@@ -1,0 +1,59 @@
+import * as React from "react";
+import { StyleSheet, Dimensions, Linking, TouchableOpacity } from "react-native";
+// import { Text, Button, Container, Logo, Theme, AnimatedView } from "../components";
+import Theme from "../Atoms/Theme";
+import Text from "../Atoms/Text";
+import Button from "../Atoms/Button";
+
+import Container from "../Atoms/Container";
+import { AnimatedView } from "../Atoms/Animations";
+import Logo from "../Molecules/Logo";
+
+const WelcomeTemplate = ({ login, signUp }) => {
+  return (
+    <Container gutter={2} style={styles.root}>
+      <Logo />
+      <AnimatedView style={styles.container}>
+        <Text type="header1" style={styles.header}>
+          Fiber
+        </Text>
+      </AnimatedView>
+      <AnimatedView style={styles.container} delay={600} duration={300}>
+        <Button label="Login" onPress={login} full primary />
+        <Button label="Sign Up" onPress={signUp} full />
+      </AnimatedView>
+      <TouchableOpacity style={styles.framer} onPress={WelcomeTemplate.framer}>
+        <Text type={"regular"} style={styles.framerText}>
+          Designed by YY
+        </Text>
+      </TouchableOpacity>
+    </Container>
+  );
+};
+
+const { width } = Dimensions.get("window");
+const styles = StyleSheet.create({
+  root: {
+    justifyContent: "flex-end",
+    alignItems: "center"
+  },
+  container: {
+    alignSelf: "stretch"
+  },
+  header: {
+    textAlign: "center",
+    marginTop: Theme.spacing.base * 2,
+    marginBottom: Theme.spacing.base * 2
+  },
+  framer: {
+    position: "absolute",
+    bottom: Theme.spacing.tiny,
+    width
+  },
+  framerText: {
+    textAlign: "center",
+    fontSize: 12
+  }
+});
+
+export default WelcomeTemplate;
