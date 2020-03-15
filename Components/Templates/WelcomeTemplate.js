@@ -15,7 +15,7 @@ const WelcomeTemplate = ({ login, signUp }) => {
       <Logo />
       <AnimatedView style={styles.container}>
         <Text type="header1" style={styles.header}>
-          Fiber
+          Push
         </Text>
       </AnimatedView>
       <AnimatedView style={styles.container} delay={600} duration={300}>
@@ -24,7 +24,7 @@ const WelcomeTemplate = ({ login, signUp }) => {
       </AnimatedView>
       <TouchableOpacity style={styles.framer} onPress={WelcomeTemplate.framer}>
         <Text type={"regular"} style={styles.framerText}>
-          Designed by YY
+          Designed by XYZ inc.
         </Text>
       </TouchableOpacity>
     </Container>
@@ -35,25 +35,25 @@ const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   root: {
     justifyContent: "flex-end",
-    alignItems: "center"
+    alignItems: "center",
   },
   container: {
-    alignSelf: "stretch"
+    alignSelf: "stretch",
   },
   header: {
     textAlign: "center",
     marginTop: Theme.spacing.base * 2,
-    marginBottom: Theme.spacing.base * 2
+    marginBottom: Theme.spacing.base * 2,
   },
   framer: {
     position: "absolute",
     bottom: Theme.spacing.tiny,
-    width
+    width,
   },
   framerText: {
     textAlign: "center",
-    fontSize: 12
-  }
+    fontSize: 12,
+  },
 });
 
 export default WelcomeTemplate;
