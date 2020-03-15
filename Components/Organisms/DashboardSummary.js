@@ -2,41 +2,25 @@ import React, { useState } from "react";
 import { View, StyleSheet, Dimensions, FlatList, TouchableOpacity, Image } from "react-native";
 import Constants from "expo-constants";
 import { Feather as Icon } from "@expo/vector-icons";
-import APIStore from "../Atoms/APIStore";
-import Theme from "../Atoms/Theme";
 import Text from "../Atoms/Text";
 import Images from "../Atoms/Images";
-import FirstPost from "../Atoms/FirstPost";
-import GoalItem from "../Molecules/GoalItem";
-import DashboardSummary from "../Organisms/DashboardSummary";
-const ProfileTemplate = ({ navigation, logout }) => {
-  const uid = APIStore.me();
-  const goals = APIStore.goals();
-  const profile = APIStore.profile(uid);
-
-  // const [internalState, setInternalState] = useState(goals);
-  // const createNewGoal = newGoal => {
-  //   setInternalState([...internalState, newGoal]);
-  // };
-
+import Theme from "../Atoms/Theme";
+import BarChartSummary from "../Molecules/BarChartSummary";
+const DashboardSummary = ({ profile, logout, goals }) => {
+  console.log({ goals });
   return (
-    <FlatList
-      bounces={false}
-      showsVerticalScrollIndicator={false}
-      style={styles.list}
-      data={goals}
-      keyExtractor={goal => goal.id}
-      renderItem={({ item }) => GoalItem(item)}
-      ListEmptyComponent={
-        <View style={styles.post}>
-          <FirstPost {...{ navigation }} />
+    <View style={[styles.header]}>
+      <TouchableOpacity onPress={logout} style={styles.settings}>
+        <View>
+          <Icon name="log-out" size={25} color="blue" />
         </View>
-      }
-      ListHeaderComponent={<DashboardSummary goals={goals} logout={logout} profile={profile} />}
-    />
+      </TouchableOpacity>
+      <View style={[styles.chart]}>
+        <BarChartSummary goals={goals} />
+      </View>
+    </View>
   );
 };
-
 const avatarSize = 100;
 const { width } = Dimensions.get("window");
 const { statusBarHeight } = Constants;
@@ -73,6 +57,11 @@ const styles = StyleSheet.create({
     left: Theme.spacing.small,
     bottom: 50 + Theme.spacing.small,
   },
+  chart: {
+    position: "absolute",
+    left: Theme.spacing.small,
+    bottom: Theme.spacing.small,
+  },
   outline: {
     color: "rgba(255, 255, 255, 0.8)",
   },
@@ -81,4 +70,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileTemplate;
+export default DashboardSummary;
