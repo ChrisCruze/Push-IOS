@@ -7,6 +7,7 @@ import SignUpPassword from "./Components/Pages/SignUpPassword";
 
 import Profile from "./Components/Pages/Profile";
 import HomeTab from "./Components/Pages/HomeTab";
+import Goal from "./Components/Pages/Goal";
 
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
@@ -107,6 +108,7 @@ const AppNavigator = createAppContainer(
       SignUp: { screen: SignUpNavigator },
       // Walkthrough: { screen: Walkthrough },
       Home: { screen: Home },
+      Goal: { screen: Goal },
     },
     StackNavigatorOptions,
   ),
