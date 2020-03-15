@@ -18,7 +18,6 @@ const ProfileTemplate = ({ navigation, logout }) => {
   // const createNewGoal = newGoal => {
   //   setInternalState([...internalState, newGoal]);
   // };
-
   return (
     <FlatList
       bounces={false}
@@ -26,7 +25,7 @@ const ProfileTemplate = ({ navigation, logout }) => {
       style={styles.list}
       data={goals}
       keyExtractor={goal => goal.id}
-      renderItem={({ item }) => GoalItem(item)}
+      renderItem={({ item }) => GoalItem({ ...item, navigation })}
       ListEmptyComponent={
         <View style={styles.post}>
           <FirstPost {...{ navigation }} />

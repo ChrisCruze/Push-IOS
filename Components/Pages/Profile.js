@@ -7,7 +7,7 @@ class Profile extends React.Component {
   };
 
   render() {
-    return <ProfileTemplate logout={this.logout} />;
+    return <ProfileTemplate logout={this.logout} navigation={this.props.navigation} />;
   }
 }
 

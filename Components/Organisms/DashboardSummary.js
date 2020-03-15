@@ -7,7 +7,6 @@ import Images from "../Atoms/Images";
 import Theme from "../Atoms/Theme";
 import BarChartSummary from "../Molecules/BarChartSummary";
 const DashboardSummary = ({ profile, logout, goals }) => {
-  console.log({ goals });
   return (
     <View style={[styles.header]}>
       <TouchableOpacity onPress={logout} style={styles.settings}>
