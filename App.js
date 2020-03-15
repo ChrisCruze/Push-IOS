@@ -25,7 +25,7 @@ const SFProTextLight = require("./assets/fonts/SF-Pro-Text-Light.otf");
 
 class App extends React.Component {
   state = {
-    isReady: false
+    isReady: false,
   };
   render() {
     if (!this.state.isReady) {
@@ -54,7 +54,7 @@ class App extends React.Component {
         "SFProText-Bold": SFProTextBold,
         "SFProText-Semibold": SFProTextSemibold,
         "SFProText-Regular": SFProTextRegular,
-        "SFProText-Light": SFProTextLight
+        "SFProText-Light": SFProTextLight,
       });
       const icons = Font.loadAsync(Feather.font);
       await Promise.all([...cacheImages, fonts, icons]);
@@ -68,35 +68,35 @@ class App extends React.Component {
 const StackNavigatorOptions = {
   headerMode: "none",
   cardStyle: {
-    backgroundColor: "white"
-  }
+    backgroundColor: "white",
+  },
 };
 
 const SignUpNavigator = createStackNavigator(
   {
     SignUp: { screen: SignUpName },
     SignUpEmail: { screen: SignUpEmail },
-    SignUpPassword: { screen: SignUpPassword }
+    SignUpPassword: { screen: SignUpPassword },
   },
-  StackNavigatorOptions
+  StackNavigatorOptions,
 );
 const ProfileNavigator = createStackNavigator(
   {
-    Profile: { screen: Profile }
+    Profile: { screen: Profile },
   },
-  StackNavigatorOptions
+  StackNavigatorOptions,
 );
 const Home = createBottomTabNavigator(
   {
     // Explore: { screen: ExploreNavigator },
     // Share: { screen: ShareNavigator },
-    Profile: { screen: ProfileNavigator }
+    Profile: { screen: ProfileNavigator },
   },
   {
     animationEnabled: true,
     tabBarComponent: HomeTab,
-    tabBarPosition: "bottom"
-  }
+    tabBarPosition: "bottom",
+  },
 );
 
 const AppNavigator = createAppContainer(
@@ -106,10 +106,10 @@ const AppNavigator = createAppContainer(
       Login: { screen: Login },
       SignUp: { screen: SignUpNavigator },
       // Walkthrough: { screen: Walkthrough },
-      Home: { screen: Home }
+      Home: { screen: Home },
     },
-    StackNavigatorOptions
-  )
+    StackNavigatorOptions,
+  ),
 );
 export { AppNavigator };
 
