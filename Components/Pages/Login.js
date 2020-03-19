@@ -2,8 +2,7 @@ import React from "react";
 import SignUpContainer from "../Molecules/SignUpContainer";
 import { TextField } from "../Atoms/Fields";
 
-const Login = props => {
-  const { navigation, setPasswordRef, goToPassword } = props;
+const Login = ({ navigation, setPasswordRef, goToPassword }) => {
   /* 
     What are setPasswordRef, goToPassword? 
     I could not find where these props are passed from

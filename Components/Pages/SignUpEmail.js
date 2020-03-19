@@ -1,14 +1,45 @@
 import * as React from "react";
-import SignUpEmailTemplate from "../Templates/SignUpEmailTemplate";
+import { TextInput } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-class SignUpEmail extends React.Component {
-  next = () => {
-    this.props.navigation.navigate("SignUpPassword");
-  };
+import SignUpContainer from "../Molecules/SignUpContainer";
+import { TextField } from "../Atoms/Fields";
+import Theme from "../Atoms/Theme";
+import Text from "../Atoms/Text";
+import Switch from "../Atoms/Switch";
 
-  render() {
-    return <SignUpEmailTemplate next={this.next} />;
-  }
-}
+const SignUpEmail = ({ navigation, setLastNameRef, goToLastName }) => {
+  const next = () => navigation.navigate("SignUpPassword");
+  return (
+    <SignUpContainer title="Your Email" subtitle="We won't spam" next={next} {...{ navigation }}>
+      <TextField
+        placeholder="Email"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        autoCorrect={false}
+        returnKeyType="go"
+        onSubmitEditing={next}
+        contrast
+      />
+      <View style={styles.row}>
+        <Switch />
+        <Text style={styles.text}>Sign up for the newsletter</Text>
+      </View>
+    </SignUpContainer>
+  );
+};
+
+const styles = StyleSheet.create({
+  text: {
+    flexWrap: "wrap",
+    marginLeft: Theme.spacing.small,
+    flex: 1,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: Theme.spacing.tiny,
+  },
+});
 
 export default SignUpEmail;

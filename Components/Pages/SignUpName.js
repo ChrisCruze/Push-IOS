@@ -1,14 +1,30 @@
 import * as React from "react";
-import SignUpNameTemplate from "../Templates/SignUpNameTemplate";
 
-class SignUpName extends React.Component {
-  next = () => {
-    this.props.navigation.navigate("SignUpEmail");
-  };
+import SignUpContainer from "../Molecules/SignUpContainer";
+import { TextField } from "../Atoms/Fields";
 
-  render() {
-    return <SignUpNameTemplate next={this.next} />;
-  }
-}
+const SignUpNameTemplate = ({ navigation, setLastNameRef, goToLastName }) => {
+  const next = () => navigation.navigate("SignUpEmail");
 
-export default SignUpName;
+  return (
+    <SignUpContainer title="Your Name" subtitle="Who are you" next={next} first {...{ navigation }}>
+      <TextField
+        placeholder="First Name"
+        autoCapitalize="none"
+        autoCorrect={false}
+        returnKeyType="next"
+        onSubmitEditing={goToLastName}
+      />
+      <TextField
+        placeholder="Last Name"
+        autoCapitalize="none"
+        autoCorrect={false}
+        returnKeyType="go"
+        textInputRef={setLastNameRef}
+        onSubmitEditing={next}
+      />
+    </SignUpContainer>
+  );
+};
+
+export default SignUpNameTemplate;
