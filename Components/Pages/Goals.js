@@ -38,7 +38,7 @@ const Goals = ({ navigation }) => {
         style={styles.list}
         data={goals}
         keyExtractor={goal => goal.id}
-        renderItem={({ item }) => GoalItem({ ...item, navigation })}
+        renderItem={({ item }) => GoalItem({ ...item, navigation, goals })}
         ListHeaderComponent={
           <View style={styles.post}>
             <TouchableWithoutFeedback onPress={createNewGoal}>
