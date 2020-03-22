@@ -9,7 +9,13 @@ import BarChartSummary from "../Molecules/BarChartSummary";
 import TableGrid from "../Molecules/TableGrid";
 
 const DashboardGoal = ({ back, goals }) => {
-  const list_of_lists = [["a", "b", "c"], ["1", "2", "3"], ["1", "2", "3"]];
+  const list_of_lists = [
+    ["a", "b", "c", "d"],
+    ["1", "2", "3"],
+    ["1", "2", "3"],
+    ["1", "2", "3"],
+    ["1", "2", "3"],
+  ];
   return (
     <Fragment>
       <BarChartSummary goals={goals} />

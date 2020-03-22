@@ -20,16 +20,27 @@ import Container from "../Atoms/Container";
 import { AnimatedView } from "../Atoms/Animations";
 import Logo from "../Molecules/Logo";
 import APIStore from "../Atoms/APIStore";
-import DashboardGoal from "../Organisms/DashboardGoal";
+// import DashboardGoal from "../Organisms/DashboardGoal";
+import BarChartSummary from "../Molecules/BarChartSummary";
+import TableGrid from "../Molecules/TableGrid";
 
 const Goal = ({ navigation }) => {
+  const back = () => navigation.navigate("Goals");
+
   const id = navigation.getParam("id");
-  const back = () => navigation.navigate("Profile");
   const goals = APIStore.goals();
+  //use the filtered
   const goals_filtered = goals.filter(function(D) {
     return D["id"] == id;
   });
   const goals_dict = goals_filtered[0];
+  const list_of_lists = [
+    ["a", "b", "c", "d"],
+    ["1", "2", "3"],
+    ["1", "2", "3"],
+    ["1", "2", "3"],
+    ["1", "2", "3"],
+  ];
   return (
     <Container gutter={2} style={styles.root}>
       <View style={[styles.header]}>
@@ -39,7 +50,9 @@ const Goal = ({ navigation }) => {
           </View>
         </TouchableOpacity>
       </View>
-      <DashboardGoal goals={goals_filtered} />
+      <BarChartSummary goals={goals} />
+      <TableGrid list_of_lists={list_of_lists} />
+
       <AnimatedView style={styles.container}>
         <Text type="header1" style={styles.header}>
           {goals_dict.title}

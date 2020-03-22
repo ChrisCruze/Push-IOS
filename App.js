@@ -8,6 +8,8 @@ import SignUpPassword from "./Components/Pages/SignUpPassword";
 import Profile from "./Components/Pages/Profile";
 import HomeTab from "./Components/Pages/HomeTab";
 import Goal from "./Components/Pages/Goal";
+import Goals from "./Components/Pages/Goals";
+import Dashboard from "./Components/Pages/Dashboard";
 
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
@@ -89,9 +91,10 @@ const ProfileNavigator = createStackNavigator(
 );
 const Home = createBottomTabNavigator(
   {
-    // Explore: { screen: ExploreNavigator },
-    // Share: { screen: ShareNavigator },
-    Profile: { screen: ProfileNavigator },
+    // Profile: { screen: ProfileNavigator },
+
+    Dashboard: { screen: Dashboard },
+    Goals: { screen: Goals },
   },
   {
     animationEnabled: true,

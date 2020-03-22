@@ -6,9 +6,7 @@ const TableRow = ({ sublist }) => {
   return (
     <View style={styles.container}>
       {sublist.map((item, column_number) => (
-        <View style={styles.container} key={column_number}>
-          <TableCell cell={item} />
-        </View>
+        <TableCell key={column_number} cell={item} />
       ))}
     </View>
   );
@@ -34,13 +32,13 @@ const TableGrid = ({ list_of_lists }) => {
 
 const styles = StyleSheet.create({
   master_container: {
-    flex: 1,
+    flex: 0.5,
     flexDirection: "column",
     alignSelf: "stretch",
   },
 
   container: {
-    flex: 1,
+    flex: 0.4,
     flexDirection: "row",
     backgroundColor: "#E0E5EC",
 

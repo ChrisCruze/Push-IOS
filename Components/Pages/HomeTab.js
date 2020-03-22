@@ -6,9 +6,9 @@ import Theme from "../Atoms/Theme";
 const HomeTab = ({ navigation }) => {
   const navigate = i => navigation.navigate(i);
   const tabs = [
-    { label: "Explore", icon: "home" },
-    { label: "Share", icon: "camera" },
-    { label: "Profile", icon: "user" },
+    // { label: "Profile", icon: "home" },
+    { label: "Dashboard", icon: "bar-chart" },
+    { label: "Goals", icon: "list" },
   ];
   const navState = navigation.state;
   const current = navState.index;
