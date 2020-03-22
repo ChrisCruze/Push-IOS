@@ -29,7 +29,7 @@ const DataFlattenConvertGoals = array => {
 
 const GroupByDay = (array, key_name) => {
   return _.groupBy(array, function(item) {
-    return moment(item[key_name || "timeStamp"]).format("MM/DD/YY");
+    return moment(item[key_name || "timeStamp"]).format("YYYY-MM-DD");
   });
 };
 
@@ -46,10 +46,30 @@ const TransformToDayArrayCount = array => {
   return calculated_array;
 };
 
+export const dates_array_create_from_start = ({ number_of_days, start_date }) => {
+  var start = start_date || moment();
+  var dates_list = [];
+  for (i = 0; i < number_of_days; i++) {
+    var next_time = start.clone();
+    next_time.subtract(i, "day");
+    dates_list.push(next_time);
+  }
+  return dates_list;
+};
+
+export const dates_array_create_from_start_grouped = ({
+  number_of_days,
+  start_date,
+  chunk_size,
+}) => {
+  const dates_array = dates_array_create_from_start({ number_of_days, start_date });
+  return _.chunk(dates_array, chunk_size || 7);
+};
+
 export const GoalsDataTransformForBar = ({ goals }) => {
   const flattened_goals_array = DataFlattenConvertGoals(goals);
-  const bar_graph_array = TransformToDayArrayCount(flattened_goals_array);
-  return bar_graph_array;
+  const transformed_date_array = TransformToDayArrayCount(flattened_goals_array);
+  return transformed_date_array;
   // const chartData = [
   //   { date: 1, count: 13000 },
   //   { date: 2, count: 16500 },
@@ -57,4 +77,46 @@ export const GoalsDataTransformForBar = ({ goals }) => {
   //   { date: 4, count: 19000 },
   // ];
   // return chartData;
+};
+
+const goals_data_combine_with_date = ({ moment_date, flattened_goals_array }) => {
+  const moment_date_formatted = moment_date.format("MM/DD");
+  const goals_array_for_date = flattened_goals_array.filter(function(D) {
+    const goal_time_stamp_format = moment(D["timeStamp"]).format("MM/DD");
+    return goal_time_stamp_format == moment_date_formatted;
+  });
+  const goals_length = goals_array_for_date.length;
+
+  return { date: moment_date_formatted, count: goals_length };
+};
+export const goals_data_last_n_days_from_transformed_goals_array = ({ goals, number_of_days }) => {
+  const flattened_goals_array = DataFlattenConvertGoals(goals);
+  const last_fourteen_days = dates_array_create_from_start({
+    number_of_days: number_of_days || 7,
+  });
+  const last_fourteen_days_with_goals_count = _.map(last_fourteen_days, function(moment_date) {
+    return goals_data_combine_with_date({ moment_date, flattened_goals_array });
+  });
+  last_fourteen_days_with_goals_count.reverse();
+  return last_fourteen_days_with_goals_count;
+};
+
+const background_color_attribute_add_based_on_count = array => {
+  return _.map(array, D => {
+    return { ...D, backgroundColor: D.count == 0 ? "#ebedf0" : "#00ff00" };
+  });
+};
+export const goals_data_last_n_days_from_transformed_goals_array_chunked = ({
+  goals,
+  number_of_days,
+  chunk_size,
+}) => {
+  const last_fourteen_days_with_goals_count = goals_data_last_n_days_from_transformed_goals_array({
+    goals,
+    number_of_days,
+  });
+  const last_fourteen_days_with_goals_count_with_color = background_color_attribute_add_based_on_count(
+    last_fourteen_days_with_goals_count,
+  );
+  return _.chunk(last_fourteen_days_with_goals_count_with_color, chunk_size || 7);
 };

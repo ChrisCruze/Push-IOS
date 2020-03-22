@@ -12,9 +12,13 @@ import Constants from "expo-constants";
 
 import APIStore from "../Atoms/APIStore";
 // import DashboardGoal from "../Organisms/DashboardGoal";
-import BarChartSummary from "../Molecules/BarChartSummary";
 import TableGrid from "../Molecules/TableGrid";
 import Header from "../Molecules/Header";
+import {
+  goals_data_last_n_days_from_transformed_goals_array,
+  goals_data_last_n_days_from_transformed_goals_array_chunked,
+} from "../Atoms/BarChart.functions";
+import BarChart from "../Atoms/BarChart";
 
 const Goal = ({ navigation }) => {
   const back = () => navigation.navigate("Goals");
@@ -25,14 +29,21 @@ const Goal = ({ navigation }) => {
   const goals_filtered = goals.filter(function(D) {
     return D["id"] == id;
   });
+
+  const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
+    goals: goals_filtered,
+    number_of_days: 7,
+  });
+
+  const goals_count_by_day_array_chunked = goals_data_last_n_days_from_transformed_goals_array_chunked(
+    {
+      goals: goals_filtered,
+      number_of_days: 28,
+      chunk_size: 7,
+    },
+  );
   const goals_dict = goals_filtered[0];
-  const list_of_lists = [
-    ["a", "b", "c", "d", "e", "f"],
-    ["a", "b", "c", "d", "e", "f"],
-    ["a", "b", "c", "d", "e", "f"],
-    ["a", "b", "c", "d", "e", "f"],
-    ["a", "b", "c", "d", "e", "f"],
-  ];
+
   return (
     <View style={styles.container}>
       <Header
@@ -40,8 +51,9 @@ const Goal = ({ navigation }) => {
         sub_title={String(goals_dict.totalCount) || "0"}
         logout={back}
       />
-      <BarChartSummary goals={goals} />
-      <TableGrid list_of_lists={list_of_lists} />
+      <BarChart chartData={goals_count_by_day_array} />
+
+      <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
     </View>
   );
 };

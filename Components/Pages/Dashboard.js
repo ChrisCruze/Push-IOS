@@ -10,25 +10,34 @@ import GoalItem from "../Molecules/GoalItem";
 import BarChartSummary from "../Molecules/BarChartSummary";
 import Header from "../Molecules/Header";
 import TableGrid from "../Molecules/TableGrid";
+import {
+  goals_data_last_n_days_from_transformed_goals_array,
+  goals_data_last_n_days_from_transformed_goals_array_chunked,
+} from "../Atoms/BarChart.functions";
+import BarChart from "../Atoms/BarChart";
 
 const Dashboard = ({ navigation }) => {
   const logout = () => navigation.navigate("Login");
-
   const uid = APIStore.me();
   const goals = APIStore.goals();
-  const profile = APIStore.profile(uid);
-  const list_of_lists = [
-    ["a", "b", "c", "d"],
-    ["1", "2", "3"],
-    ["1", "2", "3"],
-    ["1", "2", "3"],
-    ["1", "2", "3"],
-  ];
+
+  const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
+    goals,
+    number_of_days: 7,
+  });
+
+  const goals_count_by_day_array_chunked = goals_data_last_n_days_from_transformed_goals_array_chunked(
+    {
+      goals,
+      number_of_days: 28,
+      chunk_size: 7,
+    },
+  );
   return (
     <View style={styles.container}>
       <Header title={"Dashboard"} sub_title={"Today"} logout={logout} />
-      <BarChartSummary goals={goals} />
-      <TableGrid list_of_lists={list_of_lists} />
+      <BarChart chartData={goals_count_by_day_array} />
+      <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
     </View>
   );
 };
