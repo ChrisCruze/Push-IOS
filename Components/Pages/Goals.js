@@ -31,7 +31,7 @@ const Goals = ({ navigation }) => {
   };
   return (
     <View style={styles.container}>
-      <Header title={"Goals"} sub_title={"List"} />
+      <Header title={"Goals"} sub_title={"List"} logout={logout} />
       <FlatList
         bounces={false}
         showsVerticalScrollIndicator={false}

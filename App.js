@@ -92,7 +92,6 @@ const ProfileNavigator = createStackNavigator(
 const Home = createBottomTabNavigator(
   {
     // Profile: { screen: ProfileNavigator },
-
     Dashboard: { screen: Dashboard },
     Goals: { screen: Goals },
   },

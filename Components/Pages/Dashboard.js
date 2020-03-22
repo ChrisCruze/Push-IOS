@@ -26,7 +26,7 @@ const Dashboard = ({ navigation }) => {
   ];
   return (
     <View style={styles.container}>
-      <Header title={"Dashboard"} sub_title={"Today"} />
+      <Header title={"Dashboard"} sub_title={"Today"} logout={logout} />
       <BarChartSummary goals={goals} />
       <TableGrid list_of_lists={list_of_lists} />
     </View>

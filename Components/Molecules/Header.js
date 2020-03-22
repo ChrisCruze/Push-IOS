@@ -9,17 +9,19 @@ import {
   RefreshControl,
   Platform,
   TouchableWithoutFeedback,
+  TouchableOpacity,
 } from "react-native";
 import Constants from "expo-constants";
 import { TextClass } from "../Atoms/Text";
 import Theme from "../Atoms/Theme";
 import { Text as RNText } from "react-native";
+import { Feather as Icon } from "@expo/vector-icons";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
-const Header = ({ title, sub_title }) => {
+const Header = ({ title, sub_title, logout }) => {
   const [scrollAnimation, updateScrollAnimation] = React.useState(new Animated.Value(0));
 
   const start = 30;
@@ -67,6 +69,11 @@ const Header = ({ title, sub_title }) => {
             {title || "title"}
           </AnimatedText>
         </View>
+        <TouchableOpacity onPress={logout} style={styles.settings}>
+          <View>
+            <Icon name="log-out" size={25} color="blue" />
+          </View>
+        </TouchableOpacity>
         {/* <TouchableWithoutFeedback onPress={this.profile}>
           <View>
             <Avatar {...profile.picture} />
