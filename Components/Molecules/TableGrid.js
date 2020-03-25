@@ -25,7 +25,6 @@ const TableGrid = ({ list_of_lists }) => {
     </Fragment>
   );
 };
-
 const styles = StyleSheet.create({
   row_container: {
     flexDirection: "row",

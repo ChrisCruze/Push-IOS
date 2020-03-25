@@ -43,7 +43,6 @@ const Goal = ({ navigation }) => {
     },
   );
   const goals_dict = goals_filtered[0];
-
   return (
     <View style={styles.container}>
       <Header

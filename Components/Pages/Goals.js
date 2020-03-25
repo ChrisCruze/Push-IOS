@@ -17,13 +17,12 @@ import Images from "../Atoms/Images";
 import FirstPost from "../Atoms/FirstPost";
 import GoalItem from "../Molecules/GoalItem";
 import Header from "../Molecules/Header";
+import moment from "moment";
+import { useGoals } from "../Atoms/useAPIStore";
 
 const Goals = ({ navigation }) => {
   const logout = () => navigation.navigate("Login");
-
-  const uid = APIStore.me();
-  const goals = APIStore.goals();
-  const profile = APIStore.profile(uid);
+  const { goals, pushGoal } = useGoals();
 
   const [internalState, setInternalState] = useState(goals);
   const createNewGoal = newGoal => {
@@ -38,7 +37,7 @@ const Goals = ({ navigation }) => {
         style={styles.list}
         data={goals}
         keyExtractor={goal => goal.id}
-        renderItem={({ item }) => GoalItem({ ...item, navigation, goals })}
+        renderItem={({ item }) => GoalItem({ ...item, navigation, goals, pushGoal })}
         ListHeaderComponent={
           <View style={styles.post}>
             <TouchableWithoutFeedback onPress={createNewGoal}>

@@ -8,8 +8,9 @@ const GoalOptionsPress = ({ id, navigation }) => {
   navigation.navigate("Goal", { id: id });
 };
 
-const GoalPushsPress = ({ id }) => {
+const GoalPushsPress = ({ id, pushGoal }) => {
   APIStore.push(id);
+  pushGoal(id);
   console.log("record activity now!");
   // updateTotalCount(totalCount + 1);
 };
@@ -22,20 +23,23 @@ const GoalsCountFromGoalsId = ({ goals, id }) => {
   return totalCount;
 };
 
-const GoalItem = ({ id, title, cadenceCount, navigation }) => {
-  const goals = APIStore.goals();
-
-  //const [totalCount, updateTotalCount] = useState(GoalsCountFromGoalsId({ goals, id }));
+const GoalCountGet = ({ goals, id }) => {
   const goals_filtered = goals.filter(function(D) {
     return D["id"] == id;
   })[0]["timeStamps"];
   const totalCount = goals_filtered.length;
+  return totalCount;
+};
+
+const GoalItem = ({ id, title, goals, cadenceCount, navigation, pushGoal }) => {
+  const totalCount = GoalCountGet({ goals, id });
+
   return (
     <View style={styles.container}>
       <Button
         title={`${title} - ${totalCount}`}
         onPress={() => {
-          GoalPushsPress({ id });
+          GoalPushsPress({ id, pushGoal });
         }}
         style={styles.mainButton}
       />
