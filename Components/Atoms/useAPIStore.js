@@ -18,7 +18,7 @@ export const useGoals = () => {
       ...identified_goal,
       timeStamps: timeStampListWithNewOne,
     };
-    const new_list_of_goals = [...rest_of_goals, identified_goal_with_count];
+    const new_list_of_goals = [identified_goal_with_count, ...rest_of_goals];
     updateGoals(new_list_of_goals);
   }
   return { goals, pushGoal };
