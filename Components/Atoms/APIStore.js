@@ -1,11 +1,12 @@
 // @flow
-import * as _ from 'lodash';
+import * as _ from "lodash";
+import moment from "moment";
 
-const data = require('./data');
+const data = require("./data");
 
 export default class APIStore {
   static me() {
-    return '09003f2b-a0f5-4b6a-b66a-d3446df71728';
+    return "09003f2b-a0f5-4b6a-b66a-d3446df71728";
   }
 
   static profile(uid) {
@@ -13,11 +14,26 @@ export default class APIStore {
   }
 
   static posts() {
-    return _.sortBy(data.posts, ['timestamp']).reverse();
+    return _.sortBy(data.posts, ["timestamp"]).reverse();
   }
 
   static goals() {
-    return _.sortBy(data.goals, ['id']);
+    return _.sortBy(data.goals, ["id"]);
+  }
+
+  static addGoal(goal) {
+    data.goals.push(goal);
+  }
+
+  static goal(id) {
+    return data.goals.filter(goal => goal.id === id)[0];
+  }
+
+  static push(id) {
+    const goal = APIStore.goal(id);
+    goal.timeStamps.push(moment().format());
+    console.log({ goal, id });
+    return goal.timeStamps;
   }
 
   static addPost(post) {
@@ -32,7 +48,7 @@ export default class APIStore {
     if (!data.comments[post]) {
       data.comments[post] = [];
     }
-    return _.sortBy(data.comments[post], ['timestamp']).reverse();
+    return _.sortBy(data.comments[post], ["timestamp"]).reverse();
   }
 
   static like(id, uid) {

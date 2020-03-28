@@ -6,33 +6,39 @@ import APIStore from "../Atoms/APIStore";
 import Theme from "../Atoms/Theme";
 import Text from "../Atoms/Text";
 import Images from "../Atoms/Images";
-import FirstPost from "../Atoms/FirstPost";
 import GoalItem from "../Molecules/GoalItem";
-import DashboardSummary from "../Organisms/DashboardSummary";
-const ProfileTemplate = ({ navigation, logout }) => {
+import BarChartSummary from "../Molecules/BarChartSummary";
+import Header from "../Molecules/Header";
+import TableGrid from "../Molecules/TableGrid";
+import {
+  goals_data_last_n_days_from_transformed_goals_array,
+  goals_data_last_n_days_from_transformed_goals_array_chunked,
+} from "../Atoms/BarChart.functions";
+import BarChart from "../Atoms/BarChart";
+
+const Dashboard = ({ navigation }) => {
+  const logout = () => navigation.navigate("Login");
   const uid = APIStore.me();
   const goals = APIStore.goals();
-  const profile = APIStore.profile(uid);
 
-  // const [internalState, setInternalState] = useState(goals);
-  // const createNewGoal = newGoal => {
-  //   setInternalState([...internalState, newGoal]);
-  // };
+  const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
+    goals,
+    number_of_days: 7,
+  });
+
+  const goals_count_by_day_array_chunked = goals_data_last_n_days_from_transformed_goals_array_chunked(
+    {
+      goals,
+      number_of_days: 28,
+      chunk_size: 7,
+    },
+  );
   return (
-    <FlatList
-      bounces={false}
-      showsVerticalScrollIndicator={false}
-      style={styles.list}
-      data={goals}
-      keyExtractor={goal => goal.id}
-      renderItem={({ item }) => GoalItem({ ...item, navigation })}
-      ListEmptyComponent={
-        <View style={styles.post}>
-          <FirstPost {...{ navigation }} />
-        </View>
-      }
-      ListHeaderComponent={<DashboardSummary goals={goals} logout={logout} profile={profile} />}
-    />
+    <View style={styles.container}>
+      <Header title={"Dashboard"} sub_title={"Today"} logout={logout} />
+      <BarChart chartData={goals_count_by_day_array} />
+      <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
+    </View>
   );
 };
 
@@ -40,6 +46,9 @@ const avatarSize = 100;
 const { width } = Dimensions.get("window");
 const { statusBarHeight } = Constants;
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   list: {
     flex: 1,
   },
@@ -80,4 +89,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileTemplate;
+export default Dashboard;
