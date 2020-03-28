@@ -4,7 +4,7 @@ import Login from "./Components/Pages/Login";
 import SignUpName from "./Components/Pages/SignUpName";
 import SignUpEmail from "./Components/Pages/SignUpEmail";
 import SignUpPassword from "./Components/Pages/SignUpPassword";
-
+import createGoal from "./Components/Pages/createGoal";
 import Profile from "./Components/Pages/Profile";
 import HomeTab from "./Components/Pages/HomeTab";
 import Goal from "./Components/Pages/Goal";
@@ -111,6 +111,7 @@ const AppNavigator = createAppContainer(
       // Walkthrough: { screen: Walkthrough },
       Home: { screen: Home },
       Goal: { screen: Goal },
+      createGoal: {screen: createGoal},
     },
     StackNavigatorOptions,
   ),
