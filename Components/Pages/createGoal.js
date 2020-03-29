@@ -65,6 +65,8 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
     <Dropdown
       label='Cadence'
       data={data}
+      value = {selectedValue}
+      onChangeText = {setSelectedValue}
     />
 
     </CreateContainer>
