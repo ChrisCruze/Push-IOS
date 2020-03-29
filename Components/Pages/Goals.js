@@ -25,9 +25,10 @@ const Goals = ({ navigation }) => {
   const { goals, pushGoal } = useGoals();
 
   const [internalState, setInternalState] = useState(goals);
-  const createNewGoal = newGoal => {
-    setInternalState([...internalState, newGoal]);
+  const createNewGoal = () => {
+    navigation.navigate("createGoal");
   };
+
   return (
     <View style={styles.container}>
       <Header title={"Goals"} sub_title={"List"} logout={logout} />

@@ -1,4 +1,5 @@
 import * as React from "react";
+import SignUpContainer from "../Molecules/SignUpContainer";
 import {
   View,
   StyleSheet,
@@ -8,18 +9,40 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import { TextField } from "../Atoms/Fields";
 import Constants from "expo-constants";
 
 import APIStore from "../Atoms/APIStore";
-
-
 import BarChart from "../Atoms/BarChart";
 
-const createGoal = ({ navigation }) => {
-  return (
-    <View style={styles.container}>
+function createNew(goal) {
+  APIStore.addGoal(goal);
+}
 
-    </View>
+
+// view
+const createGoal = ({ navigation, goToPassword, createNew }) => {
+  return (
+    <SignUpContainer
+      title="New Goal"
+      back={() => navigation.navigate("Goals")}
+      nextLabel="Push"
+      next={() => navigation.navigate("Goals")}
+      onSubmitEditing={createNew}
+      first
+      {...{ navigation }}
+    >
+    <TextField
+      placeholder="Email"
+      keyboardType="email-address"
+      autoCapitalize="none"
+      autoCorrect={false}
+      returnKeyType="next"
+      onSubmitEditing={goToPassword}
+      contrast
+    />
+
+    </SignUpContainer>
   );
 };
 const { statusBarHeight } = Constants;
@@ -29,5 +52,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+
 
 export default createGoal;
