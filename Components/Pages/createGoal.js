@@ -30,6 +30,9 @@ function createNew(goal) {
 // view
 const createGoal = ({ navigation, goToPassword, createNew }) => {
   const [selectedValue, setSelectedValue] = useState("daily");
+
+  const [textValue, updateSelectedText] = useState("default");
+
   let data = [{
     value: 'Daily',
   }, {
@@ -37,15 +40,26 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
   }, {
     value: 'Monthly',
   }];
-  return (
 
+function pressNextSubmit (){
+  APIStore.addGoal({
+      "id": APIStore.goals().length + 1,
+      "title": textValue,
+      "cadence": selectedValue,
+      "cadenceCount": 0,
+      "totalCount": 0,
+      "timeStamps": ["2020-03-21T00:18:56Z"]
+  });
+  navigation.navigate("Goals")
+}
+
+  return (
     <CreateContainer
       title="New Goal"
       subtitle="Let's push"
       back={() => navigation.navigate("Goals")}
       nextLabel="Push"
-      next={() =>
-        navigation.navigate("Goals")}
+      next={pressNextSubmit}
       onSubmitEditing={createNew}
       first
       {...{ navigation }}
@@ -60,6 +74,7 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
       autoCapitalize="none"
       returnKeyType="next"
       onSubmitEditing={goToPassword}
+
       contrast
     />
     <Dropdown
