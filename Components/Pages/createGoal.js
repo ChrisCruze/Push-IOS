@@ -9,7 +9,6 @@ import {
   FlatList,
   TouchableOpacity,
   Image,
-  Picker,
   TextInput,
 } from "react-native";
 
@@ -19,8 +18,7 @@ import APIStore from "../Atoms/APIStore";
 import BarChart from "../Atoms/BarChart";
 import { TextField } from "../Atoms/Fields";
 import Theme from "../Atoms/Theme";
-
-
+import { Dropdown } from 'react-native-material-dropdown';
 
 
 
@@ -32,6 +30,13 @@ function createNew(goal) {
 // view
 const createGoal = ({ navigation, goToPassword, createNew }) => {
   const [selectedValue, setSelectedValue] = useState("daily");
+  let data = [{
+    value: 'Daily',
+  }, {
+    value: 'Weekly',
+  }, {
+    value: 'Monthly',
+  }];
   return (
 
     <CreateContainer
@@ -57,19 +62,10 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
       onSubmitEditing={goToPassword}
       contrast
     />
-
-    <View style = {styles.Pickercontainer}>
-      <Picker
-        selectedValue={selectedValue}
-        style={{ height: 50, width: 150 }}
-        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-      >
-        <Picker.Item label="daily" value="daily" />
-        <Picker.Item label="weekly" value="weekly" />
-        <Picker.Item label="monthly" value="weekly" />
-
-      </Picker>
-    </View>
+    <Dropdown
+      label='Cadence'
+      data={data}
+    />
 
     </CreateContainer>
   );
@@ -81,38 +77,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-    Pickercontainer: {
-      flex: 1,
-      paddingTop: 5,
-      alignItems: "center",
-    },
+  textInput: {
+    marginTop:25,
+    marginBottom:30
+  }
 });
 
-
-
-// export default function App() {
-//   const [selectedValue, setSelectedValue] = useState("java");
-//   return (
-//     <View style={styles.container}>
-//       <Picker
-//         selectedValue={selectedValue}
-//         style={{ height: 50, width: 150 }}
-//         onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-//       >
-//         <Picker.Item label="Java" value="java" />
-//         <Picker.Item label="JavaScript" value="js" />
-//       </Picker>
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     paddingTop: 40,
-//     alignItems: "center"
-//   }
-// });
 
 
 

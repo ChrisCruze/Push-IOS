@@ -31,11 +31,11 @@ const styles = StyleSheet.create({
     marginBottom:100
   },
   innerContent: {
-    height: 500,
+    height: height - Theme.spacing.base * 4,
     justifyContent: "center"
   },
   innerChildren: {
-    height:270
+    height:175
   }
 });
 
