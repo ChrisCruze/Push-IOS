@@ -1,5 +1,6 @@
 import * as React from "react";
-import SignUpContainer from "../Molecules/SignUpContainer";
+import { useState } from "react";
+import CreateContainer from "../Molecules/createContainer";
 import {
   View,
   StyleSheet,
@@ -8,12 +9,20 @@ import {
   FlatList,
   TouchableOpacity,
   Image,
+  Picker,
+  TextInput,
 } from "react-native";
-import { TextField } from "../Atoms/Fields";
+
 import Constants from "expo-constants";
 
 import APIStore from "../Atoms/APIStore";
 import BarChart from "../Atoms/BarChart";
+import { TextField } from "../Atoms/Fields";
+import Theme from "../Atoms/Theme";
+
+
+
+
 
 function createNew(goal) {
   APIStore.addGoal(goal);
@@ -22,36 +31,89 @@ function createNew(goal) {
 
 // view
 const createGoal = ({ navigation, goToPassword, createNew }) => {
+  const [selectedValue, setSelectedValue] = useState("daily");
   return (
-    <SignUpContainer
+
+    <CreateContainer
       title="New Goal"
+      subtitle="Let's push"
       back={() => navigation.navigate("Goals")}
       nextLabel="Push"
-      next={() => navigation.navigate("Goals")}
+      next={() =>
+        navigation.navigate("Goals")}
       onSubmitEditing={createNew}
       first
       {...{ navigation }}
     >
+
+
     <TextField
-      placeholder="Email"
-      keyboardType="email-address"
+      style={styles.textInput}
+      placeholder="Create goal"
+
+      keyboardType="textInput"
       autoCapitalize="none"
-      autoCorrect={false}
       returnKeyType="next"
       onSubmitEditing={goToPassword}
       contrast
     />
 
-    </SignUpContainer>
+    <View style = {styles.Pickercontainer}>
+      <Picker
+        selectedValue={selectedValue}
+        style={{ height: 50, width: 150 }}
+        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+      >
+        <Picker.Item label="daily" value="daily" />
+        <Picker.Item label="weekly" value="weekly" />
+        <Picker.Item label="monthly" value="weekly" />
+
+      </Picker>
+    </View>
+
+    </CreateContainer>
   );
 };
 const { statusBarHeight } = Constants;
 const { width } = Dimensions.get("window");
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+    Pickercontainer: {
+      flex: 1,
+      paddingTop: 5,
+      alignItems: "center",
+    },
 });
+
+
+
+// export default function App() {
+//   const [selectedValue, setSelectedValue] = useState("java");
+//   return (
+//     <View style={styles.container}>
+//       <Picker
+//         selectedValue={selectedValue}
+//         style={{ height: 50, width: 150 }}
+//         onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+//       >
+//         <Picker.Item label="Java" value="java" />
+//         <Picker.Item label="JavaScript" value="js" />
+//       </Picker>
+//     </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     paddingTop: 40,
+//     alignItems: "center"
+//   }
+// });
+
 
 
 
