@@ -73,8 +73,8 @@ function pressNextSubmit (){
       keyboardType="textInput"
       autoCapitalize="none"
       returnKeyType="next"
-      onSubmitEditing={goToPassword}
-
+      onChangeText={text => updateSelectedText(text)}
+  
       contrast
     />
     <Dropdown
