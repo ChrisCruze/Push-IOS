@@ -22,13 +22,11 @@ const Welcome = ({ navigation }) => {
         </Text>
       </AnimatedView>
       <AnimatedView style={styles.container} delay={600} duration={300}>
-        <Button label="Login" onPress={login} full primary />
+        <Button label="Push" onPress={login} full primary />
         <Button label="Sign Up" onPress={signUp} full />
       </AnimatedView>
       <TouchableOpacity style={styles.framer} onPress={Welcome.framer}>
-        <Text type={"regular"} style={styles.framerText}>
-          Designed by XYZ inc.
-        </Text>
+        <Text type={"regular"} style={styles.framerText}></Text>
       </TouchableOpacity>
     </Container>
   );
