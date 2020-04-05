@@ -28,51 +28,11 @@
   "goals": [
     {
       "id": 1,
-      "title": "Play Piano",
+      "title": "First Push",
       "cadence": "weekly",
       "cadenceCount": 4,
       "totalCount": 25,
-      "timeStamps": ["2020-03-21T00:18:56Z", "2020-03-21T00:18:56Z", "2020-03-21T00:18:56Z"]
-    },
-    {
-      "id": 2,
-      "title": "Do Yoga",
-      "cadence": "weekly",
-      "cadenceCount": 1,
-      "totalCount": 9,
-      "timeStamps": ["2020-03-21T00:18:56Z", "2020-03-21T00:18:56Z", "2020-03-21T00:18:56Z"]
-    },
-    {
-      "id": 3,
-      "title": "Call Sister",
-      "cadence": "monthly",
-      "cadenceCount": 6,
-      "totalCount": 54,
-      "timeStamps": ["2020-03-21T00:18:56Z", "2020-03-21T00:18:56Z", "2020-03-21T00:18:56Z"]
-    },
-    {
-      "id": 4,
-      "title": "Work Out",
-      "cadence": "weekly",
-      "cadenceCount": 4,
-      "totalCount": 4,
-      "timeStamps": ["2020-03-20T00:18:56Z", "2020-03-21T00:18:56Z", "2020-03-21T00:18:56Z"]
-    },
-    {
-      "id": 5,
-      "title": "Study JS",
-      "cadence": "daily",
-      "cadenceCount": 2,
-      "totalCount": 11,
-      "timeStamps": ["2020-03-18T00:18:56Z", "2020-03-21T00:18:56Z", "2020-03-21T00:18:56Z"]
-    },
-    {
-      "id": 6,
-      "title": "Read",
-      "cadence": "daily",
-      "cadenceCount": 3,
-      "totalCount": 4,
-      "timeStamps": ["2020-03-19T00:18:56Z", "2020-03-21T00:18:56Z", "2020-03-21T00:18:56Z"]
+      "timeStamps": ["2020-03-29T00:18:56Z"]
     }
   ],
   "posts": [

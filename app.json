@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Push",
-    "slug": "push-ios",
+    "name": "Push Pirates",
+    "slug": "push-pirates",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": ["ios", "android", "web"],
@@ -18,7 +18,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.push.xyz"
     }
   }
 }
