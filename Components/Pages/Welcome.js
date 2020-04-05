@@ -22,7 +22,7 @@ const Welcome = ({ navigation }) => {
         </Text>
       </AnimatedView>
       <AnimatedView style={styles.container} delay={600} duration={300}>
-        <Button label="Push" onPress={login} full primary />
+        <Button label="Login" onPress={login} full primary />
         <Button label="Sign Up" onPress={signUp} full />
       </AnimatedView>
       <TouchableOpacity style={styles.framer} onPress={Welcome.framer}>
