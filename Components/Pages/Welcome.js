@@ -26,9 +26,7 @@ const Welcome = ({ navigation }) => {
         <Button label="Sign Up" onPress={signUp} full />
       </AnimatedView>
       <TouchableOpacity style={styles.framer} onPress={Welcome.framer}>
-        <Text type={"regular"} style={styles.framerText}>
-          Designed by XYZ inc.
-        </Text>
+        <Text type={"regular"} style={styles.framerText}></Text>
       </TouchableOpacity>
     </Container>
   );

@@ -1,20 +1,18 @@
 import * as React from "react";
-import { StyleSheet, SafeAreaView, View } from "react-native";
+import { StyleSheet, SafeAreaView, View, Image, Dimensions } from "react-native";
 import { AnimatedView, simpleInterpolation, directInterpolation } from "../Atoms/Animations";
+import Theme from "../Atoms/Theme";
+import Images from "../Atoms/Images";
 
 const Logo = () => {
-  const animations = {
-    opacity: directInterpolation(),
-    transform: [{ translateY: simpleInterpolation(-200, 0) }]
-  };
   return (
     <View style={styles.container}>
-      <AnimatedView duration={400} style={[styles.square, styles.a]} {...{ animations }} />
-      <AnimatedView delay={200} duration={500} style={[styles.square, styles.b]} {...{ animations }} />
-      <AnimatedView duration={600} delay={400} style={[styles.square, styles.c]} {...{ animations }} />
+      <Image style={[styles.cover]} source={Images.cover} />
     </View>
   );
 };
+const { width } = Dimensions.get("window");
+
 const n = 75;
 const d = n * Math.sqrt(2);
 const translation = (d - n) * 0.5 + n * 0.5;
@@ -23,27 +21,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: d * 2,
-    height: d * 2
+    height: d * 2,
   },
-  square: {
-    borderColor: "white",
-    borderWidth: 5,
-    position: "absolute",
-    width: n,
-    height: n
+  cover: {
+    // ...StyleSheet.absoluteFillObject,
+    // width,
+    // height: width,
   },
-  a: {
-    backgroundColor: "#004DFF",
-    transform: [{ translateY: translation }, { rotate: "45deg" }]
-  },
-  b: {
-    backgroundColor: "#00AAFF",
-    transform: [{ translateX: translation }, { rotate: "45deg" }]
-  },
-  c: {
-    backgroundColor: "#A0EEFF",
-    transform: [{ translateY: -translation }, { rotate: "45deg" }]
-  }
 });
 
 export default Logo;

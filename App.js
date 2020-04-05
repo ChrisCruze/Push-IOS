@@ -47,7 +47,7 @@ class App extends React.Component {
   async loadStaticResources() {
     try {
       // const images = Images.downloadAsync();
-      const images = [require("./assets/images/cover.jpg")];
+      const images = [require("./assets/images/logo.jpg")];
       const cacheImages = images.map(image => {
         return Asset.fromModule(image).downloadAsync();
       });
@@ -111,7 +111,7 @@ const AppNavigator = createAppContainer(
       // Walkthrough: { screen: Walkthrough },
       Home: { screen: Home },
       Goal: { screen: Goal },
-      createGoal: {screen: createGoal},
+      createGoal: { screen: createGoal },
     },
     StackNavigatorOptions,
   ),
