@@ -18,6 +18,9 @@ import { Asset } from "expo-asset";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
+import { ApolloProvider } from "@apollo/react-hooks";
+
+import { APIClient } from "./API";
 
 const SFProTextMedium = require("./assets/fonts/SF-Pro-Text-Medium.otf");
 const SFProTextHeavy = require("./assets/fonts/SF-Pro-Text-Heavy.otf");
@@ -41,7 +44,13 @@ class App extends React.Component {
         />
       );
     } else {
-      return <AppNavigator />;
+      const client = APIClient();
+
+      return (
+        <ApolloProvider client={client}>
+          <AppNavigator test={"test2"} />
+        </ApolloProvider>
+      );
     }
   }
   async loadStaticResources() {
@@ -116,6 +125,7 @@ const AppNavigator = createAppContainer(
     StackNavigatorOptions,
   ),
 );
+
 export { AppNavigator };
 
 export default App;
