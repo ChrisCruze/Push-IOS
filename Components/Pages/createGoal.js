@@ -32,6 +32,7 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
   const [selectedValue, setSelectedValue] = useState("daily");
 
   const [textValue, updateSelectedText] = useState("default");
+  const [cadenceValue, updateCadenceValue] = useState("0");
 
   let data = [{
     value: 'Daily',
@@ -46,7 +47,7 @@ function pressNextSubmit (){
       "id": APIStore.goals().length + 1,
       "title": textValue,
       "cadence": selectedValue,
-      "cadenceCount": 0,
+      "cadenceCount": cadenceValue,
       "totalCount": 0,
       "timeStamps": ["2020-03-21T00:18:56Z"]
   });
@@ -74,9 +75,21 @@ function pressNextSubmit (){
       autoCapitalize="none"
       returnKeyType="next"
       onChangeText={text => updateSelectedText(text)}
-  
+
       contrast
     />
+    <TextField
+      style={styles.textInput}
+      placeholder="Enter Cadence Goal"
+
+      keyboardType="textInput"
+      autoCapitalize="none"
+      returnKeyType="next"
+      onChangeText={text => updateCadenceValue(text)}
+
+      contrast
+    />
+
     <Dropdown
       label='Cadence'
       data={data}

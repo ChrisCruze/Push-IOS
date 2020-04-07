@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   innerChildren: {
-    height:175
+    height:700
   }
 });
 
