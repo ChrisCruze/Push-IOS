@@ -69,12 +69,10 @@ function pressNextSubmit (){
     <TextField
       style={styles.textInput}
       placeholder="Create goal"
-
       keyboardType="textInput"
       autoCapitalize="none"
       returnKeyType="next"
       onChangeText={text => updateSelectedText(text)}
-  
       contrast
     />
     <Dropdown

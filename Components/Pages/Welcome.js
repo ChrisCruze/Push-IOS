@@ -10,22 +10,9 @@ import { AnimatedView } from "../Atoms/Animations";
 import Logo from "../Molecules/Logo";
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, gql } from "apollo-boost";
 
-import { APIClient } from "../../API";
-const Query = gql`
-  query {
-    goals {
-      title
-    }
-  }
-`;
-const Welcome = ({ navigation }) => {
-  const client = APIClient();
-  client
-    .query({
-      query: Query,
-    })
-    .then(result => console.log(result));
+import { APIClient, useAPI } from "../../API";
 
+const Welcome = ({ navigation }) => {
   const login = () => navigation.navigate("Login");
   const signUp = () => navigation.navigate("SignUp");
 

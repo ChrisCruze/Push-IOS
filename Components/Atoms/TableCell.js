@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 const TableCell = ({ cell }) => {
-  console.log({ cell });
+  // console.log({ cell });
   return (
     <View
       style={{

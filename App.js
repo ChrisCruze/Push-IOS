@@ -48,7 +48,7 @@ class App extends React.Component {
 
       return (
         <ApolloProvider client={client}>
-          <AppNavigator test={"test2"} />
+          <AppNavigator />
         </ApolloProvider>
       );
     }
