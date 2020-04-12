@@ -44,7 +44,6 @@ class App extends React.Component {
       );
     } else {
       const client = APIClient();
-
       return (
         <ApolloProvider client={client}>
           <AppNavigator />

@@ -9,15 +9,16 @@ const GoalOptionsPress = ({ id, navigation }) => {
 };
 
 const GoalPushsPress = ({ id, pushGoal }) => {
-  APIStore.push(id);
-  pushGoal(id);
+  // APIStore.push(id);
   console.log("record activity now!");
+  pushGoal(id);
 };
 
 const GoalCountGet = ({ goals, id }) => {
-  const goals_filtered = goals.find(function(D) {
-    return D["id"] == id;
-  })["timeStamps"];
+  const goals_filtered =
+    goals.find(function(D) {
+      return D["id"] == id;
+    })["timeStamps"] || [];
   const totalCount = goals_filtered.length;
   return totalCount;
 };

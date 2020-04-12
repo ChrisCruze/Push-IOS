@@ -11,7 +11,6 @@ export function APIClient() {
     link: httpLink, // Chain it with the HttpLink
     cache: new InMemoryCache(),
   });
-
   return client;
 }
 
@@ -36,6 +35,8 @@ export const useGoalsPull = () => {
         title
         _id
         timeStamps
+        cadence
+        cadenceCount
       }
     }
   `;
@@ -46,16 +47,42 @@ export const useGoalsPull = () => {
 
 export const useGoalCreate = () => {
   const ADD_GOAL = gql`
-    mutation createGoal($title: String!) {
-      createGoal(title: $title) {
+    mutation($title: String!, $cadence: String!, $cadenceCount: Int!) {
+      createGoal(
+        goalCreateInput: { title: $title, cadence: $cadence, cadenceCount: $cadenceCount }
+      ) {
         title
+        _id
       }
     }
   `;
-
   const [createGoal, { data }] = useMutation(ADD_GOAL);
-  function addGoal() {
-    createGoal({ variables: { title: "test" } });
-  }
-  return { addGoal };
+  return { createGoal, data };
+};
+
+export const useGoalUpdate = () => {
+  const UPDATE_GOAL = gql`
+    mutation(
+      $_id: ID!
+      $title: String!
+      $timeStamps: [String]!
+      $cadence: String!
+      $cadenceCount: Int!
+    ) {
+      updateGoal(
+        goalUpdateInput: {
+          _id: $_id
+          timeStamps: $timeStamps
+          title: $title
+          cadence: $cadence
+          cadenceCount: $cadenceCount
+        }
+      ) {
+        title
+        _id
+      }
+    }
+  `;
+  const [updateGoal, { data }] = useMutation(UPDATE_GOAL);
+  return { updateGoal, data };
 };
