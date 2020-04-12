@@ -5,7 +5,6 @@ import SignUpName from "./Components/Pages/SignUpName";
 import SignUpEmail from "./Components/Pages/SignUpEmail";
 import SignUpPassword from "./Components/Pages/SignUpPassword";
 import createGoal from "./Components/Pages/createGoal";
-import Profile from "./Components/Pages/Profile";
 import HomeTab from "./Components/Pages/HomeTab";
 import Goal from "./Components/Pages/Goal";
 import Goals from "./Components/Pages/Goals";
@@ -92,15 +91,9 @@ const SignUpNavigator = createStackNavigator(
   },
   StackNavigatorOptions,
 );
-const ProfileNavigator = createStackNavigator(
-  {
-    Profile: { screen: Profile },
-  },
-  StackNavigatorOptions,
-);
+
 const Home = createBottomTabNavigator(
   {
-    // Profile: { screen: ProfileNavigator },
     Dashboard: { screen: Dashboard },
     Goals: { screen: Goals },
   },

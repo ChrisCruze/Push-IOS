@@ -14,37 +14,31 @@ export function APIClient() {
   return client;
 }
 
-const QueryDefault = gql`
-  query {
-    goals {
-      title
-      _id
-      timeStamps
-    }
-  }
-`;
-
 function reformat_keys(D) {
   return { ...D, id: D["_id"] };
 }
-const goalsFromAPI = response => {
-  const data_transformed = { goals: _.map(response.data.goals, reformat_keys) };
-  return { ...response, data: data_transformed };
-};
 
-export const useAPI = () => {
-  const [response, updateResponse] = useState({ data: { goals: [] } });
-  const client = APIClient();
-
-  function refresh() {
-    client
-      .query({
-        query: QueryDefault,
-      })
-      .then(response => updateResponse(goalsFromAPI(response)));
+function goals_from_data({ loading, error, data }) {
+  if (loading) {
+    return [];
+  } else {
+    const goals_array = data.goals;
+    const goals_array_transformed = _.map(goals_array, reformat_keys);
+    return goals_array_transformed;
   }
-  useEffect(() => {
-    refresh();
-  }, []);
-  return { response, refresh };
+}
+
+export const useGoalsPull = () => {
+  const GoalsQuery = gql`
+    query {
+      goals {
+        title
+        _id
+        timeStamps
+      }
+    }
+  `;
+  const { loading, error, data } = useQuery(GoalsQuery);
+  const goals = goals_from_data({ loading, error, data });
+  return { loading, error, data, goals };
 };
