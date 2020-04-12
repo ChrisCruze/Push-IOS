@@ -1,7 +1,8 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, gql } from "apollo-boost";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import { ApolloProvider } from "@apollo/react-hooks";
+
 import _ from "lodash";
 
 export function APIClient() {
@@ -41,4 +42,20 @@ export const useGoalsPull = () => {
   const { loading, error, data } = useQuery(GoalsQuery);
   const goals = goals_from_data({ loading, error, data });
   return { loading, error, data, goals };
+};
+
+export const useGoalCreate = () => {
+  const ADD_GOAL = gql`
+    mutation createGoal($title: String!) {
+      createGoal(title: $title) {
+        title
+      }
+    }
+  `;
+
+  const [createGoal, { data }] = useMutation(ADD_GOAL);
+  function addGoal() {
+    createGoal({ variables: { title: "test" } });
+  }
+  return { addGoal };
 };

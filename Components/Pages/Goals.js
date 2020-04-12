@@ -19,15 +19,17 @@ import GoalItem from "../Molecules/GoalItem";
 import Header from "../Molecules/Header";
 import moment from "moment";
 // import { useGoals } from "../Atoms/useAPIStore";
-import { useGoalsPull } from "../../API";
+import { useGoalsPull, useGoalCreate } from "../../API";
 
 const Goals = ({ navigation }) => {
   const logout = () => navigation.navigate("Login");
   const pushGoal = function() {};
   const { goals, loading } = useGoalsPull();
+  // const { addGoal } = useGoalCreate();
 
   const [internalState, setInternalState] = useState(goals);
   const createNewGoal = () => {
+    // addGoal();
     navigation.navigate("createGoal");
   };
 
