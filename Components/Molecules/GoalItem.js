@@ -3,8 +3,10 @@ import { StyleSheet, View } from "react-native";
 import APIStore from "../Atoms/APIStore";
 import GoalComponent from "../Atoms/GoalComponent";
 
-const GoalOptionsPress = ({ id, navigation }) => {
-  navigation.navigate("Goal", { id: id });
+const GoalOptionsPress = ({ id, navigation, goals }) => {
+  const pass_dict = { id: id, goals: goals };
+  console.log({ pass_dict });
+  navigation.navigate("Goal", pass_dict);
   console.log(`navigate to options page ${id}`);
 };
 
@@ -26,7 +28,7 @@ const GoalCountGet = ({ goals, id }) => {
 const GoalItem = ({ id, title, goals, cadenceCount, navigation, pushGoal }) => {
   const totalCount = GoalCountGet({ goals, id });
   const navigateToGoal = () => {
-    GoalOptionsPress({ id, navigation });
+    GoalOptionsPress({ id, navigation, goals });
   };
   const pushGoalPress = () => {
     GoalPushsPress({ id, pushGoal });
