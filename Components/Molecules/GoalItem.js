@@ -25,7 +25,7 @@ const GoalCountGet = ({ goals, id }) => {
   return totalCount;
 };
 
-const GoalItem = ({ id, title, goals, cadenceCount, navigation, pushGoal }) => {
+const GoalItem = ({ id, title, goals, cadenceCount, navigation, pushGoal, deleteGoal }) => {
   const totalCount = GoalCountGet({ goals, id });
   const navigateToGoal = () => {
     GoalOptionsPress({ id, navigation, goals });
@@ -33,10 +33,15 @@ const GoalItem = ({ id, title, goals, cadenceCount, navigation, pushGoal }) => {
   const pushGoalPress = () => {
     GoalPushsPress({ id, pushGoal });
   };
+  const deleteGoalPress = () => {
+    deleteGoal(id);
+  };
+
   return (
     <GoalComponent
       navigateToGoal={navigateToGoal}
       pushGoal={pushGoalPress}
+      deleteGoal={deleteGoalPress}
       text={title}
       totalCount={totalCount}
     />

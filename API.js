@@ -7,9 +7,20 @@ import _ from "lodash";
 
 export function APIClient() {
   const httpLink = new HttpLink({ uri: "http://localhost:4000/graphql" });
+  const DefaultOptions = {
+    watchQuery: {
+      fetchPolicy: "no-cache",
+      errorPolicy: "ignore",
+    },
+    query: {
+      fetchPolicy: "no-cache",
+      errorPolicy: "all",
+    },
+  };
   const client = new ApolloClient({
     link: httpLink, // Chain it with the HttpLink
     cache: new InMemoryCache(),
+    // defaultOptions: DefaultOptions,
   });
   return client;
 }
@@ -85,4 +96,14 @@ export const useGoalUpdate = () => {
   `;
   const [updateGoal, { data }] = useMutation(UPDATE_GOAL);
   return { updateGoal, data };
+};
+
+export const useGoalDelete = () => {
+  const DELETE_GOAL = gql`
+    mutation($_id: ID!) {
+      deleteGoal(goalId: $_id)
+    }
+  `;
+  const [deleteGoal, { data }] = useMutation(DELETE_GOAL);
+  return { removeGoal: deleteGoal, data };
 };

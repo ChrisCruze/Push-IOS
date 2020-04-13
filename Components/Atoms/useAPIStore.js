@@ -3,7 +3,7 @@ import APIStore from "../Atoms/APIStore";
 import moment from "moment";
 import { APIClient, useAPI } from "../../API";
 import _ from "lodash";
-import { useGoalsPull, useGoalCreate, useGoalUpdate } from "../../API";
+import { useGoalsPull, useGoalCreate, useGoalUpdate, useGoalDelete } from "../../API";
 
 function goals_array_transform_from_update({ goals, id }) {
   const rest_of_goals = goals.filter(function(D) {
@@ -20,6 +20,13 @@ function goals_array_transform_from_update({ goals, id }) {
   };
   const new_list_of_goals = [identified_goal_with_count, ...rest_of_goals];
   return { goal: identified_goal_with_count, goals_array: new_list_of_goals };
+}
+
+function goals_array_transform_from_delete({ goals, id }) {
+  const rest_of_goals = goals.filter(function(D) {
+    return D["_id"] != id;
+  });
+  return rest_of_goals;
 }
 
 function filter_keys_from_object(object, keys) {
@@ -41,11 +48,18 @@ export const useGoals = () => {
   const base_goals = goals_pull_dict.goals;
   const [goals, updateGoals] = useState(base_goals);
   const { updateGoal } = useGoalUpdate();
+  const { removeGoal } = useGoalDelete();
 
   function pushGoal(id) {
     const { goal, goals_array } = goals_array_transform_from_update({ goals, id });
     updateGoalAPI({ updateGoal, goal });
     updateGoals(goals_array);
   }
-  return { goals, pushGoal };
+
+  function deleteGoal(id) {
+    removeGoal({ variables: { _id: id } });
+    const goals_array = goals_array_transform_from_delete({ goals, id });
+    updateGoals(goals_array);
+  }
+  return { goals, pushGoal, deleteGoal };
 };

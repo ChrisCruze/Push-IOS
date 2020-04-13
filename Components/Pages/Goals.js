@@ -23,10 +23,8 @@ import { useGoalsPull, useGoalCreate } from "../../API";
 
 const Goals = ({ navigation }) => {
   const logout = () => navigation.navigate("Login");
-  // const pushGoal = function() {};
-  // const { goals, loading } = useGoalsPull();
-  const { goals, pushGoal } = useGoals();
-  const [internalState, setInternalState] = useState(goals);
+
+  const { goals, pushGoal, deleteGoal } = useGoals();
   const createNewGoal = () => {
     navigation.navigate("createGoal");
   };
@@ -40,7 +38,7 @@ const Goals = ({ navigation }) => {
         style={styles.list}
         data={goals}
         keyExtractor={goal => goal.id}
-        renderItem={({ item }) => GoalItem({ ...item, navigation, goals, pushGoal })}
+        renderItem={({ item }) => GoalItem({ ...item, navigation, goals, pushGoal, deleteGoal })}
         ListHeaderComponent={
           <View style={styles.post}>
             <TouchableWithoutFeedback onPress={createNewGoal}>

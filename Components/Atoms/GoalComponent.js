@@ -6,7 +6,7 @@ import { Feather as Icon } from "@expo/vector-icons";
 import Text from "./Text";
 import Theme from "./Theme";
 
-const GoalComponent = ({ text, navigateToGoal, pushGoal, totalCount }) => {
+const GoalComponent = ({ text, navigateToGoal, pushGoal, totalCount, deleteGoal }) => {
   const contentStyle = [styles.content];
   const nameStyle = [styles.name];
 
@@ -30,6 +30,11 @@ const GoalComponent = ({ text, navigateToGoal, pushGoal, totalCount }) => {
             <TouchableWithoutFeedback onPress={navigateToGoal}>
               <View style={buttonStyles.commentsRight}>
                 <Icon name="arrow-up-right" size={18} {...{ color }} />
+              </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={deleteGoal}>
+              <View style={buttonStyles.commentsRight}>
+                <Icon name="trash" size={18} {...{ color }} />
               </View>
             </TouchableWithoutFeedback>
           </View>
