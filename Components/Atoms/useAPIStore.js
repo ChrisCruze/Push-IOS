@@ -45,8 +45,7 @@ function updateGoalAPI({ updateGoal, goal }) {
 
 export const useGoals = () => {
   const goals_pull_dict = useGoalsPull(); //{ goals, loading }
-  const base_goals = goals_pull_dict.goals;
-  const [goals, updateGoals] = useState(base_goals);
+  const [goals, updateGoals] = useState(goals_pull_dict.goals);
   const { updateGoal } = useGoalUpdate();
   const { removeGoal } = useGoalDelete();
 

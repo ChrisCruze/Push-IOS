@@ -23,12 +23,10 @@ import { useGoalsPull, useGoalCreate } from "../../API";
 
 const Goals = ({ navigation }) => {
   const logout = () => navigation.navigate("Login");
-
   const { goals, pushGoal, deleteGoal } = useGoals();
   const createNewGoal = () => {
     navigation.navigate("createGoal");
   };
-
   return (
     <View style={styles.container}>
       <Header title={"Goals"} sub_title={"List"} logout={logout} />

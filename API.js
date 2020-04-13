@@ -8,10 +8,10 @@ import _ from "lodash";
 export function APIClient() {
   const httpLink = new HttpLink({ uri: "http://localhost:4000/graphql" });
   const DefaultOptions = {
-    watchQuery: {
-      fetchPolicy: "no-cache",
-      errorPolicy: "ignore",
-    },
+    // watchQuery: {
+    //   fetchPolicy: "no-cache",
+    //   errorPolicy: "ignore",
+    // },
     query: {
       fetchPolicy: "no-cache",
       errorPolicy: "all",
@@ -20,7 +20,7 @@ export function APIClient() {
   const client = new ApolloClient({
     link: httpLink, // Chain it with the HttpLink
     cache: new InMemoryCache(),
-    // defaultOptions: DefaultOptions,
+    defaultOptions: DefaultOptions,
   });
   return client;
 }
