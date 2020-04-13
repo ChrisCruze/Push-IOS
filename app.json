@@ -20,6 +20,10 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.push.xyz"
+    },
+    "android": {
+      "package": "com.push.xyz",
+      "versionCode": 1
     }
   }
 }

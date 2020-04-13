@@ -1,25 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import APIStore from "../Atoms/APIStore";
 import moment from "moment";
+import { APIClient, useAPI } from "../../API";
+import _ from "lodash";
+import { useGoalsPull, useGoalCreate, useGoalUpdate, useGoalDelete } from "../../API";
 
-//get goals and save it to state so that I can add a push for goal
+function goals_array_transform_from_update({ goals, id }) {
+  const rest_of_goals = goals.filter(function(D) {
+    return D["_id"] != id;
+  });
+  const identified_goal = goals.find(function(D) {
+    return D["_id"] == id;
+  });
+  const timeStampsList = identified_goal["timeStamps"] || [];
+  const timeStampListWithNewOne = timeStampsList.concat(moment().format());
+  const identified_goal_with_count = {
+    ...identified_goal,
+    timeStamps: timeStampListWithNewOne,
+  };
+  const new_list_of_goals = [identified_goal_with_count, ...rest_of_goals];
+  return { goal: identified_goal_with_count, goals_array: new_list_of_goals };
+}
+
+function goals_array_transform_from_delete({ goals, id }) {
+  const rest_of_goals = goals.filter(function(D) {
+    return D["_id"] != id;
+  });
+  return rest_of_goals;
+}
+
+function filter_keys_from_object(object, keys) {
+  var new_dict = {};
+  keys.forEach(function(key) {
+    new_dict[key] = object[key];
+  });
+  return new_dict;
+}
+
+function updateGoalAPI({ updateGoal, goal }) {
+  const keys = ["_id", "title", "cadence", "cadenceCount", "timeStamps"];
+  const transformed_goal = filter_keys_from_object(goal, keys);
+  updateGoal({ variables: transformed_goal }); //{ title: "haha", cadence: "weekly", cadenceCount: 3 }
+}
+
 export const useGoals = () => {
-  const [goals, updateGoals] = useState(APIStore.goals());
+  const goals_pull_dict = useGoalsPull(); //{ goals, loading }
+  const [goals, updateGoals] = useState(goals_pull_dict.goals);
+  const { updateGoal } = useGoalUpdate();
+  const { removeGoal } = useGoalDelete();
+
   function pushGoal(id) {
-    const rest_of_goals = goals.filter(function(D) {
-      return D["id"] != id;
-    });
-    const identified_goal = goals.find(function(D) {
-      return D["id"] == id;
-    });
-    const timeStampsList = identified_goal["timeStamps"];
-    const timeStampListWithNewOne = timeStampsList.concat(moment().format());
-    const identified_goal_with_count = {
-      ...identified_goal,
-      timeStamps: timeStampListWithNewOne,
-    };
-    const new_list_of_goals = [identified_goal_with_count, ...rest_of_goals];
-    updateGoals(new_list_of_goals);
+    const { goal, goals_array } = goals_array_transform_from_update({ goals, id });
+    updateGoalAPI({ updateGoal, goal });
+    updateGoals(goals_array);
   }
-  return { goals, pushGoal };
+
+  function deleteGoal(id) {
+    removeGoal({ variables: { _id: id } });
+    const goals_array = goals_array_transform_from_delete({ goals, id });
+    updateGoals(goals_array);
+  }
+  return { goals, pushGoal, deleteGoal };
 };

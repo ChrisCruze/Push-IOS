@@ -5,7 +5,6 @@ import SignUpName from "./Components/Pages/SignUpName";
 import SignUpEmail from "./Components/Pages/SignUpEmail";
 import SignUpPassword from "./Components/Pages/SignUpPassword";
 import createGoal from "./Components/Pages/createGoal";
-import Profile from "./Components/Pages/Profile";
 import HomeTab from "./Components/Pages/HomeTab";
 import Goal from "./Components/Pages/Goal";
 import Goals from "./Components/Pages/Goals";
@@ -18,6 +17,9 @@ import { Asset } from "expo-asset";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
+import { ApolloProvider } from "@apollo/react-hooks";
+
+import { APIClient } from "./API";
 
 const SFProTextMedium = require("./assets/fonts/SF-Pro-Text-Medium.otf");
 const SFProTextHeavy = require("./assets/fonts/SF-Pro-Text-Heavy.otf");
@@ -41,7 +43,12 @@ class App extends React.Component {
         />
       );
     } else {
-      return <AppNavigator />;
+      const client = APIClient();
+      return (
+        <ApolloProvider client={client}>
+          <AppNavigator />
+        </ApolloProvider>
+      );
     }
   }
   async loadStaticResources() {
@@ -83,15 +90,9 @@ const SignUpNavigator = createStackNavigator(
   },
   StackNavigatorOptions,
 );
-const ProfileNavigator = createStackNavigator(
-  {
-    Profile: { screen: Profile },
-  },
-  StackNavigatorOptions,
-);
+
 const Home = createBottomTabNavigator(
   {
-    // Profile: { screen: ProfileNavigator },
     Dashboard: { screen: Dashboard },
     Goals: { screen: Goals },
   },
@@ -116,6 +117,7 @@ const AppNavigator = createAppContainer(
     StackNavigatorOptions,
   ),
 );
+
 export { AppNavigator };
 
 export default App;

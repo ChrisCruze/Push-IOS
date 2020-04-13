@@ -16,10 +16,12 @@ import {
 } from "../Atoms/BarChart.functions";
 import BarChart from "../Atoms/BarChart";
 
+import { useGoalsPull } from "../../API";
 const Dashboard = ({ navigation }) => {
   const logout = () => navigation.navigate("Login");
+
   const uid = APIStore.me();
-  const goals = APIStore.goals();
+  const { goals, loading } = useGoalsPull();
 
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
     goals,

@@ -18,40 +18,48 @@ import APIStore from "../Atoms/APIStore";
 import BarChart from "../Atoms/BarChart";
 import { TextField } from "../Atoms/Fields";
 import Theme from "../Atoms/Theme";
-import { Dropdown } from 'react-native-material-dropdown';
+import { Dropdown } from "react-native-material-dropdown";
 
-
+import { useGoalsPull, useGoalCreate } from "../../API";
 
 function createNew(goal) {
   APIStore.addGoal(goal);
 }
 
-
 // view
 const createGoal = ({ navigation, goToPassword, createNew }) => {
+  const { createGoal } = useGoalCreate();
+
   const [selectedValue, setSelectedValue] = useState("daily");
 
   const [textValue, updateSelectedText] = useState("default");
 
-  let data = [{
-    value: 'Daily',
-  }, {
-    value: 'Weekly',
-  }, {
-    value: 'Monthly',
-  }];
+  let data = [
+    {
+      value: "Daily",
+    },
+    {
+      value: "Weekly",
+    },
+    {
+      value: "Monthly",
+    },
+  ];
 
-function pressNextSubmit (){
-  APIStore.addGoal({
-      "id": APIStore.goals().length + 1,
-      "title": textValue,
-      "cadence": selectedValue,
-      "cadenceCount": 0,
-      "totalCount": 0,
-      "timeStamps": ["2020-03-21T00:18:56Z"]
-  });
-  navigation.navigate("Goals")
-}
+  function pressNextSubmit() {
+    const goal_dict = { title: textValue, cadence: selectedValue, cadenceCount: 0 };
+    createGoal({ variables: goal_dict }); //{ title: "haha", cadence: "weekly", cadenceCount: 3 }
+
+    // APIStore.addGoal({
+    //   id: APIStore.goals().length + 1,
+    //   title: textValue,
+    //   cadence: selectedValue,
+    //   cadenceCount: 0,
+    //   totalCount: 0,
+    //   timeStamps: ["2020-03-21T00:18:56Z"],
+    // });
+    navigation.navigate("Goals");
+  }
 
   return (
     <CreateContainer
@@ -64,26 +72,16 @@ function pressNextSubmit (){
       first
       {...{ navigation }}
     >
-
-
-    <TextField
-      style={styles.textInput}
-      placeholder="Create goal"
-
-      keyboardType="textInput"
-      autoCapitalize="none"
-      returnKeyType="next"
-      onChangeText={text => updateSelectedText(text)}
-  
-      contrast
-    />
-    <Dropdown
-      label='Cadence'
-      data={data}
-      value = {selectedValue}
-      onChangeText = {setSelectedValue}
-    />
-
+      <TextField
+        style={styles.textInput}
+        placeholder="Create goal"
+        keyboardType="textInput"
+        autoCapitalize="none"
+        returnKeyType="next"
+        onChangeText={text => updateSelectedText(text)}
+        contrast
+      />
+      <Dropdown label="Cadence" data={data} value={selectedValue} onChangeText={setSelectedValue} />
     </CreateContainer>
   );
 };
@@ -95,13 +93,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textInput: {
-    marginTop:25,
-    marginBottom:30
-  }
+    marginTop: 25,
+    marginBottom: 30,
+  },
 });
-
-
-
-
 
 export default createGoal;

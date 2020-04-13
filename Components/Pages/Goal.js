@@ -19,15 +19,18 @@ import {
   goals_data_last_n_days_from_transformed_goals_array_chunked,
 } from "../Atoms/BarChart.functions";
 import BarChart from "../Atoms/BarChart";
+import { useGoals } from "../Atoms/useAPIStore";
 
 const Goal = ({ navigation }) => {
   const back = () => navigation.navigate("Goals");
+  const _id = navigation.getParam("id");
+  // const goals = navigation.getParam("goals");
+  console.log(navigation.getParam("goals"));
+  const { goals, pushGoal } = useGoals();
 
-  const id = navigation.getParam("id");
-  const goals = APIStore.goals();
   //use the filtered
   const goals_filtered = goals.filter(function(D) {
-    return D["id"] == id;
+    return D["_id"] == _id;
   });
 
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({

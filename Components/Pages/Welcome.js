@@ -8,6 +8,9 @@ import Button from "../Atoms/Button";
 import Container from "../Atoms/Container";
 import { AnimatedView } from "../Atoms/Animations";
 import Logo from "../Molecules/Logo";
+import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, gql } from "apollo-boost";
+
+import { APIClient, useAPI } from "../../API";
 
 const Welcome = ({ navigation }) => {
   const login = () => navigation.navigate("Login");

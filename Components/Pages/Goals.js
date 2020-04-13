@@ -19,16 +19,14 @@ import GoalItem from "../Molecules/GoalItem";
 import Header from "../Molecules/Header";
 import moment from "moment";
 import { useGoals } from "../Atoms/useAPIStore";
+import { useGoalsPull, useGoalCreate } from "../../API";
 
 const Goals = ({ navigation }) => {
   const logout = () => navigation.navigate("Login");
-  const { goals, pushGoal } = useGoals();
-
-  const [internalState, setInternalState] = useState(goals);
+  const { goals, pushGoal, deleteGoal } = useGoals();
   const createNewGoal = () => {
     navigation.navigate("createGoal");
   };
-
   return (
     <View style={styles.container}>
       <Header title={"Goals"} sub_title={"List"} logout={logout} />
@@ -38,7 +36,7 @@ const Goals = ({ navigation }) => {
         style={styles.list}
         data={goals}
         keyExtractor={goal => goal.id}
-        renderItem={({ item }) => GoalItem({ ...item, navigation, goals, pushGoal })}
+        renderItem={({ item }) => GoalItem({ ...item, navigation, goals, pushGoal, deleteGoal })}
         ListHeaderComponent={
           <View style={styles.post}>
             <TouchableWithoutFeedback onPress={createNewGoal}>
