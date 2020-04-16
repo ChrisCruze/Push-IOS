@@ -6,7 +6,9 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import _ from "lodash";
 
 export function APIClient() {
-  const httpLink = new HttpLink({ uri: "http://localhost:4000/graphql" });
+  const httpLink = new HttpLink({
+    uri: "https://mysterious-everglades-44359.herokuapp.com/graphql",
+  });
   const DefaultOptions = {
     // watchQuery: {
     //   fetchPolicy: "no-cache",
