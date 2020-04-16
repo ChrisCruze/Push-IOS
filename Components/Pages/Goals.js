@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 import { Feather as Icon } from "@expo/vector-icons";
-import APIStore from "../Atoms/APIStore";
 import Theme from "../Atoms/Theme";
 import Text from "../Atoms/Text";
 import Images from "../Atoms/Images";
@@ -18,15 +17,20 @@ import FirstPost from "../Atoms/FirstPost";
 import GoalItem from "../Molecules/GoalItem";
 import Header from "../Molecules/Header";
 import moment from "moment";
-import { useGoals } from "../Atoms/useAPIStore";
-import { useGoalsPull, useGoalCreate } from "../../API";
+import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
 
 const Goals = ({ navigation }) => {
   const logout = () => navigation.navigate("Login");
-  const { goals, pushGoal, deleteGoal } = useGoals();
+
+  const { goals, refetch } = useGoalsPull();
+  const { updateGoal } = useGoalUpdate();
+  const { removeGoal } = useGoalDelete();
+  refetch();
+
   const createNewGoal = () => {
     navigation.navigate("createGoal");
   };
+
   return (
     <View style={styles.container}>
       <Header title={"Goals"} sub_title={"List"} logout={logout} />
@@ -36,7 +40,16 @@ const Goals = ({ navigation }) => {
         style={styles.list}
         data={goals}
         keyExtractor={goal => goal.id}
-        renderItem={({ item }) => GoalItem({ ...item, navigation, goals, pushGoal, deleteGoal })}
+        renderItem={({ item }) => {
+          return GoalItem({
+            ...item,
+            navigation,
+            goals,
+            updateGoal,
+            removeGoal,
+            refetch,
+          });
+        }}
         ListHeaderComponent={
           <View style={styles.post}>
             <TouchableWithoutFeedback onPress={createNewGoal}>

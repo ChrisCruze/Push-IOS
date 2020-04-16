@@ -2,18 +2,13 @@ import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import APIStore from "../Atoms/APIStore";
 import GoalComponent from "../Atoms/GoalComponent";
+import moment from "moment";
 
 const GoalOptionsPress = ({ id, navigation, goals }) => {
   const pass_dict = { id: id, goals: goals };
   console.log({ pass_dict });
   navigation.navigate("Goal", pass_dict);
   console.log(`navigate to options page ${id}`);
-};
-
-const GoalPushsPress = ({ id, pushGoal }) => {
-  // APIStore.push(id);
-  console.log("record activity now!");
-  pushGoal(id);
 };
 
 const GoalCountGet = ({ goals, id }) => {
@@ -25,16 +20,40 @@ const GoalCountGet = ({ goals, id }) => {
   return totalCount;
 };
 
-const GoalItem = ({ id, title, goals, cadenceCount, navigation, pushGoal, deleteGoal }) => {
+const GoalItem = ({
+  id,
+  _id,
+  cadence,
+  timeStamps,
+  title,
+  goals,
+  cadenceCount,
+  navigation,
+  updateGoal,
+  removeGoal,
+  refetch,
+}) => {
   const totalCount = GoalCountGet({ goals, id });
   const navigateToGoal = () => {
     GoalOptionsPress({ id, navigation, goals });
   };
+
   const pushGoalPress = () => {
-    GoalPushsPress({ id, pushGoal });
+    const timeStampsWithNew = timeStamps.concat(moment().format());
+    updateGoal({
+      variables: {
+        _id,
+        title,
+        cadence,
+        cadenceCount,
+        timeStamps: timeStampsWithNew,
+      },
+    });
+    refetch();
   };
   const deleteGoalPress = () => {
-    deleteGoal(id);
+    removeGoal({ variables: { _id } });
+    refetch();
   };
 
   return (

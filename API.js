@@ -53,9 +53,10 @@ export const useGoalsPull = () => {
       }
     }
   `;
-  const { loading, error, data } = useQuery(GoalsQuery);
+  const { loading, error, data, refetch } = useQuery(GoalsQuery);
+  console.log({ data });
   const goals = goals_from_data({ loading, error, data });
-  return { loading, error, data, goals };
+  return { loading, error, data, goals, refetch };
 };
 
 export const useGoalCreate = () => {

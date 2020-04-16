@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { View, StyleSheet, Dimensions, FlatList, TouchableOpacity, Image } from "react-native";
 import Constants from "expo-constants";
 import { Feather as Icon } from "@expo/vector-icons";
-import APIStore from "../Atoms/APIStore";
 import Theme from "../Atoms/Theme";
 import Text from "../Atoms/Text";
 import Images from "../Atoms/Images";
@@ -20,8 +19,8 @@ import { useGoalsPull } from "../../API";
 const Dashboard = ({ navigation }) => {
   const logout = () => navigation.navigate("Login");
 
-  const uid = APIStore.me();
-  const { goals, loading } = useGoalsPull();
+  const { goals, refetch } = useGoalsPull();
+  refetch();
 
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
     goals,
