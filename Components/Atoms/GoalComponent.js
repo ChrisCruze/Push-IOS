@@ -13,6 +13,7 @@ const GoalComponent = ({ text, navigateToGoal, pushGoal, totalCount, deleteGoal 
   const color = "black";
   return (
     <View style={styles.container}>
+    <TouchableWithoutFeedback onPress={pushGoal}>
       <View style={contentStyle}>
         <View style={styles.header}>
           <View style={styles.metadata}>
@@ -21,15 +22,13 @@ const GoalComponent = ({ text, navigateToGoal, pushGoal, totalCount, deleteGoal 
         </View>
         <View style={buttonStyles.container}>
           <View style={buttonStyles.content}>
-            <TouchableWithoutFeedback onPress={pushGoal}>
               <View style={buttonStyles.comments}>
-                <Icon name="circle" size={18} {...{ color }} />
+
                 <Text style={[buttonStyles.commentCount, { color }]}>{totalCount}</Text>
               </View>
-            </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={navigateToGoal}>
               <View style={buttonStyles.commentsRight}>
-                <Icon name="arrow-up-right" size={18} {...{ color }} />
+                <Icon name="dashboard" size={18} {...{ color }} />
               </View>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={deleteGoal}>
@@ -40,18 +39,22 @@ const GoalComponent = ({ text, navigateToGoal, pushGoal, totalCount, deleteGoal 
           </View>
         </View>
       </View>
+    </TouchableWithoutFeedback>
     </View>
   );
 };
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 5,
-    shadowColor: "black",
+    borderRadius: 20,
+    width:width * .9,
+    shadowColor: "#BFBFBF",
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.14,
-    shadowRadius: 6,
-    borderColor: Theme.palette.borderColor,
+    shadowOpacity: 1,
+    justifyContent: 'center',
+    marginLeft:width * .05,
+    shadowRadius: 50,
+    borderColor: "black",
     borderWidth: Platform.OS === "ios" ? 0 : 1,
     marginVertical: 2, //Theme.spacing.small,
     backgroundColor: "white",
@@ -96,6 +99,7 @@ const buttonStyles = StyleSheet.create({
   },
   commentCount: {
     marginLeft: Theme.spacing.tiny,
+    color:"white",
   },
 });
 export default GoalComponent;
