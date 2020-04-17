@@ -8,7 +8,7 @@ import _ from "lodash";
 
 export function APIClient() {
   const httpLink = new HttpLink({
-    uri: {URI},
+    uri: URI,
   });
   const DefaultOptions = {
     // watchQuery: {
