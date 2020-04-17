@@ -2,11 +2,14 @@ import React, { Fragment, useState, useEffect } from "react";
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, gql } from "apollo-boost";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { ApolloProvider } from "@apollo/react-hooks";
+import { URI } from 'react-native-dotenv';
 
 import _ from "lodash";
 
 export function APIClient() {
-  const httpLink = new HttpLink({ uri: "http://localhost:4000/graphql" });
+  const httpLink = new HttpLink({
+    uri: URI,
+  });
   const DefaultOptions = {
     // watchQuery: {
     //   fetchPolicy: "no-cache",
@@ -51,9 +54,10 @@ export const useGoalsPull = () => {
       }
     }
   `;
-  const { loading, error, data } = useQuery(GoalsQuery);
+  const { loading, error, data, refetch } = useQuery(GoalsQuery);
+  console.log({ data });
   const goals = goals_from_data({ loading, error, data });
-  return { loading, error, data, goals };
+  return { loading, error, data, goals, refetch };
 };
 
 export const useGoalCreate = () => {

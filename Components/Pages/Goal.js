@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 
-import APIStore from "../Atoms/APIStore";
 // import DashboardGoal from "../Organisms/DashboardGoal";
 import TableGrid from "../Molecules/TableGrid";
 import Header from "../Molecules/Header";
@@ -19,14 +18,13 @@ import {
   goals_data_last_n_days_from_transformed_goals_array_chunked,
 } from "../Atoms/BarChart.functions";
 import BarChart from "../Atoms/BarChart";
-import { useGoals } from "../Atoms/useAPIStore";
+import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
 
 const Goal = ({ navigation }) => {
   const back = () => navigation.navigate("Goals");
   const _id = navigation.getParam("id");
-  // const goals = navigation.getParam("goals");
-  console.log(navigation.getParam("goals"));
-  const { goals, pushGoal } = useGoals();
+  const { goals, refetch } = useGoalsPull();
+  refetch();
 
   //use the filtered
   const goals_filtered = goals.filter(function(D) {
