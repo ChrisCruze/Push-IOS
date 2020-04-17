@@ -2,12 +2,13 @@ import React, { Fragment, useState, useEffect } from "react";
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, gql } from "apollo-boost";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { ApolloProvider } from "@apollo/react-hooks";
+import { URI } from 'react-native-dotenv';
 
 import _ from "lodash";
 
 export function APIClient() {
   const httpLink = new HttpLink({
-    uri: "https://mysterious-everglades-44359.herokuapp.com/graphql",
+    uri: {URI},
   });
   const DefaultOptions = {
     // watchQuery: {
