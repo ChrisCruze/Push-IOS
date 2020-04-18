@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Dimensions, Platform, TouchableWithoutFeedback } from "react-native";
 
-import { Feather as Icon } from "@expo/vector-icons";
+import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
 
 import Text from "./Text";
 import Theme from "./Theme";
@@ -17,18 +17,37 @@ const GoalComponent = ({ text, navigateToGoal, pushGoal, totalCount, deleteGoal 
       <View style={contentStyle}>
         <View style={styles.header}>
           <View style={styles.metadata}>
-            <Text style={nameStyle}>{text}</Text>
+
+
+
+
+
+          <View style={{flexDirection:'row'}}>
+            <Text style={nameStyle}>
+              {text}
+            </Text>
+          </View>
+
+
+          <View style={{flexDirection:'row-reverse'}}>
+            <Text style={styles.countStyle}>
+              {totalCount}
+            </Text>
+          </View>
+
+
+
+
+
+
           </View>
         </View>
         <View style={buttonStyles.container}>
           <View style={buttonStyles.content}>
-              <View style={buttonStyles.comments}>
 
-                <Text style={[buttonStyles.commentCount, { color }]}>{totalCount}</Text>
-              </View>
             <TouchableWithoutFeedback onPress={navigateToGoal}>
               <View style={buttonStyles.commentsRight}>
-                <Icon name="dashboard" size={18} {...{ color }} />
+                <FontAwesome name="dashboard" size={18} {...{ color }} />
               </View>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={deleteGoal}>
@@ -47,6 +66,7 @@ const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     borderRadius: 20,
+    height:150,
     width:width * .9,
     shadowColor: "#BFBFBF",
     shadowOffset: { width: 0, height: 1 },
@@ -59,6 +79,10 @@ const styles = StyleSheet.create({
     marginVertical: 2, //Theme.spacing.small,
     backgroundColor: "white",
   },
+  countStyle: {
+    fontSize:30,
+
+ },
   content: {
     padding: Theme.spacing.small,
   },
@@ -71,6 +95,9 @@ const styles = StyleSheet.create({
   },
   name: {
     color: "black",
+    fontSize:30,
+    padding:15,
+
   },
   text: {
     flexWrap: "wrap",
@@ -100,6 +127,9 @@ const buttonStyles = StyleSheet.create({
   commentCount: {
     marginLeft: Theme.spacing.tiny,
     color:"white",
+    fontSize:30,
+    padding:10,
+
   },
 });
 export default GoalComponent;
