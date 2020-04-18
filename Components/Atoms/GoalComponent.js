@@ -13,52 +13,33 @@ const GoalComponent = ({ text, navigateToGoal, pushGoal, totalCount, deleteGoal 
   const color = "black";
   return (
     <View style={styles.container}>
-    <TouchableWithoutFeedback onPress={pushGoal}>
-      <View style={contentStyle}>
-        <View style={styles.header}>
-          <View style={styles.metadata}>
+      <TouchableWithoutFeedback onPress={pushGoal}>
+        <View style={contentStyle}>
+          <View style={styles.header}>
+            <View style={styles.metadata}>
+              <View style={{ flexDirection: "column", alignItems: "center" }}>
+                <Text style={nameStyle}>{text}</Text>
 
-
-
-
-
-          <View style={{flexDirection:'row'}}>
-            <Text style={nameStyle}>
-              {text}
-            </Text>
+                <Text style={styles.countStyle}>{totalCount}</Text>
+              </View>
+            </View>
           </View>
-
-
-          <View style={{flexDirection:'row-reverse'}}>
-            <Text style={styles.countStyle}>
-              {totalCount}
-            </Text>
-          </View>
-
-
-
-
-
-
+          <View style={buttonStyles.container}>
+            <View style={buttonStyles.content}>
+              <TouchableWithoutFeedback onPress={navigateToGoal}>
+                <View style={buttonStyles.commentsRight}>
+                  <FontAwesome name="dashboard" size={18} {...{ color }} />
+                </View>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={deleteGoal}>
+                <View style={buttonStyles.commentsRight}>
+                  <Icon name="trash" size={18} {...{ color }} />
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
           </View>
         </View>
-        <View style={buttonStyles.container}>
-          <View style={buttonStyles.content}>
-
-            <TouchableWithoutFeedback onPress={navigateToGoal}>
-              <View style={buttonStyles.commentsRight}>
-                <FontAwesome name="dashboard" size={18} {...{ color }} />
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={deleteGoal}>
-              <View style={buttonStyles.commentsRight}>
-                <Icon name="trash" size={18} {...{ color }} />
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
     </View>
   );
 };
@@ -66,13 +47,13 @@ const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     borderRadius: 20,
-    height:150,
-    width:width * .9,
+    height: 150,
+    width: width * 0.9,
     shadowColor: "#BFBFBF",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 1,
-    justifyContent: 'center',
-    marginLeft:width * .05,
+    justifyContent: "center",
+    marginLeft: width * 0.05,
     shadowRadius: 50,
     borderColor: "black",
     borderWidth: Platform.OS === "ios" ? 0 : 1,
@@ -80,24 +61,36 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   countStyle: {
-    fontSize:30,
-
- },
+    fontSize: 30,
+    padding: 15,
+  },
   content: {
-    padding: Theme.spacing.small,
+    // padding: Theme.spacing.small,
   },
   header: {
+    justifyContent: "center",
+
     flexDirection: "row",
     marginBottom: Theme.spacing.small,
+    alignItems: "center",
   },
   metadata: {
-    marginLeft: 0, //Theme.spacing.small,
+    flexDirection: "row",
+
+    // justifyContent: "space-between",
+    alignItems: "center",
+
+    // width: width,
+
+    // marginLeft: 0, //Theme.spacing.small,
   },
   name: {
-    color: "black",
-    fontSize:30,
-    padding:15,
+    // alignItems: "flex-end",
+    alignItems: "center",
 
+    color: "black",
+    fontSize: 30,
+    padding: 15,
   },
   text: {
     flexWrap: "wrap",
@@ -126,10 +119,9 @@ const buttonStyles = StyleSheet.create({
   },
   commentCount: {
     marginLeft: Theme.spacing.tiny,
-    color:"white",
-    fontSize:30,
-    padding:10,
-
+    color: "white",
+    fontSize: 30,
+    padding: 10,
   },
 });
 export default GoalComponent;
