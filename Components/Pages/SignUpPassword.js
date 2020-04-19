@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { TextInput } from "react-native";
 import { StyleSheet, View } from "react-native";
 
@@ -9,7 +9,14 @@ import Text from "../Atoms/Text";
 import Switch from "../Atoms/Switch";
 
 const SignUpPassword = ({ navigation }) => {
-  const next = () => navigation.navigate("Home");
+  const [password, updatePassword] = useState("");
+
+  const onSubmit = () => {
+    const email = navigation.getParam("email");
+    const username = navigation.getParam("username");
+    console.log({ email, username, password });
+    navigation.navigate("Home");
+  };
 
   return (
     <SignUpContainer
@@ -17,7 +24,7 @@ const SignUpPassword = ({ navigation }) => {
       subtitle="Stay Safe"
       nextLabel="Sign-Up"
       back={() => navigation.navigate("SignUpEmail")}
-      next={next}
+      next={onSubmit}
       {...{ navigation }}
     >
       <TextField
@@ -25,7 +32,8 @@ const SignUpPassword = ({ navigation }) => {
         autoCapitalize="none"
         autoCorrect={false}
         returnKeyType="go"
-        onSubmitEditing={next}
+        onChangeText={updatePassword}
+        value={password}
         secureTextEntry
         contrast
       />
