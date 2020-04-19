@@ -19,8 +19,11 @@ const GoalComponent = ({ text, navigateToGoal, pushGoal, totalCount, deleteGoal 
             <View style={styles.metadata}>
               <View style={{ flexDirection: "column", alignItems: "center" }}>
                 <Text style={nameStyle}>{text}</Text>
-
                 <Text style={styles.countStyle}>{totalCount}</Text>
+                <View style={buttonStyles.commentsRight}>
+                  <FontAwesome name="dashboard" size={18} {...{ color }} />
+                  <Icon name="trash" size={18} {...{ color }} />
+                </View>
               </View>
             </View>
           </View>
@@ -29,6 +32,7 @@ const GoalComponent = ({ text, navigateToGoal, pushGoal, totalCount, deleteGoal 
               <TouchableWithoutFeedback onPress={navigateToGoal}>
                 <View style={buttonStyles.commentsRight}>
                   <FontAwesome name="dashboard" size={18} {...{ color }} />
+                  <Icon name="trash" size={18} {...{ color }} />
                 </View>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={deleteGoal}>
