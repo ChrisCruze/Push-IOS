@@ -16,6 +16,7 @@ const SignUpPassword = ({ navigation }) => {
       title="Your Password"
       subtitle="Stay Safe"
       nextLabel="Sign-Up"
+      back={() => navigation.navigate("SignUpEmail")}
       next={next}
       {...{ navigation }}
     >

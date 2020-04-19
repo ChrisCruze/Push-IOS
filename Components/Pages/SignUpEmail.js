@@ -11,7 +11,13 @@ import Switch from "../Atoms/Switch";
 const SignUpEmail = ({ navigation, setLastNameRef, goToLastName }) => {
   const next = () => navigation.navigate("SignUpPassword");
   return (
-    <SignUpContainer title="Your Email" subtitle="We won't spam" next={next} {...{ navigation }}>
+    <SignUpContainer
+      title="Your Email"
+      subtitle="We won't spam"
+      back={() => navigation.navigate("SignUp")}
+      next={next}
+      {...{ navigation }}
+    >
       <TextField
         placeholder="Email"
         keyboardType="email-address"

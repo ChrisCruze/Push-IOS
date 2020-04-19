@@ -7,7 +7,14 @@ const SignUpNameTemplate = ({ navigation, setLastNameRef, goToLastName }) => {
   const next = () => navigation.navigate("SignUpEmail");
 
   return (
-    <SignUpContainer title="Your Name" subtitle="Who are you" next={next} first {...{ navigation }}>
+    <SignUpContainer
+      back={() => navigation.navigate("Welcome")}
+      title="Your Name"
+      subtitle="Who are you"
+      next={next}
+      first
+      {...{ navigation }}
+    >
       <TextField
         placeholder="First Name"
         autoCapitalize="none"
