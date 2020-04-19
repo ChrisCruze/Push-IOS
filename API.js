@@ -2,14 +2,41 @@ import React, { Fragment, useState, useEffect } from "react";
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, gql } from "apollo-boost";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { ApolloProvider } from "@apollo/react-hooks";
-import { URI } from 'react-native-dotenv';
+import { URI } from "react-native-dotenv";
 
 import _ from "lodash";
 
+export function APIClientAuth({ token }) {
+  const httpLink = new HttpLink({
+    uri: URI,
+  });
+
+  const authLink = new ApolloLink((operation, forward) => {
+    operation.setContext({
+      headers: {
+        authorization: token ? `Bearer ${token}` : "",
+      },
+    });
+    return forward(operation);
+  });
+  const DefaultOptions = {
+    query: {
+      fetchPolicy: "no-cache",
+      errorPolicy: "all",
+    },
+  };
+  const client = new ApolloClient({
+    link: authLink.concat(httpLink), // Chain it with the HttpLink
+    cache: new InMemoryCache(),
+    defaultOptions: DefaultOptions,
+  });
+  return client;
+}
 export function APIClient() {
   const httpLink = new HttpLink({
     uri: URI,
   });
+
   const DefaultOptions = {
     // watchQuery: {
     //   fetchPolicy: "no-cache",
