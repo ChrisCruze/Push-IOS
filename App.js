@@ -19,7 +19,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import { ApolloProvider } from "@apollo/react-hooks";
 
-import { APIClient } from "./API";
+import { APIClient, APIClientAuth } from "./API";
 
 const SFProTextMedium = require("./assets/fonts/SF-Pro-Text-Medium.otf");
 const SFProTextHeavy = require("./assets/fonts/SF-Pro-Text-Heavy.otf");
@@ -43,6 +43,10 @@ class App extends React.Component {
         />
       );
     } else {
+      // const client = APIClientAuth({
+      //   token:
+      //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlOWRjZTA5NWE1NTA5MDAyNGZjZTEzNCIsInVzZXJOYW1lIjoiSGVyb2t1ISIsImVtYWlsIjoidGVzdDJAZ21haWwuY29tIn0sImlhdCI6MTU4NzUwNTQyOSwiZXhwIjoxNTg3NTI3MDI5fQ.o7Sz6TexZathBEKJWXzxYKEaC9GlsQ1Qn3yF68n-M9Q",
+      // });
       const client = APIClient();
       return (
         <ApolloProvider client={client}>

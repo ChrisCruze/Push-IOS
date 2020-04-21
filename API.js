@@ -68,7 +68,21 @@ function goals_from_data({ loading, error, data }) {
     return goals_array_transformed;
   }
 }
-
+export const useUserPull = () => {
+  const Query = gql`
+    query {
+      goals {
+        title
+        _id
+        timeStamps
+        cadence
+        cadenceCount
+      }
+    }
+  `;
+  const { loading, error, data, refetch, client } = useQuery(Query);
+  return { loading, error, data, goals, refetch, client };
+};
 export const useGoalsPull = () => {
   const GoalsQuery = gql`
     query {
@@ -82,7 +96,6 @@ export const useGoalsPull = () => {
     }
   `;
   const { loading, error, data, refetch } = useQuery(GoalsQuery);
-  console.log({ data });
   const goals = goals_from_data({ loading, error, data });
   return { loading, error, data, goals, refetch };
 };
