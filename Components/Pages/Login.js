@@ -2,6 +2,28 @@ import React, { useState } from "react";
 import SignUpContainer from "../Molecules/SignUpContainer";
 import { TextField } from "../Atoms/Fields";
 
+function fetch_authenticate({ email, password, navigation }) {
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  var raw = JSON.stringify({ email: email, password: password });
+
+  var requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
+
+  fetch("https://pushpiratesforlife.herokuapp.com/login", requestOptions)
+    .then(response => response.text())
+    .then(result => {
+      console.log({ result });
+      navigation.navigate("Home");
+    })
+    .catch(error => console.log("error", error));
+}
+
 const Login = ({ navigation }) => {
   const [password, updatePassword] = useState("");
   const [email, updateEmail] = useState("");
@@ -9,7 +31,7 @@ const Login = ({ navigation }) => {
   const onLoginSubmit = () => {
     //this is where login to the graphql login will go
     console.log({ email, password });
-    navigation.navigate("Home");
+    fetch_authenticate({ email, password, navigation });
   };
 
   return (
