@@ -14,6 +14,7 @@
     "apollo-boost": "^0.4.7",
     "apollo-link-context": "^1.0.20",
     "apollo-link-state": "^0.4.2",
+    "axios": "^0.19.2",
     "dotenv": "^8.2.0",
     "expo": "~36.0.0",
     "expo-blur": "^8.1.0",

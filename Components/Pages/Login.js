@@ -3,49 +3,25 @@ import SignUpContainer from "../Molecules/SignUpContainer";
 import { TextField } from "../Atoms/Fields";
 import { AsyncStorage } from "react-native";
 import { LOGIN_URI } from "react-native-dotenv";
-
-const storeToken = async ({ token }) => {
-  try {
-    await AsyncStorage.setItem("token", token);
-  } catch (error) {
-    console.log({ error });
-  }
-};
-
-function fetch_authenticate({ email, password, navigation }) {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-
-  var raw = JSON.stringify({ email: email, password: password });
-
-  var requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
-  };
-
-  fetch(LOGIN_URI, requestOptions)
-    .then(response => {
-      return response.text();
-    })
-    .then(result => {
-      const token = JSON.parse(result)["token"];
-      return token;
-    })
-    .then(token => {
-      storeToken({ token });
-      navigation.navigate("Home");
-    })
-    .catch(error => console.log("error", error));
-}
+import axios from "axios";
 
 const Login = ({ navigation }) => {
   const [password, updatePassword] = useState("");
   const [email, updateEmail] = useState("");
 
   const onLoginSubmit = () => {
-    fetch_authenticate({ email, password, navigation });
+    axios
+      .post(LOGIN_URI, {
+        email,
+        password,
+      })
+      .then(response => AsyncStorage.setItem("token", response["data"]["token"]))
+      .then(() => {
+        navigation.navigate("Home");
+      })
+      .catch(function(error) {
+        console.log({ error });
+      });
   };
 
   return (

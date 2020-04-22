@@ -7,18 +7,13 @@ import { setContext } from "apollo-link-context";
 import _ from "lodash";
 import { AsyncStorage } from "react-native";
 
-const retrieveLocalStorageToken = async () => {
-  const token = await AsyncStorage.getItem("token");
-  return token;
-};
-
 export function APIClient() {
   const httpLink = new HttpLink({
     uri: URI,
   });
 
-  const authLink = setContext((_, { headers }) => {
-    return retrieveLocalStorageToken().then(token => {
+  const authLink = setContext(() => {
+    return AsyncStorage.getItem("token").then(token => {
       return {
         headers: {
           authorization: token ? `Bearer ${token}` : "",
