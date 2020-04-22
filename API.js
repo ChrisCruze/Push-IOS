@@ -3,52 +3,37 @@ import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, gql } from "apollo-b
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { URI } from "react-native-dotenv";
-
+import { setContext } from "apollo-link-context";
 import _ from "lodash";
+import { AsyncStorage } from "react-native";
 
-export function APIClientAuth({ token }) {
-  const httpLink = new HttpLink({
-    uri: URI,
-  });
+const retrieveLocalStorageToken = async () => {
+  const token = await AsyncStorage.getItem("token");
+  return token;
+};
 
-  const authLink = new ApolloLink((operation, forward) => {
-    operation.setContext({
-      headers: {
-        authorization: token ? `Bearer ${token}` : "",
-      },
-    });
-    return forward(operation);
-  });
-  const DefaultOptions = {
-    query: {
-      fetchPolicy: "no-cache",
-      errorPolicy: "all",
-    },
-  };
-  const client = new ApolloClient({
-    link: authLink.concat(httpLink), // Chain it with the HttpLink
-    cache: new InMemoryCache(),
-    defaultOptions: DefaultOptions,
-  });
-  return client;
-}
 export function APIClient() {
   const httpLink = new HttpLink({
     uri: URI,
   });
 
+  const authLink = setContext((_, { headers }) => {
+    return retrieveLocalStorageToken().then(token => {
+      return {
+        headers: {
+          authorization: token ? `Bearer ${token}` : "",
+        },
+      };
+    });
+  });
   const DefaultOptions = {
-    // watchQuery: {
-    //   fetchPolicy: "no-cache",
-    //   errorPolicy: "ignore",
-    // },
     query: {
       fetchPolicy: "no-cache",
       errorPolicy: "all",
     },
   };
   const client = new ApolloClient({
-    link: httpLink, // Chain it with the HttpLink
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
     defaultOptions: DefaultOptions,
   });
@@ -62,8 +47,10 @@ function reformat_keys(D) {
 function goals_from_data({ loading, error, data }) {
   if (loading) {
     return [];
+  } else if (data == undefined) {
+    return [];
   } else {
-    const goals_array = data.goals;
+    const goals_array = data.goals || [];
     const goals_array_transformed = _.map(goals_array, reformat_keys);
     return goals_array_transformed;
   }

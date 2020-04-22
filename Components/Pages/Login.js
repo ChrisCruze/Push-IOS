@@ -1,41 +1,18 @@
 import React, { useState } from "react";
 import SignUpContainer from "../Molecules/SignUpContainer";
 import { TextField } from "../Atoms/Fields";
-import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, gql } from "apollo-boost";
-import { useQuery, useMutation, useApolloClient } from "@apollo/react-hooks";
-import { withClientState } from "apollo-link-state";
-import { URI } from "react-native-dotenv";
+import { AsyncStorage } from "react-native";
+import { LOGIN_URI } from "react-native-dotenv";
 
-function ClientStateDefine() {
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlOWRjZTA5NWE1NTA5MDAyNGZjZTEzNCIsInVzZXJOYW1lIjoiSGVyb2t1ISIsImVtYWlsIjoidGVzdDJAZ21haWwuY29tIn0sImlhdCI6MTU4NzUwNTQyOSwiZXhwIjoxNTg3NTI3MDI5fQ.o7Sz6TexZathBEKJWXzxYKEaC9GlsQ1Qn3yF68n-M9Q";
-  const httpLink = new HttpLink({
-    uri: URI,
-  });
+const storeToken = async ({ token }) => {
+  try {
+    await AsyncStorage.setItem("token", token);
+  } catch (error) {
+    console.log({ error });
+  }
+};
 
-  const authLink = new ApolloLink((operation, forward) => {
-    operation.setContext({
-      headers: {
-        authorization: token ? `Bearer ${token}` : "",
-      },
-    });
-    return forward(operation);
-  });
-  const DefaultOptions = {
-    query: {
-      fetchPolicy: "no-cache",
-      errorPolicy: "all",
-    },
-  };
-  const clientState = withClientState({
-    link: authLink.concat(httpLink), // Chain it with the HttpLink
-    cache: new InMemoryCache(),
-    defaultOptions: DefaultOptions,
-  });
-  return clientState;
-}
-
-function fetch_authenticate({ email, password, navigation, client }) {
+function fetch_authenticate({ email, password, navigation }) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
@@ -48,15 +25,16 @@ function fetch_authenticate({ email, password, navigation, client }) {
     redirect: "follow",
   };
 
-  fetch("https://pushpiratesforlife.herokuapp.com/login", requestOptions)
+  fetch(LOGIN_URI, requestOptions)
     .then(response => {
-      // console.log({ response });
-      response.text();
+      return response.text();
     })
     .then(result => {
-      const clientState = ClientStateDefine();
-      client.onResetStore(clientState);
-      console.log({ client });
+      const token = JSON.parse(result)["token"];
+      return token;
+    })
+    .then(token => {
+      storeToken({ token });
       navigation.navigate("Home");
     })
     .catch(error => console.log("error", error));
@@ -65,12 +43,9 @@ function fetch_authenticate({ email, password, navigation, client }) {
 const Login = ({ navigation }) => {
   const [password, updatePassword] = useState("");
   const [email, updateEmail] = useState("");
-  const client = useApolloClient();
 
   const onLoginSubmit = () => {
-    //this is where login to the graphql login will go
-    console.log({ email, password, client });
-    fetch_authenticate({ email, password, navigation, client });
+    fetch_authenticate({ email, password, navigation });
   };
 
   return (
