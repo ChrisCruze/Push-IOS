@@ -22,7 +22,7 @@ const SignUpPassword = ({ navigation }) => {
       })
       .then(response => AsyncStorage.setItem("token", response["data"]["token"]))
       .then(() => {
-        navigation.navigate("Home");
+        navigation.navigate("Goals");
       })
       .catch(function(error) {
         console.log({ error });
