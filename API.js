@@ -2,26 +2,33 @@ import React, { Fragment, useState, useEffect } from "react";
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, gql } from "apollo-boost";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { ApolloProvider } from "@apollo/react-hooks";
-import { URI } from 'react-native-dotenv';
-
+import { URI } from "react-native-dotenv";
+import { setContext } from "apollo-link-context";
 import _ from "lodash";
+import { AsyncStorage } from "react-native";
 
 export function APIClient() {
   const httpLink = new HttpLink({
     uri: URI,
   });
+
+  const authLink = setContext(() => {
+    return AsyncStorage.getItem("token").then(token => {
+      return {
+        headers: {
+          authorization: token ? `Bearer ${token}` : "",
+        },
+      };
+    });
+  });
   const DefaultOptions = {
-    // watchQuery: {
-    //   fetchPolicy: "no-cache",
-    //   errorPolicy: "ignore",
-    // },
     query: {
       fetchPolicy: "no-cache",
       errorPolicy: "all",
     },
   };
   const client = new ApolloClient({
-    link: httpLink, // Chain it with the HttpLink
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
     defaultOptions: DefaultOptions,
   });
@@ -35,13 +42,29 @@ function reformat_keys(D) {
 function goals_from_data({ loading, error, data }) {
   if (loading) {
     return [];
+  } else if (data == undefined) {
+    return [];
   } else {
-    const goals_array = data.goals;
+    const goals_array = data.goals || [];
     const goals_array_transformed = _.map(goals_array, reformat_keys);
     return goals_array_transformed;
   }
 }
-
+export const useUserPull = () => {
+  const Query = gql`
+    query {
+      goals {
+        title
+        _id
+        timeStamps
+        cadence
+        cadenceCount
+      }
+    }
+  `;
+  const { loading, error, data, refetch, client } = useQuery(Query);
+  return { loading, error, data, goals, refetch, client };
+};
 export const useGoalsPull = () => {
   const GoalsQuery = gql`
     query {
@@ -55,7 +78,6 @@ export const useGoalsPull = () => {
     }
   `;
   const { loading, error, data, refetch } = useQuery(GoalsQuery);
-  console.log({ data });
   const goals = goals_from_data({ loading, error, data });
   return { loading, error, data, goals, refetch };
 };

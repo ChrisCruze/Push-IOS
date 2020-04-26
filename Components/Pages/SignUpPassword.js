@@ -1,22 +1,41 @@
-import * as React from "react";
-import { TextInput } from "react-native";
-import { StyleSheet, View } from "react-native";
+import React, { useState } from "react";
 
 import SignUpContainer from "../Molecules/SignUpContainer";
 import { TextField } from "../Atoms/Fields";
-import Theme from "../Atoms/Theme";
-import Text from "../Atoms/Text";
-import Switch from "../Atoms/Switch";
+
+import { AsyncStorage } from "react-native";
+import { SIGNUP_URI } from "react-native-dotenv";
+import axios from "axios";
 
 const SignUpPassword = ({ navigation }) => {
-  const next = () => navigation.navigate("Home");
+  const [password, updatePassword] = useState("");
+
+  const onSubmit = () => {
+    const email = navigation.getParam("email");
+    const userName = navigation.getParam("username");
+
+    axios
+      .post(SIGNUP_URI, {
+        email,
+        password,
+        userName,
+      })
+      .then(response => AsyncStorage.setItem("token", response["data"]["token"]))
+      .then(() => {
+        navigation.navigate("Goals");
+      })
+      .catch(function(error) {
+        console.log({ error });
+      });
+  };
 
   return (
     <SignUpContainer
       title="Your Password"
       subtitle="Stay Safe"
       nextLabel="Sign-Up"
-      next={next}
+      back={() => navigation.navigate("SignUpEmail")}
+      next={onSubmit}
       {...{ navigation }}
     >
       <TextField
@@ -24,7 +43,8 @@ const SignUpPassword = ({ navigation }) => {
         autoCapitalize="none"
         autoCorrect={false}
         returnKeyType="go"
-        onSubmitEditing={next}
+        onChangeText={updatePassword}
+        value={password}
         secureTextEntry
         contrast
       />
