@@ -27,6 +27,8 @@ const SFProTextBold = require("./assets/fonts/SF-Pro-Text-Bold.otf");
 const SFProTextSemibold = require("./assets/fonts/SF-Pro-Text-Semibold.otf");
 const SFProTextRegular = require("./assets/fonts/SF-Pro-Text-Regular.otf");
 const SFProTextLight = require("./assets/fonts/SF-Pro-Text-Light.otf");
+const Roboto_medium = require("./assets/fonts/Roboto_medium.ttf");
+const Roboto =  require("./assets/fonts/Roboto.ttf");
 
 class App extends React.Component {
   state = {
@@ -65,6 +67,9 @@ class App extends React.Component {
         "SFProText-Semibold": SFProTextSemibold,
         "SFProText-Regular": SFProTextRegular,
         "SFProText-Light": SFProTextLight,
+        "Roboto_medium": Roboto_medium,
+        "Roboto": Roboto,
+
       });
       const icons = Font.loadAsync(Feather.font);
       await Promise.all([...cacheImages, fonts, icons]);
