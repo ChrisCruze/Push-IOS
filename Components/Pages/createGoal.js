@@ -28,6 +28,7 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
   const [selectedValue, setSelectedValue] = useState("daily");
 
   const [textValue, updateSelectedText] = useState("default");
+  const [cadenceValue, updateCadenceValue] = useState("0");
 
   let data = [
     {
@@ -42,7 +43,7 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
   ];
 
   function pressNextSubmit() {
-    const goal_dict = { title: textValue, cadence: selectedValue, cadenceCount: 0 };
+    const goal_dict = { title: textValue, cadence: selectedValue, cadenceCount: cadenceValue };
     createGoal({ variables: goal_dict }); //{ title: "haha", cadence: "weekly", cadenceCount: 3 }
     navigation.navigate("Goals");
   }
@@ -67,6 +68,18 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
         onChangeText={text => updateSelectedText(text)}
         contrast
       />
+      <TextField
+        style={styles.textInput}
+        placeholder="Enter Cadence Goal"
+
+        keyboardType="textInput"
+        autoCapitalize="none"
+        returnKeyType="next"
+        onChangeText={text => updateCadenceValue(text)}
+
+        contrast
+      />
+
       <Dropdown label="Cadence" data={data} value={selectedValue} onChangeText={setSelectedValue} />
     </CreateContainer>
   );
