@@ -6,7 +6,7 @@ import Button from "../Atoms/Button";
 import Theme from "../Atoms/Theme";
 import Container from "../Atoms/Container";
 
-const SignUpContainer = ({ title, subtitle, next, children, nextLabel, back }) => {
+const SignUpContainer = ({ title, subtitle, next, children, nextLabel, back, snackbar }) => {
   return (
     <Container gutter={1}>
       <Content style={styles.content}>
@@ -20,6 +20,7 @@ const SignUpContainer = ({ title, subtitle, next, children, nextLabel, back }) =
           <Button label="Back" onPress={back} full />
         </View>
       </Content>
+      {snackbar}
     </Container>
   );
 };

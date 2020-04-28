@@ -1,10 +1,11 @@
-import axios from "axios";
+
 import React, { useState } from "react";
 import { AsyncStorage, Dimensions, StyleSheet, Text } from "react-native";
 import { LOGIN_URI } from "react-native-dotenv";
 import { Snackbar } from 'react-native-paper';
 import { TextField } from "../Atoms/Fields";
 import SignUpContainer from "../Molecules/SignUpContainer";
+import axios from "axios";
 
 const Login = ({ navigation }) => {
   const [password, updatePassword] = useState("");
