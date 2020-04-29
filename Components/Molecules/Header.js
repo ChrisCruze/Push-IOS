@@ -83,6 +83,7 @@ const Header = ({ title, sub_title, logout }) => {
     </AnimatedSafeAreaView>
   );
 };
+const main_background = "#EFEEEE"//E0E5EC
 
 const styles = StyleSheet.create({
   container: {
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight + 100 + Theme.spacing.base,
   },
   header: {
-    backgroundColor: "white",
+    backgroundColor: main_background,//"white",
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,

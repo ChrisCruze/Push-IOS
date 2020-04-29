@@ -24,8 +24,8 @@ const GoalButtonFront = ({text,totalCount,pushGoal}) => {
     <View style={[styles.standaloneRowFront,styles.standaloneRow]}>
         <View style={[styles.dark_shadow,styles.standaloneRow]}>
             <View style={[styles.light_shadow,styles.standaloneRow]}>
-                <Text>{text}</Text>
-                <Text>{totalCount}</Text>
+                <Text style={styles.textFont}>{text}</Text>
+                <Text style={styles.textFont}>{totalCount}</Text>
             </View>
         </View>
     </View>
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
 
     },
     standaloneRowBack: {
-        backgroundColor: light_shadow,
+        backgroundColor: main_background,
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -84,8 +84,13 @@ const styles = StyleSheet.create({
         borderRadius: 20,
 
     },
+    textFont: {
+        fontSize: 30,
+
+    },
     backTextWhite: {
         color: 'black',
+
     },
     spacer: {
         height: 50,
