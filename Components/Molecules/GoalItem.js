@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import APIStore from "../Atoms/APIStore";
 import GoalComponent from "../Atoms/GoalComponent";
 import moment from "moment";
+import GoalButton from "../Atoms/GoalButton";
 
 const GoalOptionsPress = ({ id, navigation, goals }) => {
   const pass_dict = { id: id, goals: goals };
@@ -57,7 +58,8 @@ const GoalItem = ({
   };
 
   return (
-    <GoalComponent
+
+    <GoalButton
       navigateToGoal={navigateToGoal}
       pushGoal={pushGoalPress}
       deleteGoal={deleteGoalPress}
