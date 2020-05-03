@@ -9,18 +9,22 @@ import {
 } from 'react-native';
 
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
+import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
 
 const GoalButtonBackDelete = ({deleteGoal}) => {
     return (
         <TouchableWithoutFeedback  onPress={deleteGoal}>
-            <Text style={[styles.buttonText]}>Delete</Text>
+            <Icon name="trash" size={45} {...{ color:'black' }} />
+
+            {/* <Text style={[styles.buttonText]}>Delete</Text> */}
         </TouchableWithoutFeedback>
     )
 }
 const GoalButtonBackDashboard = ({navigateToGoal}) => {
     return (
         <TouchableWithoutFeedback  onPress={navigateToGoal}>
-            <Text style={[styles.buttonText]}>Dashboard</Text>
+            <FontAwesome name="dashboard" size={45} {...{ color :'black'}} />
+            {/* <Text style={[styles.buttonText]}>Dashboard</Text> */}
         </TouchableWithoutFeedback>
     )
 }

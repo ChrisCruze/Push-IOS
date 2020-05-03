@@ -20,7 +20,9 @@ import moment from "moment";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
 
 const Goals = ({ navigation }) => {
-  const logout = () => navigation.navigate("Login");
+  const logout = () => {
+    AsyncStorage.setItem("token", null).then(()=> navigation.navigate("Login"))
+  }
 
   const { goals, refetch } = useGoalsPull();
   const { updateGoal } = useGoalUpdate();

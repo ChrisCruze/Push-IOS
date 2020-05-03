@@ -17,8 +17,9 @@ import BarChart from "../Atoms/BarChart";
 
 import { useGoalsPull } from "../../API";
 const Dashboard = ({ navigation }) => {
-  const logout = () => navigation.navigate("Login");
-
+  const logout = () => {
+    AsyncStorage.setItem("token", null).then(()=> navigation.navigate("Login"))
+  }
   const { goals, refetch } = useGoalsPull();
   refetch();
 
