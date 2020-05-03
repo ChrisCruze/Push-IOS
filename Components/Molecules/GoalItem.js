@@ -4,6 +4,7 @@ import APIStore from "../Atoms/APIStore";
 import GoalComponent from "../Atoms/GoalComponent";
 import moment from "moment";
 import GoalButton from "../Atoms/GoalButton";
+import GoalListItem from "../Atoms/GoalListItem";
 
 const GoalOptionsPress = ({ id, navigation, goals }) => {
   const pass_dict = { id: id, goals: goals };
@@ -59,7 +60,7 @@ const GoalItem = ({
 
   return (
 
-    <GoalButton
+    <GoalListItem
       navigateToGoal={navigateToGoal}
       pushGoal={pushGoalPress}
       deleteGoal={deleteGoalPress}

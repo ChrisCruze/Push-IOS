@@ -83,7 +83,7 @@ const Header = ({ title, sub_title, logout }) => {
     </AnimatedSafeAreaView>
   );
 };
-const main_background = "#EFEEEE"//E0E5EC
+const main_background = "#ecf0f1"//E0E5EC
 
 const styles = StyleSheet.create({
   container: {
