@@ -43,7 +43,7 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
   ];
 
   function pressNextSubmit() {
-    const goal_dict = { title: textValue, cadence: selectedValue, cadenceCount: cadenceValue };
+    const goal_dict = { title: textValue, cadence: selectedValue, cadenceCount: parseInt(cadenceValue)||0 };
     createGoal({ variables: goal_dict }); //{ title: "haha", cadence: "weekly", cadenceCount: 3 }
     navigation.navigate("Goals");
   }
