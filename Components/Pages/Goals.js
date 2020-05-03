@@ -18,10 +18,11 @@ import GoalItem from "../Molecules/GoalItem";
 import Header from "../Molecules/Header";
 import moment from "moment";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
+import { AsyncStorage } from "react-native";
 
 const Goals = ({ navigation }) => {
   const logout = () => {
-    AsyncStorage.setItem("token", null).then(()=> navigation.navigate("Login"))
+    AsyncStorage.setItem("token", '').then(()=> AsyncStorage.setItem("token_created_date", '')).then(()=> navigation.navigate("Login"))
   }
 
   const { goals, refetch } = useGoalsPull();

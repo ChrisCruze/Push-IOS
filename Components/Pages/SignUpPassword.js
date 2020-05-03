@@ -20,7 +20,10 @@ const SignUpPassword = ({ navigation }) => {
         password,
         userName,
       })
-      .then(response => AsyncStorage.setItem("token", response["data"]["token"]))
+      .then(response => {
+        AsyncStorage.setItem("token_created_date", moment().format())
+        AsyncStorage.setItem("token", response["data"]["token"])
+      })
       .then(() => {
         navigation.navigate("Goals");
       })
