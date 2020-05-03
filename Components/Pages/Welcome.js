@@ -11,11 +11,24 @@ import Logo from "../Molecules/Logo";
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, gql } from "apollo-boost";
 
 import { APIClient, useAPI } from "../../API";
+import { AsyncStorage } from "react-native";
+
+
+
+
+const AuthCheckNavigate = ({navigation}) =>{
+  AsyncStorage.getItem("token").then(token => {
+      if (token != null){
+        navigation.navigate("Goals")
+      }
+  })
+}
+
 
 const Welcome = ({ navigation }) => {
   const login = () => navigation.navigate("Login");
   const signUp = () => navigation.navigate("SignUp");
-
+  AuthCheckNavigate({navigation})
   return (
     <Container gutter={2} style={styles.root}>
       <Logo />
