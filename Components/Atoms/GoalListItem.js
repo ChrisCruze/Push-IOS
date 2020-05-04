@@ -38,24 +38,33 @@ const GoalButtonBack = ({deleteGoal,navigateToGoal}) => {
         </View>
     )
 }
-const GoalButtonFront = ({text,totalCount,pushGoal}) => {
+
+
+const GoalButtonFront = ({text,totalCount,pushGoal,lastTimeStampMessage,is_overdue}) => {
+    const color = is_overdue ? 'red' : 'green'
+
     return (
         <TouchableWithoutFeedback  onPress={pushGoal}>
-            <View style={[styles.box]}>
-                <Text style={styles.buttonText}>{text}</Text>
-                <Text style={styles.buttonText}>{totalCount}</Text>
+                    <View style={styles.box}>
+            <View style={styles.row}>
+                <Text style={styles.task}>{text}</Text>
+                <Text style={[styles.frequency,{textDecorationColor:color,color:color}]}>{totalCount}</Text>
             </View>
+            <View style={styles.row}>
+                <Text style={styles.duration}>Last Updated: {lastTimeStampMessage}</Text>
+            </View>
+        </View>
         </TouchableWithoutFeedback>
     )
 }
 
-const GoalListItem = ({ text, navigateToGoal, pushGoal, totalCount, deleteGoal }) => {
+const GoalListItem = ({ text, navigateToGoal, pushGoal, totalCount, deleteGoal ,lastTimeStampMessage,is_overdue}) => {
     return (
         <View style={styles.container}>
             <View style={styles.standalone}>
                 <SwipeRow leftOpenValue={75} rightOpenValue={-75}>
                     <GoalButtonBack deleteGoal={deleteGoal} navigateToGoal={navigateToGoal}/>
-                    <GoalButtonFront text={text} totalCount={totalCount} pushGoal={pushGoal}/>
+                    <GoalButtonFront text={text} totalCount={totalCount} pushGoal={pushGoal} lastTimeStampMessage={lastTimeStampMessage} is_overdue={is_overdue}/>
                 </SwipeRow>
             </View>
         </View>
@@ -102,17 +111,19 @@ const styles = StyleSheet.create({
     spacer: {
         height: 50,
     },
+
+
     box: {
-        shadowOffset:{  width: 1,  height: 1,  },
+        shadowOffset:{  width: 2,  height: 5,  },
         shadowColor: '#D1CDC7',
-        shadowOpacity: 1.0,
-        backgroundColor: '#ecf0f1',
+        shadowOpacity: .5,
+        backgroundColor: '#EEEEEE',
         height: 120,
         width: width *.90,
-        borderRadius: 25,
-        borderLeftColor: '#fff',
+        borderRadius: 30,
+        borderTopColor: '#FFF',
+        borderLeftColor: '#FFF',
         borderBottomColor: '#D1CDC7',
-        borderTopColor: '#fff',
         borderRightColor: '#D1CDC7',
         fontWeight: 'bold',
         alignSelf: 'center',
@@ -120,6 +131,28 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
 
+      },
+      task:{
+        fontSize: 28,
+        fontWeight: 'bold',
+        flex: 1,
+      },
+      duration: {
+        fontSize: 14,
+        fontWeight: 'bold',
+      },
+      frequency: {
+      flex: 1,
+      marginLeft: 50,
+      marginTop: 1,
+      fontSize: 24,
+      textDecorationLine: 'underline'
+      },
+      row: {
+        marginTop: 10,
+        marginLeft: 10,
+        flexDirection: 'row',
+        flex: 2,
       },
       buttonText: {
         alignSelf: 'center',
