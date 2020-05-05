@@ -6,6 +6,7 @@ import { TextField } from "../Atoms/Fields";
 import { AsyncStorage } from "react-native";
 import { SIGNUP_URI } from "react-native-dotenv";
 import axios from "axios";
+import moment from "moment"
 
 const SignUpPassword = ({ navigation }) => {
   const [password, updatePassword] = useState("");
