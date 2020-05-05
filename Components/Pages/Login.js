@@ -6,6 +6,7 @@ import { Snackbar } from 'react-native-paper';
 import { TextField } from "../Atoms/Fields";
 import SignUpContainer from "../Molecules/SignUpContainer";
 import axios from "axios";
+import moment from "moment"
 
 const Login = ({ navigation }) => {
   const [password, updatePassword] = useState("");
@@ -30,7 +31,10 @@ const Login = ({ navigation }) => {
           email,
           password,
         })
-        .then(response => AsyncStorage.setItem("token", response["data"]["token"]))
+        .then(response => {
+          AsyncStorage.setItem("token_created_date", moment().format())
+          AsyncStorage.setItem("token", response["data"]["token"])
+        })
         .then(() => {
           navigation.navigate("Goals");
         })
