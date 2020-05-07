@@ -10,6 +10,7 @@
   "dependencies": {
     "@apollo/react-hooks": "^3.1.4",
     "@expo/vector-icons": "^10.0.6",
+    "@react-native-community/art": "^1.2.0",
     "@react-native-community/masked-view": "^0.1.7",
     "apollo-boost": "^0.4.7",
     "apollo-link-context": "^1.0.20",
@@ -30,6 +31,7 @@
     "react-native-fontawesome": "^7.0.0",
     "react-native-gesture-handler": "^1.6.0",
     "react-native-material-dropdown": "^0.11.1",
+    "react-native-neomorph-shadows": "^1.0.3",
     "react-native-paper": "^3.8.0",
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.7.3",

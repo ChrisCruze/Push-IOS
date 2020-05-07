@@ -7,7 +7,7 @@ import {
     View,
     Dimensions
 } from 'react-native';
-
+import { Neomorph } from 'react-native-neomorph-shadows';
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
 import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
 
@@ -45,15 +45,20 @@ const GoalButtonFront = ({text,totalCount,pushGoal,lastTimeStampMessage,is_overd
 
     return (
         <TouchableWithoutFeedback  onPress={pushGoal}>
-                    <View style={styles.box}>
-            <View style={styles.row}>
+            <Neomorph 
+            darkShadowColor="#D1CDC7"   // <- set this
+            lightShadowColor="#FFF"
+            style={styles.neomorph}>
+                <View style={styles.topRow}>
                 <Text style={styles.task}>{text}</Text>
+                <View style={styles.dash}>
                 <Text style={[styles.frequency,{textDecorationColor:color,color:color}]}>{totalCount}</Text>
-            </View>
-            <View style={styles.row}>
+                </View>
+                </View>
+                <View style={styles.botRow}>
                 <Text style={styles.duration}>Last Updated: {lastTimeStampMessage}</Text>
-            </View>
-        </View>
+                </View>
+            </Neomorph>
         </TouchableWithoutFeedback>
     )
 }
@@ -113,47 +118,60 @@ const styles = StyleSheet.create({
     },
 
 
-    box: {
-        shadowOffset:{  width: 2,  height: 5,  },
-        shadowColor: '#D1CDC7',
-        shadowOpacity: .5,
-        backgroundColor: '#EEEEEE',
-        height: 120,
-        width: width *.90,
+    neomorph: {
+        shadowOpacity: 0.7,  // <- and this or yours opacity
+        shadowRadius: 30,
         borderRadius: 30,
         borderTopColor: '#FFF',
         borderLeftColor: '#FFF',
         borderBottomColor: '#D1CDC7',
         borderRightColor: '#D1CDC7',
-        fontWeight: 'bold',
-        alignSelf: 'center',
-        borderWidth: 5,
-        justifyContent: 'center',
+        backgroundColor: '#ECF0F3', 
+        width: 300,
+        height: 100,
         alignItems: 'center',
-
+        justifyContent: 'center',
+        borderWidth: 2,
       },
-      task:{
-        fontSize: 28,
-        fontWeight: 'bold',
+        task:{
+          fontWeight: 'bold',
+          flex: 1,
+          textAlign: "center",
+          fontSize: 28,
+        },
+        duration: {
+          fontSize: 14,
+          fontWeight: 'bold',
+          textAlign: "justify",
+        },
+        frequency: {
         flex: 1,
-      },
-      duration: {
-        fontSize: 14,
-        fontWeight: 'bold',
-      },
-      frequency: {
-      flex: 1,
-      marginLeft: 50,
-      marginTop: 1,
-      fontSize: 24,
-      textDecorationLine: 'underline'
-      },
-      row: {
-        marginTop: 10,
-        marginLeft: 10,
-        flexDirection: 'row',
-        flex: 2,
-      },
+        color: 'grey',
+        textAlign: "center",
+        fontSize: 28,
+        },
+        topRow: {
+          width: 250,
+          marginTop: 10,
+          marginRight: 10,
+          flexDirection: 'row',
+          flex: 2,
+          
+        },
+        botRow: {
+          marginTop: 10,
+          fontSize: 14,
+          fontWeight: 'bold',
+          flexDirection: 'row',
+          flex: 2,
+          textAlign: "center",
+          
+        },
+        dash: {
+          textAlign: 'center',
+          borderBottomWidth: 3,
+          borderColor: 'green'
+        },
       buttonText: {
         alignSelf: 'center',
         fontSize: 32,
