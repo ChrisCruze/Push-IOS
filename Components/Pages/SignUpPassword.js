@@ -7,6 +7,7 @@ import { SIGNUP_URI } from "react-native-dotenv";
 import { Snackbar } from 'react-native-paper';
 
 import axios from "axios";
+import moment from "moment"
 
 const SignUpPassword = ({ navigation }) => {
   const [password, updatePassword] = useState("");
@@ -38,7 +39,10 @@ const SignUpPassword = ({ navigation }) => {
         password,
         userName,
       })
-      .then(response => AsyncStorage.setItem("token", response["data"]["token"]))
+      .then(response => {
+        AsyncStorage.setItem("token_created_date", moment().format())
+        AsyncStorage.setItem("token", response["data"]["token"])
+      })
       .then(() => {
         navigation.navigate("Goals");
       })

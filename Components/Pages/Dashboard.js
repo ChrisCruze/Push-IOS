@@ -14,12 +14,15 @@ import {
   goals_data_last_n_days_from_transformed_goals_array_chunked,
 } from "../Atoms/BarChart.functions";
 import BarChart from "../Atoms/BarChart";
+import { AsyncStorage } from "react-native";
 
 import { useGoalsPull } from "../../API";
 const Dashboard = ({ navigation }) => {
-  const logout = () => navigation.navigate("Login");
-
+  const logout = () => {
+    AsyncStorage.setItem("token", '').then(()=> AsyncStorage.setItem("token_created_date", '')).then(()=> navigation.navigate("Login"))
+  }
   const { goals, refetch } = useGoalsPull();
+  
   refetch();
 
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({

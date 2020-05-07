@@ -28,14 +28,14 @@ const { height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   content: {
     padding: Theme.spacing.base,
-    marginBottom:100
+    marginBottom:50
   },
   innerContent: {
-    height: 1000,
+    height: height - Theme.spacing.base * 4,
     justifyContent: "center"
   },
   innerChildren: {
-    height:700
+    height:300
   }
 });
 

@@ -18,9 +18,12 @@ import GoalItem from "../Molecules/GoalItem";
 import Header from "../Molecules/Header";
 import moment from "moment";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
+import { AsyncStorage } from "react-native";
 
 const Goals = ({ navigation }) => {
-  const logout = () => navigation.navigate("Login");
+  const logout = () => {
+    AsyncStorage.setItem("token", '').then(()=> AsyncStorage.setItem("token_created_date", '')).then(()=> navigation.navigate("Login"))
+  }
 
   const { goals, refetch } = useGoalsPull();
   const { updateGoal } = useGoalUpdate();
@@ -72,9 +75,13 @@ const Goals = ({ navigation }) => {
 const avatarSize = 100;
 const { width } = Dimensions.get("window");
 const { statusBarHeight } = Constants;
+const main_background = "#ecf0f1"//E0E5EC
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: main_background,
+
   },
   list: {
     flex: 1,
