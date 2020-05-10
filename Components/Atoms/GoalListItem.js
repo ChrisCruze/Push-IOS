@@ -95,15 +95,15 @@ const GoalListItem = ({
 export default GoalListItem;
 
 const { width } = Dimensions.get("window");
-const main_background = "#ecf0f1";
+const main_background = "#ECF0F3";
 const styles = StyleSheet.create({
   container: {
     backgroundColor: main_background,
     flex: 1,
   },
   standalone: {
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: 15,
+    marginBottom: 15,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
 
   neomorph: {
     shadowOpacity: 0.7, // <- and this or yours opacity
-    shadowRadius: 30,
+    shadowRadius: 7,
     borderRadius: 30,
     borderTopColor: "#FFF",
     borderLeftColor: "#FFF",
@@ -141,10 +141,10 @@ const styles = StyleSheet.create({
     borderRightColor: "#D1CDC7",
     backgroundColor: "#ECF0F3",
     width: width * 0.8,
-    height: 100,
+    height: 95,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 2,
+    // borderWidth: 2,
   },
   task: {
     fontWeight: "bold",
