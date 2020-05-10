@@ -22,8 +22,10 @@ import { AsyncStorage } from "react-native";
 
 const Goals = ({ navigation }) => {
   const logout = () => {
-    AsyncStorage.setItem("token", '').then(()=> AsyncStorage.setItem("token_created_date", '')).then(()=> navigation.navigate("Login"))
-  }
+    AsyncStorage.setItem("token", "")
+      .then(() => AsyncStorage.setItem("token_created_date", ""))
+      .then(() => navigation.navigate("Login"));
+  };
 
   const { goals, refetch } = useGoalsPull();
   const { updateGoal } = useGoalUpdate();
@@ -75,13 +77,12 @@ const Goals = ({ navigation }) => {
 const avatarSize = 100;
 const { width } = Dimensions.get("window");
 const { statusBarHeight } = Constants;
-const main_background = "#ecf0f1"//E0E5EC
+const main_background = "#ECF0F3"; //E0E5EC
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: main_background,
-
   },
   list: {
     flex: 1,
