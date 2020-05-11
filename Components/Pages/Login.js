@@ -42,6 +42,7 @@ const Login = ({ navigation }) => {
           navigation.navigate("Goals");
         })
         .catch(error => {
+          updateLoading(false);
           if (error.message === "Request failed with status code 404") {
             setMessage("User not found");
           } else if (error.message === "Request failed with status code 401") {

@@ -47,6 +47,7 @@ const SignUpPassword = ({ navigation }) => {
           navigation.navigate("Goals");
         })
         .catch(function(error) {
+          updateLoading(false);
           setMessage(error.message);
           setVisible(1);
         });
