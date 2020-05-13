@@ -13,20 +13,13 @@ import {
 } from "react-native";
 
 import Constants from "expo-constants";
-
-import BarChart from "../Atoms/BarChart";
 import { TextField } from "../Atoms/Fields";
-import Theme from "../Atoms/Theme";
 import { Dropdown } from "react-native-material-dropdown";
-
 import { useGoalsPull, useGoalCreate } from "../../API";
 
-// view
 const createGoal = ({ navigation, goToPassword, createNew }) => {
   const { createGoal } = useGoalCreate();
-
   const [selectedValue, setSelectedValue] = useState("daily");
-
   const [textValue, updateSelectedText] = useState("default");
   const [cadenceValue, updateCadenceValue] = useState("0");
 
@@ -43,7 +36,11 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
   ];
 
   function pressNextSubmit() {
-    const goal_dict = { title: textValue, cadence: selectedValue, cadenceCount: parseInt(cadenceValue)||0 };
+    const goal_dict = {
+      title: textValue,
+      cadence: selectedValue,
+      cadenceCount: parseInt(cadenceValue) || 0,
+    };
     createGoal({ variables: goal_dict }); //{ title: "haha", cadence: "weekly", cadenceCount: 3 }
     navigation.navigate("Goals");
   }
@@ -71,12 +68,10 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
       <TextField
         style={styles.textInput}
         placeholder="Enter Cadence Goal"
-
         keyboardType="textInput"
         autoCapitalize="none"
         returnKeyType="next"
         onChangeText={text => updateCadenceValue(text)}
-
         contrast
       />
 
@@ -84,8 +79,6 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
     </CreateContainer>
   );
 };
-const { statusBarHeight } = Constants;
-const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
