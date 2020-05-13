@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 import TableGrid from "../Molecules/TableGrid";
+import GoalPageButtons from "../Molecules/GoalPageButtons";
+
 import Header from "../Molecules/Header";
 import {
   goals_data_last_n_days_from_transformed_goals_array,
@@ -37,7 +39,7 @@ const GoalTableGrid = ({ goals_filtered }) => {
   return <TableGrid list_of_lists={goals_count_by_day_array_chunked} />;
 };
 
-const Goalheader = ({ goals_filtered, back }) => {
+const GoalHeader = ({ goals_filtered, back }) => {
   const goals_dict = goals_filtered[0];
   return <Header title={goals_dict.title || "-"} sub_title={" "} logout={back} />;
 };
@@ -54,9 +56,10 @@ const Goal = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Goalheader goals_filtered={goals_filtered} back={back} />
+      <GoalHeader goals_filtered={goals_filtered} back={back} />
       <GoalBarChart goals_filtered={goals_filtered} />
       <GoalTableGrid goals_filtered={goals_filtered} />
+      <GoalPageButtons _id={_id} navigation={navigation} />
     </View>
   );
 };
@@ -64,6 +67,7 @@ const Goal = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#ECF0F3",
   },
 });
 
