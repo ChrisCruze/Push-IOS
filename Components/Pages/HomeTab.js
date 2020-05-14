@@ -8,6 +8,7 @@ const HomeTab = ({ navigation }) => {
   const tabs = [
     // { label: "Profile", icon: "home" },
     { label: "Dashboard", icon: "bar-chart" },
+    { label: "createGoal", icon: "plus-circle" },
     { label: "Goals", icon: "list" },
   ];
   const navState = navigation.state;
