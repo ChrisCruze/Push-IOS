@@ -77,7 +77,7 @@ const Goals = ({ navigation }) => {
 const avatarSize = 100;
 const { width } = Dimensions.get("window");
 const { statusBarHeight } = Constants;
-const main_background = "#ECF0F3"; //E0E5EC
+const main_background = "#FFF9FD"; //E0E5EC
 
 const styles = StyleSheet.create({
   container: {

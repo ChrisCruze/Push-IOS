@@ -41,13 +41,14 @@ const GoalButtonBack = ({ deleteGoal, navigateToGoal }) => {
 };
 
 const GoalButtonFront = ({ text, totalCount, pushGoal, lastTimeStampMessage, is_overdue }) => {
-  const color = is_overdue ? "red" : "green";
+  const color = "#17355A"; //"#2DAAFF"; //is_overdue ? "red" : "green";
+  const color_shade = is_overdue ? "#C94818" : "#193162";
 
   return (
     <TouchableWithoutFeedback onPress={pushGoal}>
       <Neomorph
-        darkShadowColor="#D1CDC7" // <- set this
-        lightShadowColor="#FFF"
+        darkShadowColor={color_shade} //"#D1CDC7" // <- set this
+        lightShadowColor="#FFF" //{color_shade} ///
         style={styles.neomorph}
       >
         <View style={styles.topRow}>
@@ -95,7 +96,7 @@ const GoalListItem = ({
 export default GoalListItem;
 
 const { width } = Dimensions.get("window");
-const main_background = "#ECF0F3";
+const main_background = "#FFF9FD";
 const styles = StyleSheet.create({
   container: {
     backgroundColor: main_background,
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
     borderLeftColor: "#FFF",
     borderBottomColor: "#D1CDC7",
     borderRightColor: "#D1CDC7",
-    backgroundColor: "#ECF0F3",
+    backgroundColor: "#FFF9FD", //"#0070c0", //89CFF0"#ECF0F3",
     width: width * 0.8,
     height: 95,
     alignItems: "center",
@@ -148,17 +149,21 @@ const styles = StyleSheet.create({
   },
   task: {
     fontWeight: "bold",
+    color: "#17355A",
     flex: 1,
     fontSize: 28,
   },
   duration: {
+    color: "#17355A",
+
     fontSize: 12,
     textAlign: "justify",
   },
   frequency: {
     flex: 1,
-    color: "grey",
-    fontSize: 28,
+    color: "#17355A",
+
+    fontSize: 32,
     textAlign: "right",
   },
   topRow: {
