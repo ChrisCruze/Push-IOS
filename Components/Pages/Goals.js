@@ -31,6 +31,7 @@ const Goals = ({ navigation }) => {
   const { updateGoal } = useGoalUpdate();
   const { removeGoal } = useGoalDelete();
   refetch();
+setTimeout(refetch,2000)
 
   const createNewGoal = () => {
     navigation.navigate("createGoal");
