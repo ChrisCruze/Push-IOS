@@ -9,6 +9,7 @@ import HomeTab from "./Components/Pages/HomeTab";
 import Goal from "./Components/Pages/Goal";
 import Goals from "./Components/Pages/Goals";
 import Dashboard from "./Components/Pages/Dashboard";
+import editGoal from "./Components/Pages/editGoal";
 
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
@@ -119,6 +120,7 @@ const AppNavigator = createAppContainer(
       Home: { screen: Home },
       Goal: { screen: Goal },
       createGoal: { screen: createGoal },
+      editGoal: { screen: editGoal },
     },
     StackNavigatorOptions,
   ),
