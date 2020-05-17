@@ -35,13 +35,15 @@ const SignUpContainer = ({
             <View>{children}</View>
             <Button label={nextLabel || "Next"} onPress={next} full primary />
             <Button label="Back" onPress={back} full />
-            <Button
-              label="Forgot Password?"
-              onPress={() => navigation.navigate("ForgotPassword")}
-              full
-              style={{ marginTop: 50 }}
-              textStyle={{ textDecorationLine: "underline" }}
-            />
+            {navigation.state.routeName === "Login" && (
+              <Button
+                label="Forgot Password?"
+                onPress={() => navigation.navigate("ForgotPassword")}
+                full
+                style={{ marginTop: 50 }}
+                textStyle={{ textDecorationLine: "underline" }}
+              />
+            )}
           </View>
         </Content>
         {snackbar}
