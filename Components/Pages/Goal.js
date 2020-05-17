@@ -62,7 +62,7 @@ const Goal = ({ navigation }) => {
       <GoalBarChart goals_filtered={goals_filtered} />
       <GoalTableGrid goals_filtered={goals_filtered} />
       <GoalPageButtons _id={_id} navigation={navigation} />
-      <GoalTimeStamps {...goals_filtered[0]} />
+      <GoalTimeStamps {...goals_filtered[0]} navigation={navigation} />
     </View>
   );
 };

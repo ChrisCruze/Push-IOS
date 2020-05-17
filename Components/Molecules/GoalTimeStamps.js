@@ -1,7 +1,6 @@
 import React, { useState, Fragment } from "react";
 import {
   StyleSheet,
-  Text,
   View,
   Button,
   Dimensions,
@@ -12,6 +11,8 @@ import {
 import _ from "lodash";
 import moment from "moment";
 import GoalTimeStamp from "../Atoms/GoalTimeStamp";
+import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
+import { Container, Header, Content, List, ListItem, Text } from "native-base";
 
 const timeStampsSort = ({ timeStamps }) => {
   const sorted_time_stamps = _.sortBy(timeStamps, function(i) {
@@ -21,21 +22,36 @@ const timeStampsSort = ({ timeStamps }) => {
   return sorted_time_stamps;
 };
 
-const timeStampsWithRemoved = ({ listData, key }) => {
-  const newData = [...listData];
-  const prevIndex = listData.findIndex(item => item.key === key);
-  newData.splice(prevIndex, 1);
-  return newData;
-};
-
-const GoalTimeStamps = ({ _id, title, cadence, cadenceCount, timeStamps }) => {
+const GoalTimeStamps = ({ _id, title, cadence, cadenceCount, timeStamps, navigation }) => {
   const timeStampsSorted = timeStampsSort({ timeStamps: timeStamps });
   const timeStampArray = _.map(timeStampsSorted, function(i, num) {
-    return { key: moment(i).unix(), timeStamp: i };
+    return { key: num, timeStamp: i };
   });
-  console.log({ _id, title, cadence, cadenceCount, timeStamps });
+  const { updateGoal } = useGoalUpdate();
+  const { refetch } = useGoalsPull();
+
   return (
     <View style={styles.container}>
+      {/* <List>
+        {timeStampArray.map((item, key) => (
+          <ListItem key={key}>
+            <GoalTimeStamp
+              {...item}
+              {...{
+                _id,
+                title,
+                cadence,
+                cadenceCount,
+                timeStamps,
+                timeStampArray,
+                updateGoal,
+                refetch,
+                navigation,
+              }}
+            />
+          </ListItem>
+        ))}
+      </List> */}
       <FlatList
         data={timeStampArray}
         keyExtractor={timeStampDict => timeStampDict.key}
@@ -44,6 +60,9 @@ const GoalTimeStamps = ({ _id, title, cadence, cadenceCount, timeStamps }) => {
             ...item,
             ...{ _id, title, cadence, cadenceCount, timeStamps },
             timeStampArray,
+            updateGoal,
+            refetch,
+            navigation,
           });
         }}
       />

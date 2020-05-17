@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,9 +8,20 @@ import {
   FlatList,
   Animated,
   TouchableHighlight,
+  TouchableWithoutFeedback,
 } from "react-native";
 import _ from "lodash";
 import moment from "moment";
+
+const timeStampsWithRemoved = ({ timeStamps, timeStamp }) => {
+  const timeStampsCopy = [...timeStamps];
+  const prevIndex = timeStampsCopy.findIndex(item => item === timeStamp);
+
+  const timeStampsCopyFiltered = timeStampsCopy.filter(function(i, num) {
+    return num !== prevIndex;
+  });
+  return timeStampsCopyFiltered;
+};
 
 const GoalTimeStamp = ({
   timeStamp,
@@ -21,12 +32,33 @@ const GoalTimeStamp = ({
   cadenceCount,
   timeStamps,
   timeStampArray,
+  updateGoal,
+  refetch,
+  navigation,
 }) => {
   const time_stamp_formatted = moment(timeStamp).format("M/DD(ddd) h:mma");
 
+  const deleteTimeStamp = () => {
+    const timeStampsUpdated = timeStampsWithRemoved({ timeStamps, timeStamp });
+    updateGoal({
+      variables: {
+        _id,
+        title,
+        cadence,
+        cadenceCount,
+        timeStamps: timeStampsUpdated,
+      },
+    });
+    refetch();
+    // const pass_dict = { id: _id };
+    // navigation.navigate("Goal", pass_dict);
+  };
   return (
     <View style={styles.container}>
       <Text>{time_stamp_formatted}</Text>
+      <TouchableWithoutFeedback onPress={deleteTimeStamp}>
+        <Text>Delete</Text>
+      </TouchableWithoutFeedback>
     </View>
   );
 };
