@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Dimensions, FlatList, TouchableOpacity, Image } from "react-native";
 import Constants from "expo-constants";
 import { Feather as Icon } from "@expo/vector-icons";
@@ -19,12 +19,15 @@ import { AsyncStorage } from "react-native";
 import { useGoalsPull } from "../../API";
 const Dashboard = ({ navigation }) => {
   const logout = () => {
-    AsyncStorage.setItem("token", '').then(()=> AsyncStorage.setItem("token_created_date", '')).then(()=> navigation.navigate("Login"))
-  }
+    AsyncStorage.setItem("token", "")
+      .then(() => AsyncStorage.setItem("token_created_date", ""))
+      .then(() => navigation.navigate("Login"));
+  };
   const { goals, refetch } = useGoalsPull();
-  
-  refetch();
 
+  useEffect(() => {
+    refetch();
+  }, []);
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
     goals,
     number_of_days: 7,

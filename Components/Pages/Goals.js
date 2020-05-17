@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -30,9 +30,10 @@ const Goals = ({ navigation }) => {
   const { goals, refetch } = useGoalsPull();
   const { updateGoal } = useGoalUpdate();
   const { removeGoal } = useGoalDelete();
-  refetch();
-setTimeout(refetch,2000)
 
+  useEffect(() => {
+    refetch();
+  }, []);
   const createNewGoal = () => {
     navigation.navigate("createGoal");
   };

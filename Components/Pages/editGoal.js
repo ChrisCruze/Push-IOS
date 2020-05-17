@@ -22,7 +22,10 @@ const editGoal = ({ navigation }) => {
   const { updateGoal } = useGoalUpdate();
 
   const _id = navigation.getParam("_id");
-  refetch();
+  useEffect(() => {
+    refetch();
+  }, []);
+
   const goals_dict = goals.find(function(D) {
     return D["_id"] == _id;
   });

@@ -48,8 +48,9 @@ const Goal = ({ navigation }) => {
   const back = () => navigation.navigate("Goals");
   const _id = navigation.getParam("id");
   const { goals, refetch } = useGoalsPull();
-  refetch();
-
+  useEffect(() => {
+    refetch();
+  }, []);
   const goals_filtered = goals.filter(function(D) {
     return D["_id"] == _id;
   });
