@@ -21,7 +21,7 @@ const SublistsToFlattenedList = array => {
   );
 };
 
-const DataFlattenConvertGoals = array => {
+export const DataFlattenConvertGoals = array => {
   const time_stamp_array_grouped = _.map(array, DataFlattenConvertGoalItem);
   const time_stamp_array_flattened = SublistsToFlattenedList(time_stamp_array_grouped);
   return time_stamp_array_flattened;

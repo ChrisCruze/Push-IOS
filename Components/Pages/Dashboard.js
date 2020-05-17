@@ -15,6 +15,8 @@ import {
 } from "../Atoms/BarChart.functions";
 import BarChart from "../Atoms/BarChart";
 import { AsyncStorage } from "react-native";
+import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
+import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
 
 import { useGoalsPull } from "../../API";
 const Dashboard = ({ navigation }) => {
@@ -24,7 +26,7 @@ const Dashboard = ({ navigation }) => {
       .then(() => navigation.navigate("Login"));
   };
   const { goals, refetch } = useGoalsPull();
-
+  const timeStamps = DataFlattenConvertGoals(goals);
   useEffect(() => {
     refetch();
   }, []);
@@ -45,6 +47,7 @@ const Dashboard = ({ navigation }) => {
       <Header title={"Dashboard"} sub_title={"Today"} logout={logout} />
       <BarChart chartData={goals_count_by_day_array} />
       <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
+      <DashboardTimeStamps timeStamps={timeStamps} navigation={navigation} />
     </View>
   );
 };
