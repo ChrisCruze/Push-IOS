@@ -7,10 +7,14 @@ import {
   TouchableWithoutFeedback,
   View,
   Dimensions,
+  Animated,
 } from "react-native";
 import { Neomorph } from "react-native-neomorph-shadows";
 import { SwipeListView, SwipeRow } from "react-native-swipe-list-view";
 import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
+import AwesomeButton from "react-native-really-awesome-button";
+import AwesomeButtonRick from "react-native-really-awesome-button/src/themes/rick";
+import AwesomeButtonProgress from "react-native-really-awesome-button";
 
 const GoalButtonBackDelete = ({ deleteGoal }) => {
   return (
@@ -40,7 +44,7 @@ const GoalButtonBack = ({ deleteGoal, navigateToGoal }) => {
   );
 };
 
-const GoalButtonFront = ({ text, totalCount, pushGoal, lastTimeStampMessage, is_overdue }) => {
+const GoalButtonFrontOLD = ({ text, totalCount, pushGoal, lastTimeStampMessage, is_overdue }) => {
   const color = "#17355A"; //"#2DAAFF"; //is_overdue ? "red" : "green";
   const color_shade = is_overdue ? "#C94818" : "#193162";
 
@@ -66,7 +70,78 @@ const GoalButtonFront = ({ text, totalCount, pushGoal, lastTimeStampMessage, is_
     </TouchableWithoutFeedback>
   );
 };
+const GoalButtonFront = ({ text, totalCount, pushGoal, lastTimeStampMessage, is_overdue }) => {
+  const color = "#17355A"; //"#2DAAFF"; //is_overdue ? "red" : "green";
+  const color_shade = is_overdue ? "#C94818" : "#193162";
+  const main_background = "#FFF9FD";
+  return (
+    <TouchableWithoutFeedback onPress={pushGoal}>
+      <AwesomeButtonProgress
+        progress
+        height={115}
+        activityColor={main_background}
+        backgroundColor={main_background}
+        backgroundShadow={main_background}
+        backgroundDarker={main_background}
+        backgroundPlaceholder={main_background}
+        backgroundActive={main_background} //"#C0C0C0"}
+        backgroundProgress={main_background}
+        activeOpacity={70}
+        borderColor={main_background}
+        progressLoadingTime={10000}
+        width={Dimensions.get("window").width * 85}
+        raiseLevel={0}
+        action={(element, next) => doSomethingThenCall(next)}
+        onPress={next => {
+          pushGoal();
+          next();
+        }}
+      >
+        <Neomorph
+          darkShadowColor={color_shade} //"#D1CDC7" // <- set this
+          lightShadowColor="#FFF" //{color_shade} ///
+          style={styles.neomorph}
+        >
+          <View style={styles.topRow}>
+            <Text style={styles.task}>{text}</Text>
+            <View style={[styles.dash, { borderColor: color }]}>
+              <Text style={[styles.frequency, { textDecorationColor: color, color: color }]}>
+                {totalCount}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.botRow}>
+            <Text style={styles.duration}>Last Updated: {lastTimeStampMessage}</Text>
+          </View>
+        </Neomorph>
+      </AwesomeButtonProgress>
+    </TouchableWithoutFeedback>
 
+    // <AwesomeButton progress width={Dimensions.get("window") * 0.8} height={95}>
+    //   {/* <Image source="require('send-icon.png)" /> */}
+    //   {/* <Text>Send it</Text> */}
+
+    //   <Neomorph
+    //     darkShadowColor={color_shade} //"#D1CDC7" // <- set this
+    //     lightShadowColor="#FFF" //{color_shade} ///
+    //     style={styles.neomorph}
+    //   >
+    //     <View style={styles.topRow}>
+    //       <Text style={styles.task}>{text}</Text>
+    //       <View style={[styles.dash, { borderColor: color }]}>
+    //         <Text style={[styles.frequency, { textDecorationColor: color, color: color }]}>
+    //           {totalCount}
+    //         </Text>
+    //       </View>
+    //     </View>
+    //     <View style={styles.botRow}>
+    //       <Text style={styles.duration}>Last Updated: {lastTimeStampMessage}</Text>
+    //     </View>
+    //   </Neomorph>
+
+    // </AwesomeButton>
+  );
+};
 const GoalListItem = ({
   text,
   navigateToGoal,
@@ -76,10 +151,26 @@ const GoalListItem = ({
   lastTimeStampMessage,
   is_overdue,
 }) => {
+  const onSwipeValueChange = swipeData => {
+    const { key, value } = swipeData;
+    if (value > Dimensions.get("window").width) {
+      Animated.timing(new Animated.Value(0), {
+        toValue: 0,
+        duration: 200,
+      }).start(() => {
+        navigateToGoal();
+      });
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.standalone}>
-        <SwipeRow leftOpenValue={75} rightOpenValue={-75}>
+        <SwipeRow
+          // disableRightSwipe
+          rightOpenValue={Dimensions.get("window").width}
+          onSwipeValueChange={onSwipeValueChange}
+        >
           <GoalButtonBack deleteGoal={deleteGoal} navigateToGoal={navigateToGoal} />
           <GoalButtonFront
             text={text}
