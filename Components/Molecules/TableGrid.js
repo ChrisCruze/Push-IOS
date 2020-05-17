@@ -28,7 +28,7 @@ const TableGrid = ({ list_of_lists }) => {
 const styles = StyleSheet.create({
   row_container: {
     flexDirection: "row",
-    backgroundColor: "white",
+    backgroundColor: "#ECF0F3",
     justifyContent: "center",
   },
   cell_container: {
