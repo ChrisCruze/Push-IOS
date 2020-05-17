@@ -38,7 +38,7 @@ const Goals = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Header title={"Goals"} sub_title={"List"} logout={logout} />
+      <Header title={"Goals"} sub_title={"List"} logout={logout} logout_text={"Logout"} />
       <FlatList
         bounces={false}
         showsVerticalScrollIndicator={false}
@@ -55,13 +55,6 @@ const Goals = ({ navigation }) => {
             refetch,
           });
         }}
-        ListHeaderComponent={
-          <View style={styles.post}>
-            <TouchableWithoutFeedback onPress={createNewGoal}>
-              <Icon name="plus-circle" color={Theme.palette.primary} size={25} />
-            </TouchableWithoutFeedback>
-          </View>
-        }
         ListEmptyComponent={
           <View style={styles.post}>
             <TouchableWithoutFeedback onPress={createNewGoal}>

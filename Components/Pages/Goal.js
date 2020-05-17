@@ -50,6 +50,7 @@ const Goal = ({ navigation }) => {
         title={goals_dict.title || "-"}
         sub_title={String(goals_dict.totalCount) || "0"}
         logout={back}
+        logout_text={"Back"}
       />
       <BarChart chartData={goals_count_by_day_array} />
 
