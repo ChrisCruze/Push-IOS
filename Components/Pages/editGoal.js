@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CreateContainer from "../Molecules/createContainer";
 import {
   View,
@@ -15,13 +15,24 @@ import {
 import Constants from "expo-constants";
 import { TextField } from "../Atoms/Fields";
 import { Dropdown } from "react-native-material-dropdown";
-import { useGoalsPull, useGoalCreate } from "../../API";
+import { useGoalUpdate, useGoalsPull } from "../../API";
 
-const createGoal = ({ navigation, goToPassword, createNew }) => {
-  const { createGoal } = useGoalCreate();
-  const [selectedValue, setSelectedValue] = useState("daily");
-  const [textValue, updateSelectedText] = useState("default");
-  const [cadenceValue, updateCadenceValue] = useState("0");
+const editGoal = ({ navigation }) => {
+  const { goals, refetch } = useGoalsPull();
+  const { updateGoal } = useGoalUpdate();
+
+  const _id = navigation.getParam("_id");
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  const goals_dict = goals.find(function(D) {
+    return D["_id"] == _id;
+  });
+  const [selectedValue, setSelectedValue] = useState(goals_dict.cadence);
+  const [textValue, updateSelectedText] = useState(goals_dict.title);
+  const [cadenceValue, updateCadenceValue] = useState(goals_dict.cadenceCount);
+  const timeStamps = goals_dict.timeStamps;
 
   let data = [
     {
@@ -36,32 +47,36 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
   ];
 
   function pressNextSubmit() {
-    const goal_dict = {
-      title: textValue,
-      cadence: selectedValue,
-      cadenceCount: parseInt(cadenceValue) || 0,
-    };
-    createGoal({ variables: goal_dict }); //{ title: "haha", cadence: "weekly", cadenceCount: 3 }
+    updateGoal({
+      variables: {
+        _id,
+        title: textValue,
+        cadence: selectedValue,
+        cadenceCount: parseInt(cadenceValue) || 0,
+        timeStamps: timeStamps,
+      },
+    });
     navigation.navigate("Goals");
   }
 
   return (
     <CreateContainer
-      title="New Goal"
+      title="Edit Goal"
       subtitle="Let's push"
       back={() => navigation.navigate("Goals")}
       nextLabel="Push"
       next={pressNextSubmit}
-      onSubmitEditing={createNew}
+      // onSubmitEditing={createNew}
       first
       {...{ navigation }}
     >
       <TextField
         style={styles.textInput}
-        placeholder="Create goal"
+        placeholder="Edit goal"
         keyboardType="textInput"
         autoCapitalize="none"
         returnKeyType="next"
+        value={textValue}
         onChangeText={text => updateSelectedText(text)}
         contrast
       />
@@ -71,6 +86,7 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
         keyboardType="textInput"
         autoCapitalize="none"
         returnKeyType="next"
+        value={String(cadenceValue)}
         onChangeText={text => updateCadenceValue(text)}
         contrast
       />
@@ -90,4 +106,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default createGoal;
+export default editGoal;
