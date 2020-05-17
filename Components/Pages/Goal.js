@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -19,6 +19,7 @@ import {
 } from "../Atoms/BarChart.functions";
 import BarChart from "../Atoms/BarChart";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
+import GoalTimeStamps from "../Molecules/GoalTimeStamps";
 
 const GoalBarChart = ({ goals_filtered }) => {
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
@@ -61,6 +62,7 @@ const Goal = ({ navigation }) => {
       <GoalBarChart goals_filtered={goals_filtered} />
       <GoalTableGrid goals_filtered={goals_filtered} />
       <GoalPageButtons _id={_id} navigation={navigation} />
+      <GoalTimeStamps {...goals_filtered[0]} />
     </View>
   );
 };
