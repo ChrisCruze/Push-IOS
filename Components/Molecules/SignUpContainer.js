@@ -37,7 +37,7 @@ const SignUpContainer = ({
             <Button label="Back" onPress={back} full />
             <Button
               label="Forgot Password?"
-              onPress={() => navigation.navigate("Goals")}
+              onPress={() => navigation.navigate("ForgotPassword")}
               full
               style={{ marginTop: 50 }}
               textStyle={{ textDecorationLine: "underline" }}
