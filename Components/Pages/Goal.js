@@ -61,7 +61,7 @@ const Goal = ({ navigation }) => {
       <GoalHeader goals_filtered={goals_filtered} back={back} />
       <GoalBarChart goals_filtered={goals_filtered} />
       <GoalTableGrid goals_filtered={goals_filtered} />
-      <GoalPageButtons _id={_id} navigation={navigation} />
+      <GoalPageButtons {...goals_filtered[0]} _id={_id} navigation={navigation} refetch={refetch} />
       <GoalTimeStamps {...goals_filtered[0]} navigation={navigation} />
     </View>
   );

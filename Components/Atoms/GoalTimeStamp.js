@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import _ from "lodash";
 import moment from "moment";
+import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
 
 const timeStampsWithRemoved = ({ timeStamps, timeStamp }) => {
   const timeStampsCopy = [...timeStamps];
@@ -57,7 +58,7 @@ const GoalTimeStamp = ({
     <View style={styles.container}>
       <Text>{time_stamp_formatted}</Text>
       <TouchableWithoutFeedback onPress={deleteTimeStamp}>
-        <Text>Delete</Text>
+        <Icon name="trash" size={25} {...{ color: "black" }} />
       </TouchableWithoutFeedback>
     </View>
   );
