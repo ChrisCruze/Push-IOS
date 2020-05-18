@@ -10,26 +10,25 @@ import {
 } from "react-native";
 import _ from "lodash";
 import moment from "moment";
-import GoalTimeStamp from "../Atoms/GoalTimeStamp";
+import DashboardTimeStamp from "../Atoms/DashboardTimeStamp";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
 import { Container, Header, Content, List, ListItem, Text } from "native-base";
 
 const timeStampsSort = ({ timeStamps }) => {
   const sorted_time_stamps = _.sortBy(timeStamps, function(i) {
-    return moment(i).unix();
+    return moment(i.timeStamp).unix();
   });
   sorted_time_stamps.reverse();
   return sorted_time_stamps;
 };
 
-const GoalTimeStamps = ({ _id, title, cadence, cadenceCount, timeStamps, navigation }) => {
+const DashboardTimeStamps = ({ timeStamps, navigation }) => {
   const timeStampsSorted = timeStampsSort({ timeStamps: timeStamps });
   const timeStampArray = _.map(timeStampsSorted, function(i, num) {
-    return { key: num, timeStamp: i };
+    return { key: num, ...i };
   });
   const { updateGoal } = useGoalUpdate();
   const { refetch } = useGoalsPull();
-
   return (
     <View style={styles.container}>
       {/* <List>
@@ -56,9 +55,8 @@ const GoalTimeStamps = ({ _id, title, cadence, cadenceCount, timeStamps, navigat
         data={timeStampArray}
         keyExtractor={timeStampDict => timeStampDict.key}
         renderItem={({ item }) => {
-          return GoalTimeStamp({
+          return DashboardTimeStamp({
             ...item,
-            ...{ _id, title, cadence, cadenceCount, timeStamps },
             timeStampArray,
             updateGoal,
             refetch,
@@ -77,4 +75,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GoalTimeStamps;
+export default DashboardTimeStamps;
