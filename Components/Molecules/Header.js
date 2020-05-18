@@ -2,6 +2,7 @@ import * as React from "react";
 import moment from "moment";
 import {
   FlatList,
+  Text,
   StyleSheet,
   View,
   Animated,
@@ -21,7 +22,7 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
-const Header = ({ title, sub_title, logout }) => {
+const Header = ({ title, sub_title, logout, logout_text }) => {
   const [scrollAnimation, updateScrollAnimation] = React.useState(new Animated.Value(0));
 
   const start = 30;
@@ -71,7 +72,7 @@ const Header = ({ title, sub_title, logout }) => {
         </View>
         <TouchableOpacity onPress={logout} style={styles.settings}>
           <View>
-            <Icon name="log-out" size={25} color="blue" />
+            <Text style={{ color: "white" }}>{logout_text}</Text>
           </View>
         </TouchableOpacity>
         {/* <TouchableWithoutFeedback onPress={this.profile}>
@@ -83,7 +84,7 @@ const Header = ({ title, sub_title, logout }) => {
     </AnimatedSafeAreaView>
   );
 };
-const main_background = "#ecf0f1"//E0E5EC
+const main_background = "#F17355"; //E0E5EC //"#17355A" //"#F17355"
 
 const styles = StyleSheet.create({
   container: {
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight + 100 + Theme.spacing.base,
   },
   header: {
-    backgroundColor: main_background,//"white",
+    backgroundColor: main_background, //"white",
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
