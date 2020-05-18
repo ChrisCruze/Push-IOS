@@ -81,6 +81,8 @@ const GoalItem = ({
   const lastTimeStampMessage = lastTimeStampMessageCreate(lastTimeStamp);
   const is_overdue = determineOverDue({ title, cadence, cadenceCount, lastTimeStamp });
 
+  
+
   const navigateToGoal = () => {
     GoalOptionsPress({ id, navigation, goals });
   };
@@ -102,7 +104,7 @@ const GoalItem = ({
     removeGoal({ variables: { _id } });
     refetch();
   };
-
+  
   return (
     <GoalListItem
       navigateToGoal={navigateToGoal}
@@ -110,6 +112,7 @@ const GoalItem = ({
       deleteGoal={deleteGoalPress}
       text={title}
       totalCount={totalCount}
+      cadence={cadenceCount}
       lastTimeStamp={lastTimeStamp}
       lastTimeStampMessage={lastTimeStampMessage}
       is_overdue={is_overdue}
