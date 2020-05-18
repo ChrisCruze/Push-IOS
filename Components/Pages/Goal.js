@@ -42,7 +42,12 @@ const GoalTableGrid = ({ goals_filtered }) => {
 
 const GoalHeader = ({ goals_filtered, back }) => {
   const goals_dict = goals_filtered[0];
-  return <Header title={goals_dict.title || "-"} sub_title={" "} logout={back} />;
+  return <Header
+        title={goals_dict.title || "-"}
+        sub_title={String(goals_dict.totalCount) || "0"}
+        logout={back}
+        logout_text={"Back"}
+      />
 };
 
 const Goal = ({ navigation }) => {

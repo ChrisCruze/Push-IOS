@@ -8,6 +8,7 @@ import createGoal from "./Components/Pages/createGoal";
 import HomeTab from "./Components/Pages/HomeTab";
 import Goal from "./Components/Pages/Goal";
 import Goals from "./Components/Pages/Goals";
+import ForgotPassword from "./Components/Pages/ForgotPassword";
 import Dashboard from "./Components/Pages/Dashboard";
 import editGoal from "./Components/Pages/editGoal";
 
@@ -68,8 +69,8 @@ class App extends React.Component {
         "SFProText-Semibold": SFProTextSemibold,
         "SFProText-Regular": SFProTextRegular,
         "SFProText-Light": SFProTextLight,
-        Roboto_medium: Roboto_medium,
-        Roboto: Roboto,
+        "Roboto_medium": Roboto_medium,
+        "Roboto": Roboto,
       });
       const icons = Font.loadAsync(Feather.font);
       await Promise.all([...cacheImages, fonts, icons]);
@@ -99,6 +100,8 @@ const SignUpNavigator = createStackNavigator(
 const Home = createBottomTabNavigator(
   {
     Dashboard: { screen: Dashboard },
+    createGoal: { screen: createGoal },
+
     Goals: { screen: Goals },
   },
   {
@@ -114,7 +117,7 @@ const AppNavigator = createAppContainer(
       Welcome: { screen: Welcome },
       Login: { screen: Login },
       SignUp: { screen: SignUpNavigator },
-      // Walkthrough: { screen: Walkthrough },
+      ForgotPassword: { screen: ForgotPassword },
       Home: { screen: Home },
       Goal: { screen: Goal },
       createGoal: { screen: createGoal },

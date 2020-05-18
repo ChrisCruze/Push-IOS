@@ -8,6 +8,7 @@ const HomeTab = ({ navigation }) => {
   const tabs = [
     // { label: "Profile", icon: "home" },
     { label: "Dashboard", icon: "bar-chart" },
+    { label: "createGoal", icon: "plus-circle" },
     { label: "Goals", icon: "list" },
   ];
   const navState = navigation.state;
@@ -17,14 +18,14 @@ const HomeTab = ({ navigation }) => {
     <SafeAreaView style={styles.tabs}>
       <View style={styles.container}>
         {tabs.map((info, i) => {
-          const color = i === current ? Theme.palette.primary : Theme.palette.lightGray;
+          const color = "white"; //i === current ? Theme.palette.primary : Theme.palette.lightGray;
           return (
             <TouchableWithoutFeedback
               key={info.label}
               onPress={() => (i !== current ? navigate(info.label) : null)}
             >
               <View style={styles.tab}>
-                <Icon name={info.icon} size={25} {...{ color }} />
+                <Icon name={info.icon} size={30} {...{ color }} />
               </View>
             </TouchableWithoutFeedback>
           );
@@ -36,7 +37,7 @@ const HomeTab = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   tabs: {
-    backgroundColor: "white",
+    backgroundColor: "#17355A", //"#FFF9FD",
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,

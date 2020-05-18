@@ -3,7 +3,17 @@ import { StyleSheet } from "react-native";
 import { Button as NBButton, Text, Spinner } from "native-base";
 import Theme from "./Theme";
 
-const Button = ({ label, full, primary, disabled, transparent, onPress, style, loading }) => {
+const Button = ({
+  label,
+  full,
+  primary,
+  disabled,
+  transparent,
+  onPress,
+  style,
+  loading,
+  textStyle,
+}) => {
   const computedStyle = [styles.base];
   if (primary && !transparent) {
     computedStyle.push(styles.primary);
@@ -17,7 +27,7 @@ const Button = ({ label, full, primary, disabled, transparent, onPress, style, l
         onPress,
         style: computedStyle,
         transparent: !primary || transparent,
-        disabled
+        disabled,
       }}
     >
       {!!loading && <Spinner color="white" />}
@@ -26,10 +36,17 @@ const Button = ({ label, full, primary, disabled, transparent, onPress, style, l
           style={[
             primary ? Theme.typography.large : Theme.typography.regular,
             {
-              color: disabled ? "transparent" : primary ? (transparent ? Theme.palette.primary : "white") : Theme.typography.color,
+              color: disabled
+                ? "transparent"
+                : primary
+                ? transparent
+                  ? Theme.palette.primary
+                  : "white"
+                : Theme.typography.color,
               fontSize: primary ? 16 : Theme.typography.regular.fontSize,
-              fontFamily: Theme.typography.semibold
-            }
+              fontFamily: Theme.typography.semibold,
+              ...textStyle,
+            },
           ]}
         >
           {label}
@@ -45,8 +62,8 @@ const styles = StyleSheet.create({
     shadowColor: "rgba(0, 170, 255, 0.29)",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
-    shadowRadius: 7
-  }
+    shadowRadius: 7,
+  },
 });
 
 export default Button;
