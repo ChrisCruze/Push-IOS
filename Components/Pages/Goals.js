@@ -24,7 +24,6 @@ import moment from "moment";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
 import { AsyncStorage } from "react-native";
 
-
 const Goals = ({ navigation }) => {
   const logout = () => {
     AsyncStorage.setItem("token", "")
@@ -37,7 +36,7 @@ const Goals = ({ navigation }) => {
   const { removeGoal } = useGoalDelete();
   const [notification, setNotification] = useState({});
   const [expoPushToken, setExpoPushToken] = useState('');
-
+  
   const registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
@@ -70,7 +69,7 @@ const Goals = ({ navigation }) => {
   const _handleNotification = notification => {
     Vibration.vibrate();
     console.log(notification);
-    this.setState({ notification: notification });
+    setNotification({ notification: notification });
   };
 
   const sendPushNotification = async () => {
@@ -93,11 +92,13 @@ const Goals = ({ navigation }) => {
     });
   };
 
+  let notificationSubscription;
 
   useEffect(() => {
     refetch();
     registerForPushNotificationsAsync();
-    this._notificationSubscription = Notifications.addListener(_handleNotification);
+    notificationSubscription = Notifications.addListener(_handleNotification);
+    console.log(notificationSubscription);
   }, []);
   const createNewGoal = () => {
     navigation.navigate("createGoal");
