@@ -35,9 +35,22 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
     },
   ];
 
+  function capitalizeEachWord(sentence){
+    var words = sentence.toLowerCase().split(' ');
+    for(var i = 0; i < words.length; i++){
+            words[i] = words[i].charAt(0).toUpperCase() + words[i].substring(1);  
+        }
+        return words.join(' '); 
+    }
+  
+
   function pressNextSubmit() {
+    let newText =capitalizeEachWord(textValue);
+    console.log(newText);
+    updateSelectedText(newText);
+    console.log(textValue);
     const goal_dict = {
-      title: textValue,
+      title: newText,
       cadence: selectedValue,
       cadenceCount: parseInt(cadenceValue) || 0,
     };
@@ -85,6 +98,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textInput: {
+    borderColor: 'black',
+    borderWidth: 1,
     marginTop: 25,
     marginBottom: 30,
   },

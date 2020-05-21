@@ -70,7 +70,7 @@ const GoalButtonFrontOLD = ({ text, totalCount, pushGoal, lastTimeStampMessage, 
     </TouchableWithoutFeedback>
   );
 };
-const GoalButtonFront = ({ text, totalCount, pushGoal, lastTimeStampMessage, is_overdue }) => {
+const GoalButtonFront = ({ text, totalCount, cadence, pushGoal, lastTimeStampMessage, is_overdue }) => {
   const color = "#17355A"; //"#2DAAFF"; //is_overdue ? "red" : "green";
   const color_shade = is_overdue ? "#C94818" : "#193162";
   const main_background = "#FFF9FD";
@@ -106,7 +106,7 @@ const GoalButtonFront = ({ text, totalCount, pushGoal, lastTimeStampMessage, is_
             <Text style={styles.task}>{text}</Text>
             <View style={[styles.dash, { borderColor: color }]}>
               <Text style={[styles.frequency, { textDecorationColor: color, color: color }]}>
-                {totalCount}
+                {totalCount}/{cadence}
               </Text>
             </View>
           </View>
@@ -147,6 +147,7 @@ const GoalListItem = ({
   navigateToGoal,
   pushGoal,
   totalCount,
+  cadence,
   deleteGoal,
   lastTimeStampMessage,
   is_overdue,
@@ -175,6 +176,7 @@ const GoalListItem = ({
           <GoalButtonFront
             text={text}
             totalCount={totalCount}
+            cadence={cadence}
             pushGoal={pushGoal}
             lastTimeStampMessage={lastTimeStampMessage}
             is_overdue={is_overdue}
