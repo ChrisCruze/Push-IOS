@@ -64,7 +64,7 @@ const Header = ({ title, sub_title, logout, logout_text }) => {
             type="large"
             style={{ position: "absolute", top: 0, opacity, transform: [{ translateY }] }}
           >
-            {sub_title || "sub_title"}
+            {sub_title || ""}
           </AnimatedText>
           <AnimatedText type="header2" style={{ fontSize, marginTop }}>
             {title || "title"}
