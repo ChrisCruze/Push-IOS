@@ -20,8 +20,8 @@ import { useGoalsPull, useGoalCreate } from "../../API";
 const createGoal = ({ navigation, goToPassword, createNew }) => {
   const { createGoal } = useGoalCreate();
   const [selectedValue, setSelectedValue] = useState("daily");
-  const [textValue, updateSelectedText] = useState("default");
-  const [cadenceValue, updateCadenceValue] = useState("0");
+  const [textValue, updateSelectedText] = useState("");
+  const [cadenceValue, updateCadenceValue] = useState(1);
 
   let data = [
     {
@@ -36,13 +36,17 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
   ];
 
   function pressNextSubmit() {
-    updateSelectedText(textValue);
     const goal_dict = {
       title: textValue,
       cadence: selectedValue,
       cadenceCount: parseInt(cadenceValue) || 0,
     };
     createGoal({ variables: goal_dict });
+
+    updateSelectedText("");
+    updateCadenceValue(1);
+    setSelectedValue("daily");
+
     navigation.navigate("Goals");
   }
 
@@ -64,6 +68,7 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
         autoCapitalize="words"
         returnKeyType="next"
         onChangeText={text => updateSelectedText(text)}
+        value={textValue}
         contrast
       />
       <TextField
@@ -73,6 +78,7 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
         autoCapitalize="none"
         returnKeyType="next"
         onChangeText={text => updateCadenceValue(text)}
+        value={cadenceValue}
         contrast
       />
       <Dropdown label="Cadence" data={data} value={selectedValue} onChangeText={setSelectedValue} />
