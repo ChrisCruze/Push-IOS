@@ -53,21 +53,34 @@ const GoalButtonFront = ({
   is_overdue,
 }) => {
   const [fadeAnim] = useState(new Animated.Value(1));
+  const [moveAnim] = useState(new Animated.Value(0));
+
   // const fadeAnim = new Animated.Value(0)
   const color = "#17355A"; //"#2DAAFF"; //is_overdue ? "red" : "green";
   const color_shade = is_overdue ? "#C94818" : "#193162";
   const main_background = "#FFF9FD";
 
   const pushGoalAnimate = () => {
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 700,
-    }).start(() => {
-      pushGoal();
+    Animated.parallel([
       Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 1500,
-      }).start();
+        toValue: 0,
+        duration: 800,
+      }),
+      Animated.timing(moveAnim, {
+        toValue: 20,
+        duration: 800,
+      }),
+    ]).start(() => {
+      Animated.timing(moveAnim, {
+        toValue: 0,
+        duration: 0,
+      }).start(() => {
+        pushGoal();
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 1500,
+        }).start();
+      });
     });
   };
 
@@ -84,7 +97,7 @@ const GoalButtonFront = ({
             <Animated.Text
               style={[
                 styles.frequency,
-                { textDecorationColor: color, color: color, opacity: fadeAnim },
+                { textDecorationColor: color, color: color, opacity: fadeAnim, bottom: moveAnim },
               ]}
             >
               {totalCount}/{cadence}
