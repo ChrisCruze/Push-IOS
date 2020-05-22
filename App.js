@@ -1,7 +1,6 @@
 import React from "react";
 import Welcome from "./Components/Pages/Welcome";
 import Login from "./Components/Pages/Login";
-import SignUpName from "./Components/Pages/SignUpName";
 import SignUpEmail from "./Components/Pages/SignUpEmail";
 import SignUpPassword from "./Components/Pages/SignUpPassword";
 import createGoal from "./Components/Pages/createGoal";
@@ -90,7 +89,6 @@ const StackNavigatorOptions = {
 
 const SignUpNavigator = createStackNavigator(
   {
-    SignUp: { screen: SignUpName },
     SignUpEmail: { screen: SignUpEmail },
     SignUpPassword: { screen: SignUpPassword },
   },
