@@ -11,6 +11,9 @@ import Goals from "./Components/Pages/Goals";
 import Dashboard from "./Components/Pages/Dashboard";
 import editGoal from "./Components/Pages/editGoal";
 
+import {TabScreen} from "./Components/Molecules/HeaderSample";
+
+
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import { Feather } from "@expo/vector-icons";
@@ -101,7 +104,7 @@ const Home = createBottomTabNavigator(
     Dashboard: { screen: Dashboard },
     createGoal: { screen: createGoal },
 
-    Goals: { screen: Goals },
+    Goals: { screen: TabScreen },
   },
   {
     animationEnabled: true,

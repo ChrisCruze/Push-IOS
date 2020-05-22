@@ -19,6 +19,7 @@ import {
 } from "../Atoms/BarChart.functions";
 import BarChart from "../Atoms/BarChart";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
+import StickyParallaxHeader from 'react-native-sticky-parallax-header'
 
 const GoalBarChart = ({ goals_filtered }) => {
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
