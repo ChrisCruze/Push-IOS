@@ -35,26 +35,14 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
     },
   ];
 
-  function capitalizeEachWord(sentence){
-    var words = sentence.toLowerCase().split(' ');
-    for(var i = 0; i < words.length; i++){
-            words[i] = words[i].charAt(0).toUpperCase() + words[i].substring(1);  
-        }
-        return words.join(' '); 
-    }
-  
-
   function pressNextSubmit() {
-    let newText =capitalizeEachWord(textValue);
-    console.log(newText);
-    updateSelectedText(newText);
-    console.log(textValue);
+    updateSelectedText(textValue);
     const goal_dict = {
-      title: newText,
+      title: textValue,
       cadence: selectedValue,
       cadenceCount: parseInt(cadenceValue) || 0,
     };
-    createGoal({ variables: goal_dict }); //{ title: "haha", cadence: "weekly", cadenceCount: 3 }
+    createGoal({ variables: goal_dict });
     navigation.navigate("Goals");
   }
 
@@ -71,23 +59,22 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
     >
       <TextField
         style={styles.textInput}
-        placeholder="Create goal"
-        keyboardType="textInput"
-        autoCapitalize="none"
+        placeholder="Title"
+        keyboardType="default"
+        autoCapitalize="words"
         returnKeyType="next"
         onChangeText={text => updateSelectedText(text)}
         contrast
       />
       <TextField
         style={styles.textInput}
-        placeholder="Enter Cadence Goal"
-        keyboardType="textInput"
+        placeholder="Cadence Count"
+        keyboardType="numeric"
         autoCapitalize="none"
         returnKeyType="next"
         onChangeText={text => updateCadenceValue(text)}
         contrast
       />
-
       <Dropdown label="Cadence" data={data} value={selectedValue} onChangeText={setSelectedValue} />
     </CreateContainer>
   );
@@ -98,7 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textInput: {
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     marginTop: 25,
     marginBottom: 30,
