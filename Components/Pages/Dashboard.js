@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Dimensions, FlatList, TouchableOpacity, Image } from "react-native";
 import Constants from "expo-constants";
-import { Feather as Icon } from "@expo/vector-icons";
 import Theme from "../Atoms/Theme";
-import Text from "../Atoms/Text";
-import Images from "../Atoms/Images";
-import GoalItem from "../Molecules/GoalItem";
-import BarChartSummary from "../Molecules/BarChartSummary";
 import Header from "../Molecules/Header";
 import TableGrid from "../Molecules/TableGrid";
 import {

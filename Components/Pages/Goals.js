@@ -4,23 +4,18 @@ import {
   StyleSheet,
   Dimensions,
   FlatList,
-  TouchableOpacity,
-  Image,
   TouchableWithoutFeedback,
-  Vibration, 
+  Vibration,
   Platform,
 } from "react-native";
-import { Notifications } from 'expo';
-import * as Permissions from 'expo-permissions';
+import { Notifications } from "expo";
+import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
 import { Feather as Icon } from "@expo/vector-icons";
 import Theme from "../Atoms/Theme";
-import Text from "../Atoms/Text";
-import Images from "../Atoms/Images";
-import FirstPost from "../Atoms/FirstPost";
+
 import GoalItem from "../Molecules/GoalItem";
 import Header from "../Molecules/Header";
-import moment from "moment";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
 import { AsyncStorage } from "react-native";
 
@@ -35,32 +30,31 @@ const Goals = ({ navigation }) => {
   const { updateGoal } = useGoalUpdate();
   const { removeGoal } = useGoalDelete();
   const [notification, setNotification] = useState({});
-  const [expoPushToken, setExpoPushToken] = useState('');
-  
+  const [expoPushToken, setExpoPushToken] = useState("");
+
   const registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
       let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
+      if (existingStatus !== "granted") {
         const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
         finalStatus = status;
       }
-      if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
+      if (finalStatus !== "granted") {
+        alert("Failed to get push token for push notification!");
         return;
       }
       let token = await Notifications.getExpoPushTokenAsync();
-      console.log(token);
       setExpoPushToken(token);
     } else {
-      alert('Must use physical device for Push Notifications');
+      alert("Must use physical device for Push Notifications");
     }
 
-    if (Platform.OS === 'android') {
-      Notifications.createChannelAndroidAsync('default', {
-        name: 'default',
+    if (Platform.OS === "android") {
+      Notifications.createChannelAndroidAsync("default", {
+        name: "default",
         sound: true,
-        priority: 'max',
+        priority: "max",
         vibrate: [0, 250, 250, 250],
       });
     }
@@ -68,25 +62,24 @@ const Goals = ({ navigation }) => {
 
   const _handleNotification = notification => {
     Vibration.vibrate();
-    console.log(notification);
     setNotification({ notification: notification });
   };
 
   const sendPushNotification = async () => {
     const message = {
       to: expoPushToken,
-      sound: 'default',
-      title: 'Original Title',
-      body: 'And here is the body!',
-      data: { data: 'goes here' },
+      sound: "default",
+      title: "Original Title",
+      body: "And here is the body!",
+      data: { data: "goes here" },
       _displayInForeground: true,
     };
-    const response = await fetch('https://exp.host/--/api/v2/push/send', {
-      method: 'POST',
+    const response = await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
       headers: {
-        Accept: 'application/json',
-        'Accept-encoding': 'gzip, deflate',
-        'Content-Type': 'application/json',
+        "Accept": "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(message),
     });
@@ -103,9 +96,6 @@ const Goals = ({ navigation }) => {
   const createNewGoal = () => {
     navigation.navigate("createGoal");
   };
-
-  
-
 
   return (
     <View style={styles.container}>

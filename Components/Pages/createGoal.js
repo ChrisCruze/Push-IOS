@@ -1,23 +1,12 @@
 import * as React from "react";
 import { useState } from "react";
 import CreateContainer from "../Molecules/createContainer";
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  Linking,
-  FlatList,
-  TouchableOpacity,
-  Image,
-  TextInput,
-} from "react-native";
-
-import Constants from "expo-constants";
+import { StyleSheet } from "react-native";
 import { TextField } from "../Atoms/Fields";
 import { Dropdown } from "react-native-material-dropdown";
-import { useGoalsPull, useGoalCreate } from "../../API";
+import { useGoalCreate } from "../../API";
 
-const createGoal = ({ navigation, goToPassword, createNew }) => {
+const createGoal = ({ navigation, createNew }) => {
   const { createGoal } = useGoalCreate();
   const [selectedValue, setSelectedValue] = useState("daily");
   const [textValue, updateSelectedText] = useState("default");
@@ -35,26 +24,23 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
     },
   ];
 
-  function capitalizeEachWord(sentence){
-    var words = sentence.toLowerCase().split(' ');
-    for(var i = 0; i < words.length; i++){
-            words[i] = words[i].charAt(0).toUpperCase() + words[i].substring(1);  
-        }
-        return words.join(' '); 
+  function capitalizeEachWord(sentence) {
+    var words = sentence.toLowerCase().split(" ");
+    for (var i = 0; i < words.length; i++) {
+      words[i] = words[i].charAt(0).toUpperCase() + words[i].substring(1);
     }
-  
+    return words.join(" ");
+  }
 
   function pressNextSubmit() {
-    let newText =capitalizeEachWord(textValue);
-    console.log(newText);
+    let newText = capitalizeEachWord(textValue);
     updateSelectedText(newText);
-    console.log(textValue);
     const goal_dict = {
       title: newText,
       cadence: selectedValue,
       cadenceCount: parseInt(cadenceValue) || 0,
     };
-    createGoal({ variables: goal_dict }); //{ title: "haha", cadence: "weekly", cadenceCount: 3 }
+    createGoal({ variables: goal_dict });
     navigation.navigate("Goals");
   }
 
@@ -98,7 +84,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textInput: {
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     marginTop: 25,
     marginBottom: 30,

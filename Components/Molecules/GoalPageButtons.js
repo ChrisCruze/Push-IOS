@@ -1,8 +1,7 @@
 import React, { useState, Fragment } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
-import Constants from "expo-constants";
 import ButtonNeomorph from "../Atoms/ButtonNeomorph";
-import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
+import { useGoalUpdate, useGoalDelete } from "../../API";
 import _ from "lodash";
 import moment from "moment";
 const GoalPageButtons = ({

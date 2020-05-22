@@ -9,16 +9,12 @@ import {
   SafeAreaView,
   RefreshControl,
   Platform,
-  TouchableWithoutFeedback,
   TouchableOpacity,
 } from "react-native";
 import Constants from "expo-constants";
 import { TextClass } from "../Atoms/Text";
 import Theme from "../Atoms/Theme";
-import { Text as RNText } from "react-native";
-import { Feather as Icon } from "@expo/vector-icons";
 
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
@@ -75,11 +71,6 @@ const Header = ({ title, sub_title, logout, logout_text }) => {
             <Text style={{ color: "white" }}>{logout_text}</Text>
           </View>
         </TouchableOpacity>
-        {/* <TouchableWithoutFeedback onPress={this.profile}>
-          <View>
-            <Avatar {...profile.picture} />
-          </View>
-        </TouchableWithoutFeedback> */}
       </Animated.View>
     </AnimatedSafeAreaView>
   );
