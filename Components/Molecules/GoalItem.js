@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Vibration } from "react-native";
 import APIStore from "../Atoms/APIStore";
 import GoalComponent from "../Atoms/GoalComponent";
 import moment from "moment";
@@ -81,8 +81,6 @@ const GoalItem = ({
   const lastTimeStampMessage = lastTimeStampMessageCreate(lastTimeStamp);
   const is_overdue = determineOverDue({ title, cadence, cadenceCount, lastTimeStamp });
 
-  
-
   const navigateToGoal = () => {
     GoalOptionsPress({ id, navigation, goals });
   };
@@ -98,13 +96,14 @@ const GoalItem = ({
         timeStamps: timeStampsWithNew,
       },
     });
+    Vibration.vibrate();
     refetch();
   };
   const deleteGoalPress = () => {
     removeGoal({ variables: { _id } });
     refetch();
   };
-  
+
   return (
     <GoalListItem
       navigateToGoal={navigateToGoal}
