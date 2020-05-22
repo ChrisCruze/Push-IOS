@@ -6,6 +6,10 @@ import moment from "moment";
 import GoalButton from "../Atoms/GoalButton";
 import GoalListItem from "../Atoms/GoalListItem";
 import _ from "lodash";
+import * as Haptics from 'expo-haptics';
+
+// import { Vibration } from ‘react-native’;
+
 
 const GoalOptionsPress = ({ id, navigation, goals }) => {
   const pass_dict = { id: id, goals: goals };
@@ -98,6 +102,7 @@ const GoalItem = ({
         timeStamps: timeStampsWithNew,
       },
     });
+    Haptics.selectionAsync()
     refetch();
   };
   const deleteGoalPress = () => {
