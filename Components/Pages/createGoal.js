@@ -19,7 +19,7 @@ import { useGoalsPull, useGoalCreate } from "../../API";
 
 const createGoal = ({ navigation, goToPassword, createNew }) => {
   const { createGoal } = useGoalCreate();
-  const [selectedValue, setSelectedValue] = useState("daily");
+  const [selectedValue, setSelectedValue] = useState("Daily");
   const [textValue, updateSelectedText] = useState("");
   const [cadenceValue, updateCadenceValue] = useState(1);
 
@@ -45,7 +45,7 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
 
     updateSelectedText("");
     updateCadenceValue(1);
-    setSelectedValue("daily");
+    setSelectedValue("Daily");
 
     navigation.navigate("Goals");
   }
@@ -55,7 +55,7 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
       title="New Goal"
       subtitle="Let's push"
       back={() => navigation.navigate("Goals")}
-      nextLabel="Push"
+      nextLabel="Create"
       next={pressNextSubmit}
       onSubmitEditing={createNew}
       first
