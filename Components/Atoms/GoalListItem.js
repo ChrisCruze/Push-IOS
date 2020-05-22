@@ -70,13 +70,20 @@ const GoalButtonFrontOLD = ({ text, totalCount, pushGoal, lastTimeStampMessage, 
     </TouchableWithoutFeedback>
   );
 };
-const GoalButtonFront = ({ text, totalCount, cadence, pushGoal, lastTimeStampMessage, is_overdue }) => {
+const GoalButtonFront = ({
+  text,
+  totalCount,
+  cadence,
+  pushGoal,
+  lastTimeStampMessage,
+  is_overdue,
+}) => {
   const color = "#17355A"; //"#2DAAFF"; //is_overdue ? "red" : "green";
   const color_shade = is_overdue ? "#C94818" : "#193162";
   const main_background = "#FFF9FD";
   return (
     <TouchableWithoutFeedback onPress={pushGoal}>
-      <AwesomeButtonProgress
+      {/* <AwesomeButtonProgress
         progress
         height={115}
         activityColor={main_background}
@@ -96,25 +103,25 @@ const GoalButtonFront = ({ text, totalCount, cadence, pushGoal, lastTimeStampMes
           pushGoal();
           next();
         }}
+      > */}
+      <Neomorph
+        darkShadowColor={color_shade} //"#D1CDC7" // <- set this
+        lightShadowColor="#FFF" //{color_shade} ///
+        style={styles.neomorph}
       >
-        <Neomorph
-          darkShadowColor={color_shade} //"#D1CDC7" // <- set this
-          lightShadowColor="#FFF" //{color_shade} ///
-          style={styles.neomorph}
-        >
-          <View style={styles.topRow}>
-            <Text style={styles.task}>{text}</Text>
-            <View style={[styles.dash, { borderColor: color }]}>
-              <Text style={[styles.frequency, { textDecorationColor: color, color: color }]}>
-                {totalCount}/{cadence}
-              </Text>
-            </View>
+        <View style={styles.topRow}>
+          <Text style={styles.task}>{text}</Text>
+          <View style={[styles.dash, { borderColor: color }]}>
+            <Text style={[styles.frequency, { textDecorationColor: color, color: color }]}>
+              {totalCount}/{cadence}
+            </Text>
           </View>
-          <View style={styles.botRow}>
-            <Text style={styles.duration}>Last Updated: {lastTimeStampMessage}</Text>
-          </View>
-        </Neomorph>
-      </AwesomeButtonProgress>
+        </View>
+        <View style={styles.botRow}>
+          <Text style={styles.duration}>Last Updated: {lastTimeStampMessage}</Text>
+        </View>
+      </Neomorph>
+      {/* </AwesomeButtonProgress> */}
     </TouchableWithoutFeedback>
 
     // <AwesomeButton progress width={Dimensions.get("window") * 0.8} height={95}>
