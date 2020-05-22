@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from "react";
 import { StyleSheet, Text, View, Button, Dimensions, TouchableWithoutFeedback } from "react-native";
 import { Neomorph } from "react-native-neomorph-shadows";
+import Theme from "./Theme";
 
 const ButtonNeomorph = ({ onPress, text }) => {
   return (
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     borderLeftColor: "#FFF",
     borderBottomColor: "#D1CDC7",
     borderRightColor: "#D1CDC7",
-    backgroundColor: "#ECF0F3",
+    backgroundColor: Theme.palette.background, //"#ECF0F3",
     width: width * 0.3,
     height: 50,
     alignItems: "center",

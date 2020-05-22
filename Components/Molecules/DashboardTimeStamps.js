@@ -69,8 +69,6 @@ const DashboardTimeStamps = ({ timeStamps, navigation }) => {
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#ECF0F3",
-
     flex: 1,
   },
 });
