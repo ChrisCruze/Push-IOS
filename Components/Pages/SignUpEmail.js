@@ -44,7 +44,7 @@ const SignUpEmail = ({ navigation }) => {
     <SignUpContainer
       title="Your Email"
       subtitle="We won't spam"
-      back={() => navigation.navigate("SignUp")}
+      back={() => navigation.navigate("Welcome")}
       next={onSubmit}
       snackbar={snackbar(visible, message)}
       {...{ navigation }}
