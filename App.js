@@ -11,8 +11,8 @@ import Goals from "./Components/Pages/Goals";
 import Dashboard from "./Components/Pages/Dashboard";
 import editGoal from "./Components/Pages/editGoal";
 
-import {TabScreen} from "./Components/Molecules/HeaderSample";
-
+import { TabScreen } from "./Components/Molecules/HeaderSample";
+import HeaderDetailsSample from "./Components/Molecules/HeaderDetailsSample";
 
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
@@ -71,8 +71,8 @@ class App extends React.Component {
         "SFProText-Semibold": SFProTextSemibold,
         "SFProText-Regular": SFProTextRegular,
         "SFProText-Light": SFProTextLight,
-        Roboto_medium: Roboto_medium,
-        Roboto: Roboto,
+        "Roboto_medium": Roboto_medium,
+        "Roboto": Roboto,
       });
       const icons = Font.loadAsync(Feather.font);
       await Promise.all([...cacheImages, fonts, icons]);
@@ -104,7 +104,7 @@ const Home = createBottomTabNavigator(
     Dashboard: { screen: Dashboard },
     createGoal: { screen: createGoal },
 
-    Goals: { screen: TabScreen },
+    Goals: { screen: TabScreen }, //TabScreen HeaderDetailsSample
   },
   {
     animationEnabled: true,
