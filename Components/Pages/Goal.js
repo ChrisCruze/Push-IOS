@@ -20,6 +20,7 @@ import {
 import BarChart from "../Atoms/BarChart";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
 import GoalTimeStamps from "../Molecules/GoalTimeStamps";
+import Theme from "../Atoms/Theme";
 
 const GoalBarChart = ({ goals_filtered }) => {
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
@@ -42,12 +43,9 @@ const GoalTableGrid = ({ goals_filtered }) => {
 
 const GoalHeader = ({ goals_filtered, back }) => {
   const goals_dict = goals_filtered[0];
-  return <Header
-        title={goals_dict.title || "-"}
-        sub_title={String(goals_dict.totalCount) || "0"}
-        logout={back}
-        logout_text={"Back"}
-      />
+  return (
+    <Header title={goals_dict.title || "-"} sub_title={" "} logout={back} logout_text={"Back"} />
+  );
 };
 
 const Goal = ({ navigation }) => {
@@ -75,7 +73,7 @@ const Goal = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ECF0F3",
+    backgroundColor: Theme.palette.background,
   },
 });
 

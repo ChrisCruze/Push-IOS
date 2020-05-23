@@ -71,8 +71,6 @@ const GoalTimeStamps = ({ _id, title, cadence, cadenceCount, timeStamps, navigat
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#ECF0F3",
-
     flex: 1,
   },
 });
