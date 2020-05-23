@@ -21,7 +21,7 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
   const { createGoal } = useGoalCreate();
   const [selectedValue, setSelectedValue] = useState("Daily");
   const [textValue, updateSelectedText] = useState("");
-  const [cadenceValue, updateCadenceValue] = useState(1);
+  const [cadenceValue, updateCadenceValue] = useState("1");
 
   let data = [
     {
@@ -44,7 +44,7 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
     createGoal({ variables: goal_dict });
 
     updateSelectedText("");
-    updateCadenceValue(1);
+    updateCadenceValue("1");
     setSelectedValue("Daily");
 
     navigation.navigate("Goals");
