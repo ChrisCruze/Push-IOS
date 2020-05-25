@@ -26,6 +26,7 @@ import { AsyncStorage } from "react-native";
 import { NavigationEvents } from "react-navigation";
 import AnimatedHeader from "../Molecules/AnimatedHeader";
 import _ from "lodash";
+import { determineOverDue } from "../Atoms/BarChart.functions";
 
 const GoalsSort = ({ goals }) => {
   const [sortOrder, updateSortOrder] = useState("none");
@@ -47,6 +48,25 @@ const GoalsSort = ({ goals }) => {
   }
 };
 
+const GoalsFilter = ({ goals }) => {
+  const [filter, updateFilter] = useState("all");
+  const goals_copy = [...goals];
+
+  if (filter == "all") {
+    return { filtered_goals: goals, updateFilter, filter };
+  } else if (filter == "incomplete") {
+    var filtered_goals = goals.filter(function(D) {
+      return determineOverDue({ ...D, goals });
+    });
+    return { filtered_goals, updateFilter, filter };
+  } else if (filter == "complete") {
+    var filtered_goals = goals.filter(function(D) {
+      return !determineOverDue({ ...D, goals });
+    });
+    return { filtered_goals, updateFilter, filter };
+  }
+};
+
 const Goals = ({ navigation }) => {
   const logout = () => {
     AsyncStorage.setItem("token", "")
@@ -55,7 +75,9 @@ const Goals = ({ navigation }) => {
   };
 
   const { goals, refetch } = useGoalsPull();
-  const { sorted_goals, updateSortOrder, sortOrder } = GoalsSort({ goals });
+  const { filtered_goals, updateFilter } = GoalsFilter({ goals });
+  const { sorted_goals, updateSortOrder, sortOrder } = GoalsSort({ goals: filtered_goals });
+
   const { updateGoal } = useGoalUpdate();
   const { removeGoal } = useGoalDelete();
   const [notification, setNotification] = useState({});
@@ -142,6 +164,7 @@ const Goals = ({ navigation }) => {
         refetch={refetch}
         updateSortOrder={updateSortOrder}
         sortOrder={sortOrder}
+        updateFilter={updateFilter}
       >
         <FlatList
           bounces={false}

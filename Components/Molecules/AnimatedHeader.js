@@ -19,7 +19,7 @@ import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
-const AnimatedSubHeaderMetrics = ({ goals }) => {
+const AnimatedSubHeaderMetrics = ({ goals, updateFilter }) => {
   const number_of_goals = goals.length;
   const number_of_pushes = DataFlattenConvertGoals(goals).length;
   const completed_count = goals.filter(function(D) {
@@ -31,15 +31,33 @@ const AnimatedSubHeaderMetrics = ({ goals }) => {
   const complete_percentage = ((completed_count / number_of_goals) * 100).toFixed(0);
   return (
     <Fragment>
-      <View>
-        <AnimatedText type="large">{completed_count + " Done"}</AnimatedText>
-      </View>
-      <View>
-        <AnimatedText type="large">{remaining_count + " Remain"}</AnimatedText>
-      </View>
-      <View>
-        <AnimatedText type="large">{complete_percentage + " %"}</AnimatedText>
-      </View>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          updateFilter("complete");
+        }}
+      >
+        <View>
+          <AnimatedText type="large">{completed_count + " Done"}</AnimatedText>
+        </View>
+      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          updateFilter("incomplete");
+        }}
+      >
+        <View>
+          <AnimatedText type="large">{remaining_count + " Remain"}</AnimatedText>
+        </View>
+      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          updateFilter("all");
+        }}
+      >
+        <View>
+          <AnimatedText type="large">{goals.length + " Total"}</AnimatedText>
+        </View>
+      </TouchableWithoutFeedback>
     </Fragment>
   );
 };
@@ -64,7 +82,13 @@ const AnimatedSubHeaderSort = ({ sortOrder, updateSortOrder }) => {
   );
 };
 
-const AnimatedSubHeader = ({ scrollAnimation, goals, updateSortOrder, sortOrder }) => {
+const AnimatedSubHeader = ({
+  scrollAnimation,
+  goals,
+  updateSortOrder,
+  sortOrder,
+  updateFilter,
+}) => {
   const [fadeAnim] = useState(new Animated.Value(0));
   const transformOpacity = scrollAnimation.interpolate({
     inputRange: [0, 60],
@@ -91,7 +115,7 @@ const AnimatedSubHeader = ({ scrollAnimation, goals, updateSortOrder, sortOrder 
     >
       <Animated.View style={[styles.innerSubHeader, { opacity: fadeAnim }]}>
         <AnimatedSubHeaderSort sortOrder={sortOrder} updateSortOrder={updateSortOrder} />
-        <AnimatedSubHeaderMetrics goals={goals} />
+        <AnimatedSubHeaderMetrics goals={goals} updateFilter={updateFilter} />
       </Animated.View>
     </AnimatedSafeAreaView>
   );
@@ -107,6 +131,7 @@ const AnimatedHeader = ({
   refetch,
   updateSortOrder,
   sortOrder,
+  updateFilter,
 }) => {
   const [scrollAnimation] = React.useState(new Animated.Value(0));
   const [showDetailHeader, updateShowDetailHeader] = useState(false);
@@ -145,7 +170,9 @@ const AnimatedHeader = ({
         </Animated.View>
       </AnimatedSafeAreaView>
       {showDetailHeader ? (
-        <AnimatedSubHeader {...{ scrollAnimation, goals, refetch, updateSortOrder, sortOrder }} />
+        <AnimatedSubHeader
+          {...{ scrollAnimation, goals, refetch, updateSortOrder, sortOrder, updateFilter }}
+        />
       ) : null}
       <Animated.ScrollView
         style={styles.scrollView}
