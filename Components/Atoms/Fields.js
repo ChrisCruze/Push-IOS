@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     borderColor: Theme.palette.borderColor,
     borderWidth: 1,
     borderRadius: 3,
-    ...Theme.typography.regular,
+    ...Theme.typography.small,
     color: Theme.typography.color,
     padding: Theme.spacing.small,
     marginBottom: Theme.spacing.base,

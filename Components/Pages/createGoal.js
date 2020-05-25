@@ -19,9 +19,9 @@ import { useGoalsPull, useGoalCreate } from "../../API";
 
 const createGoal = ({ navigation, goToPassword, createNew }) => {
   const { createGoal } = useGoalCreate();
-  const [selectedValue, setSelectedValue] = useState("daily");
-  const [textValue, updateSelectedText] = useState("default");
-  const [cadenceValue, updateCadenceValue] = useState("0");
+  const [selectedValue, setSelectedValue] = useState("Daily");
+  const [textValue, updateSelectedText] = useState("");
+  const [cadenceValue, updateCadenceValue] = useState("1");
 
   let data = [
     {
@@ -35,26 +35,18 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
     },
   ];
 
-  function capitalizeEachWord(sentence){
-    var words = sentence.toLowerCase().split(' ');
-    for(var i = 0; i < words.length; i++){
-            words[i] = words[i].charAt(0).toUpperCase() + words[i].substring(1);  
-        }
-        return words.join(' '); 
-    }
-  
-
   function pressNextSubmit() {
-    let newText =capitalizeEachWord(textValue);
-    console.log(newText);
-    updateSelectedText(newText);
-    console.log(textValue);
     const goal_dict = {
-      title: newText,
+      title: textValue,
       cadence: selectedValue,
       cadenceCount: parseInt(cadenceValue) || 0,
     };
-    createGoal({ variables: goal_dict }); //{ title: "haha", cadence: "weekly", cadenceCount: 3 }
+    createGoal({ variables: goal_dict });
+
+    updateSelectedText("");
+    updateCadenceValue("1");
+    setSelectedValue("Daily");
+
     navigation.navigate("Goals");
   }
 
@@ -63,7 +55,7 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
       title="New Goal"
       subtitle="Let's push"
       back={() => navigation.navigate("Goals")}
-      nextLabel="Push"
+      nextLabel="Create"
       next={pressNextSubmit}
       onSubmitEditing={createNew}
       first
@@ -71,23 +63,24 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
     >
       <TextField
         style={styles.textInput}
-        placeholder="Create goal"
-        keyboardType="textInput"
-        autoCapitalize="none"
+        placeholder="Title"
+        keyboardType="default"
+        autoCapitalize="words"
         returnKeyType="next"
         onChangeText={text => updateSelectedText(text)}
+        value={textValue}
         contrast
       />
       <TextField
         style={styles.textInput}
-        placeholder="Enter Cadence Goal"
-        keyboardType="textInput"
+        placeholder="Cadence Count"
+        keyboardType="numeric"
         autoCapitalize="none"
         returnKeyType="next"
         onChangeText={text => updateCadenceValue(text)}
+        value={cadenceValue}
         contrast
       />
-
       <Dropdown label="Cadence" data={data} value={selectedValue} onChangeText={setSelectedValue} />
     </CreateContainer>
   );
@@ -98,7 +91,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textInput: {
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     marginTop: 25,
     marginBottom: 30,
