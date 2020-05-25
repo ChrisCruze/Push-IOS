@@ -23,16 +23,19 @@ const AnimatedSubHeaderMetrics = ({ goals }) => {
   const number_of_goals = goals.length;
   const number_of_pushes = DataFlattenConvertGoals(goals).length;
   const completed_count = goals.filter(function(D) {
+    return !determineOverDue({ ...D, goals });
+  }).length;
+  const remaining_count = goals.filter(function(D) {
     return determineOverDue({ ...D, goals });
   }).length;
   const complete_percentage = ((completed_count / number_of_goals) * 100).toFixed(0);
   return (
     <Fragment>
       <View>
-        <AnimatedText type="large">{number_of_goals + " Goals"}</AnimatedText>
+        <AnimatedText type="large">{completed_count + " Done"}</AnimatedText>
       </View>
       <View>
-        <AnimatedText type="large">{number_of_pushes + " Pushes"}</AnimatedText>
+        <AnimatedText type="large">{remaining_count + " Remain"}</AnimatedText>
       </View>
       <View>
         <AnimatedText type="large">{complete_percentage + " %"}</AnimatedText>
