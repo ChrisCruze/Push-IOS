@@ -24,6 +24,8 @@ import moment from "moment";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
 import { AsyncStorage } from "react-native";
 import { NavigationEvents } from "react-navigation";
+import AnimatedHeader from "../Molecules/AnimatedHeader";
+import AnimatedContainer from "../Molecules/AnimatedContainer";
 
 const Goals = ({ navigation }) => {
   const logout = () => {
@@ -111,31 +113,32 @@ const Goals = ({ navigation }) => {
           refetch();
         }}
       />
-      <Header title={"Goals"} sub_title={"List"} logout={logout} logout_text={"Logout"} />
-      <FlatList
-        bounces={false}
-        showsVerticalScrollIndicator={false}
-        style={styles.list}
-        data={goals}
-        keyExtractor={goal => goal.id}
-        renderItem={({ item }) => {
-          return GoalItem({
-            ...item,
-            navigation,
-            goals,
-            updateGoal,
-            removeGoal,
-            refetch,
-          });
-        }}
-        ListEmptyComponent={
-          <View style={styles.post}>
-            <TouchableWithoutFeedback onPress={createNewGoal}>
-              <Icon name="plus-circle" color={Theme.palette.primary} size={25} />
-            </TouchableWithoutFeedback>
-          </View>
-        }
-      />
+      <AnimatedContainer title={"Goals"} sub_title={"List"} logout={logout} logout_text={"Logout"}>
+        <FlatList
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          style={styles.list}
+          data={goals}
+          keyExtractor={goal => goal.id}
+          renderItem={({ item }) => {
+            return GoalItem({
+              ...item,
+              navigation,
+              goals,
+              updateGoal,
+              removeGoal,
+              refetch,
+            });
+          }}
+          ListEmptyComponent={
+            <View style={styles.post}>
+              <TouchableWithoutFeedback onPress={createNewGoal}>
+                <Icon name="plus-circle" color={Theme.palette.primary} size={25} />
+              </TouchableWithoutFeedback>
+            </View>
+          }
+        />
+      </AnimatedContainer>
     </View>
   );
 };

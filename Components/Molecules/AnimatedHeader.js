@@ -17,20 +17,56 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
-const Header = ({ title, sub_title, logout, logout_text }) => {
+const AnimatedHeader = ({ title, sub_title, logout, logout_text, scrollAnimation }) => {
+  const transformHeight = {
+    transform: [
+      {
+        scaleY: scrollAnimation.interpolate({
+          inputRange: [30, 60],
+          outputRange: [1, 0.9],
+          extrapolate: "clamp",
+        }),
+        translateY: scrollAnimation.interpolate({
+          inputRange: [30, 60],
+          outputRange: [0, -60],
+          extrapolate: "clamp",
+        }),
+      },
+    ],
+  };
+  // const transformHeight = {
+  //   transform: [
+  //     {
+  //       scaleY: 1,
+  //     },
+  //   ],
+  // };
+
+  const transformY = {
+    transform: [
+      {
+        translateY: 0,
+      },
+    ],
+  };
   return (
-    <AnimatedSafeAreaView style={[styles.header, { shadowOpacity: 0 }]}>
-      <Animated.View style={[styles.innerHeader, { height: 100 }]}>
+    <AnimatedSafeAreaView style={[styles.header, { shadowOpacity: 0 }, transformHeight]}>
+      <Animated.View style={[styles.innerHeader]}>
         <View>
           <AnimatedText
             type="large"
-            style={{ position: "absolute", top: 0, opacity: 1, transform: [{ translateY: 0 }] }}
+            style={{ position: "absolute", top: 0, opacity: 1, transformY }}
           >
             {sub_title || ""}
           </AnimatedText>
-          <AnimatedText type="header2" style={{ fontSize: 36, marginTop: 24 }}>
+          <Animated.Text
+            style={{
+              fontSize: 36,
+              marginTop: 24,
+            }}
+          >
             {title || "title"}
-          </AnimatedText>
+          </Animated.Text>
         </View>
         <TouchableOpacity onPress={logout} style={styles.settings}>
           <View>
@@ -70,4 +106,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: Theme.spacing.small,
   },
 });
-export default Header;
+export default AnimatedHeader;

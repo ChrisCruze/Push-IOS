@@ -17,7 +17,7 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
-const Header = ({ title, sub_title, logout, logout_text }) => {
+const AnimatedHeaderDetails = ({ title, sub_title, logout, logout_text, scrollAnimation }) => {
   return (
     <AnimatedSafeAreaView style={[styles.header, { shadowOpacity: 0 }]}>
       <Animated.View style={[styles.innerHeader, { height: 100 }]}>
@@ -70,4 +70,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: Theme.spacing.small,
   },
 });
-export default Header;
+export default AnimatedHeaderDetails;
