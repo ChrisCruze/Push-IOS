@@ -17,64 +17,48 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
-const AnimatedHeader = ({ title, sub_title, logout, logout_text, scrollAnimation }) => {
-  const transformHeight = {
-    transform: [
-      {
-        scaleY: scrollAnimation.interpolate({
-          inputRange: [30, 60],
-          outputRange: [1, 0.9],
-          extrapolate: "clamp",
-        }),
-        translateY: scrollAnimation.interpolate({
-          inputRange: [30, 60],
-          outputRange: [0, -60],
-          extrapolate: "clamp",
-        }),
-      },
-    ],
-  };
-  // const transformHeight = {
-  //   transform: [
-  //     {
-  //       scaleY: 1,
-  //     },
-  //   ],
-  // };
+const AnimatedHeader = ({ title, sub_title, logout, logout_text, children }) => {
+  const [scrollAnimation] = React.useState(new Animated.Value(0));
 
-  const transformY = {
-    transform: [
-      {
-        translateY: 0,
-      },
-    ],
-  };
   return (
-    <AnimatedSafeAreaView style={[styles.header, { shadowOpacity: 0 }, transformHeight]}>
-      <Animated.View style={[styles.innerHeader]}>
-        <View>
-          <AnimatedText
-            type="large"
-            style={{ position: "absolute", top: 0, opacity: 1, transformY }}
-          >
-            {sub_title || ""}
-          </AnimatedText>
-          <Animated.Text
-            style={{
-              fontSize: 36,
-              marginTop: 24,
-            }}
-          >
-            {title || "title"}
-          </Animated.Text>
-        </View>
-        <TouchableOpacity onPress={logout} style={styles.settings}>
+    <View style={styles.container}>
+      <AnimatedSafeAreaView style={[styles.header, { shadowOpacity: 0 }]}>
+        <Animated.View style={[styles.innerHeader, { height: 100 }]}>
           <View>
-            <Text style={{ color: "white" }}>{logout_text}</Text>
+            <AnimatedText
+              type="large"
+              style={{ position: "absolute", top: 0, opacity: 1, transform: [{ translateY: 0 }] }}
+            >
+              {sub_title || ""}
+            </AnimatedText>
+            <AnimatedText type="header2" style={{ fontSize: 36, marginTop: 24 }}>
+              {title || "title"}
+            </AnimatedText>
           </View>
-        </TouchableOpacity>
-      </Animated.View>
-    </AnimatedSafeAreaView>
+          <TouchableOpacity onPress={logout} style={styles.settings}>
+            <View>
+              <Text style={{ color: "white" }}>{logout_text}</Text>
+            </View>
+          </TouchableOpacity>
+        </Animated.View>
+      </AnimatedSafeAreaView>
+
+      <Animated.ScrollView
+        style={styles.scrollView}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: { contentOffset: { y: scrollAnimation } },
+            },
+          ],
+          {
+            useNativeDriver: true,
+          },
+        )}
+      >
+        {children}
+      </Animated.ScrollView>
+    </View>
   );
 };
 const main_background = "#F17355"; //E0E5EC //"#17355A" //"#F17355"

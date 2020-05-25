@@ -25,7 +25,6 @@ import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
 import { AsyncStorage } from "react-native";
 import { NavigationEvents } from "react-navigation";
 import AnimatedHeader from "../Molecules/AnimatedHeader";
-import AnimatedContainer from "../Molecules/AnimatedContainer";
 
 const Goals = ({ navigation }) => {
   const logout = () => {
@@ -113,7 +112,7 @@ const Goals = ({ navigation }) => {
           refetch();
         }}
       />
-      <AnimatedContainer title={"Goals"} sub_title={"List"} logout={logout} logout_text={"Logout"}>
+      <AnimatedHeader title={"Goals"} sub_title={"List"} logout={logout} logout_text={"Logout"}>
         <FlatList
           bounces={false}
           showsVerticalScrollIndicator={false}
@@ -138,7 +137,7 @@ const Goals = ({ navigation }) => {
             </View>
           }
         />
-      </AnimatedContainer>
+      </AnimatedHeader>
     </View>
   );
 };
