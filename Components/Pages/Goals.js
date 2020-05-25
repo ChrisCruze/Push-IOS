@@ -28,10 +28,13 @@ import AnimatedHeader from "../Molecules/AnimatedHeader";
 import _ from "lodash";
 
 const GoalsSort = ({ goals }) => {
-  const [sortOrder, updateSortOrder] = useState("asc");
+  const [sortOrder, updateSortOrder] = useState("none");
   const goals_copy = [...goals];
 
-  if (sortOrder == "asc") {
+  if (sortOrder == "none") {
+    var sorted_goals = goals_copy;
+    return { sorted_goals, updateSortOrder, sortOrder };
+  } else if (sortOrder == "asc") {
     var sorted_goals = _.sortBy(goals_copy, function(D) {
       return D["timeStamps"].length;
     });
@@ -89,7 +92,6 @@ const Goals = ({ navigation }) => {
 
   const _handleNotification = notification => {
     Vibration.vibrate();
-    console.log(notification);
     setNotification({ notification: notification });
   };
 

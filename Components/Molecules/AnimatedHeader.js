@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import moment from "moment";
 import {
   FlatList,
@@ -14,19 +14,55 @@ import Constants from "expo-constants";
 import { TextClass } from "../Atoms/Text";
 import Theme from "../Atoms/Theme";
 import { DataFlattenConvertGoals, determineOverDue } from "../Atoms/BarChart.functions";
+import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
 
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
-const AnimatedSubHeader = ({ scrollAnimation, goals, updateSortOrder, sortOrder }) => {
+const AnimatedSubHeaderMetrics = ({ goals }) => {
   const number_of_goals = goals.length;
   const number_of_pushes = DataFlattenConvertGoals(goals).length;
   const completed_count = goals.filter(function(D) {
     return determineOverDue({ ...D, goals });
   }).length;
   const complete_percentage = ((completed_count / number_of_goals) * 100).toFixed(0);
+  return (
+    <Fragment>
+      <View>
+        <AnimatedText type="large">{number_of_goals + " Goals"}</AnimatedText>
+      </View>
+      <View>
+        <AnimatedText type="large">{number_of_pushes + " Pushes"}</AnimatedText>
+      </View>
+      <View>
+        <AnimatedText type="large">{complete_percentage + " %"}</AnimatedText>
+      </View>
+    </Fragment>
+  );
+};
 
+const AnimatedSubHeaderSort = ({ sortOrder, updateSortOrder }) => {
+  return (
+    <TouchableWithoutFeedback
+      onPress={() => {
+        updateSortOrder(sortOrder == "none" ? "desc" : sortOrder == "desc" ? "asc" : "none");
+      }}
+    >
+      <View>
+        {sortOrder == "none" ? (
+          <AnimatedText type="large">Sort</AnimatedText>
+        ) : sortOrder == "desc" ? (
+          <FontAwesome name="sort-down" size={25} {...{ color: Theme.palette.lightGray }} />
+        ) : (
+          <FontAwesome name="sort-up" size={25} {...{ color: Theme.palette.lightGray }} />
+        )}
+      </View>
+    </TouchableWithoutFeedback>
+  );
+};
+
+const AnimatedSubHeader = ({ scrollAnimation, goals, updateSortOrder, sortOrder }) => {
+  const [fadeAnim] = useState(new Animated.Value(0));
   const transformOpacity = scrollAnimation.interpolate({
     inputRange: [0, 60],
     outputRange: [1, 0],
@@ -39,33 +75,20 @@ const AnimatedSubHeader = ({ scrollAnimation, goals, updateSortOrder, sortOrder 
     extrapolate: "clamp",
   });
 
+  useEffect(() => {
+    Animated.timing(fadeAnim, { toValue: 1, duration: 1000 }).start();
+  }, []);
+
   return (
     <AnimatedSafeAreaView
       style={[
         styles.subheader,
-        { opacity: transformOpacity, transform: [{ translateY: transformY }] },
-      ]} //, scaleY: 1
+        { opacity: transformOpacity, transform: [{ translateY: transformY }] }, //translateY: transformY
+      ]}
     >
-      <Animated.View style={[styles.innerSubHeader]}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            console.log({ sortOrder });
-            updateSortOrder(sortOrder == "asc" ? "desc" : "asc");
-          }}
-        >
-          <View>
-            <AnimatedText type="large">Sort</AnimatedText>
-          </View>
-        </TouchableWithoutFeedback>
-        <View>
-          <AnimatedText type="large">{number_of_goals + " Goals"}</AnimatedText>
-        </View>
-        <View>
-          <AnimatedText type="large">{number_of_pushes + " Pushes"}</AnimatedText>
-        </View>
-        <View>
-          <AnimatedText type="large">{complete_percentage + " %"}</AnimatedText>
-        </View>
+      <Animated.View style={[styles.innerSubHeader, { opacity: fadeAnim }]}>
+        <AnimatedSubHeaderSort sortOrder={sortOrder} updateSortOrder={updateSortOrder} />
+        <AnimatedSubHeaderMetrics goals={goals} />
       </Animated.View>
     </AnimatedSafeAreaView>
   );
@@ -83,11 +106,21 @@ const AnimatedHeader = ({
   sortOrder,
 }) => {
   const [scrollAnimation] = React.useState(new Animated.Value(0));
+  const [showDetailHeader, updateShowDetailHeader] = useState(false);
+  scrollAnimation.addListener(({ value }) => {
+    if (value < 0) {
+      updateShowDetailHeader(true);
+    } else if (value > 100) {
+      updateShowDetailHeader(false);
+    }
+  });
 
   return (
     <View style={styles.container}>
       <AnimatedSafeAreaView style={[styles.header, { shadowOpacity: 0 }]}>
-        <Animated.View style={[styles.innerHeader, { height: 100 }]}>
+        <Animated.View
+          style={[styles.innerHeader, { height: Platform.OS === "android" ? 70 : 80 }]}
+        >
           <View>
             <AnimatedText
               type="large"
@@ -108,8 +141,9 @@ const AnimatedHeader = ({
           </TouchableOpacity>
         </Animated.View>
       </AnimatedSafeAreaView>
-      <AnimatedSubHeader {...{ scrollAnimation, goals, refetch, updateSortOrder, sortOrder }} />
-
+      {showDetailHeader ? (
+        <AnimatedSubHeader {...{ scrollAnimation, goals, refetch, updateSortOrder, sortOrder }} />
+      ) : null}
       <Animated.ScrollView
         style={styles.scrollView}
         onScroll={Animated.event(
@@ -134,12 +168,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  RefreshIndicator: {
-    ...StyleSheet.absoluteFillObject,
-    paddingTop: Constants.statusBarHeight + 100 + Theme.spacing.base,
-  },
   subheader: {
-    backgroundColor: main_background, // Theme.palette.background, //"white",
+    backgroundColor: Theme.palette.background, // Theme.palette.background, //"white",
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
@@ -161,16 +191,12 @@ const styles = StyleSheet.create({
     elevation: 8,
     zIndex: 10000,
   },
-
   innerHeader: {
     marginHorizontal: Theme.spacing.base,
     marginVertical: Theme.spacing.tiny,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-  },
-  list: {
-    paddingHorizontal: Theme.spacing.small,
   },
 });
 export default AnimatedHeader;

@@ -20,7 +20,7 @@ const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 const Header = ({ title, sub_title, logout, logout_text }) => {
   return (
     <AnimatedSafeAreaView style={[styles.header, { shadowOpacity: 0 }]}>
-      <Animated.View style={[styles.innerHeader, { height: 100 }]}>
+      <Animated.View style={[styles.innerHeader, { height: Platform.OS === "android" ? 70 : 80 }]}>
         <View>
           <AnimatedText
             type="large"
