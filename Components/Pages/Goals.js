@@ -25,6 +25,24 @@ import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
 import { AsyncStorage } from "react-native";
 import { NavigationEvents } from "react-navigation";
 import AnimatedHeader from "../Molecules/AnimatedHeader";
+import _ from "lodash";
+
+const GoalsSort = ({ goals }) => {
+  const [sortOrder, updateSortOrder] = useState("asc");
+  const goals_copy = [...goals];
+
+  if (sortOrder == "asc") {
+    var sorted_goals = _.sortBy(goals_copy, function(D) {
+      return D["timeStamps"].length;
+    });
+    return { sorted_goals, updateSortOrder, sortOrder };
+  } else {
+    var sorted_goals = _.sortBy(goals_copy, function(D) {
+      return D["timeStamps"].length * -1;
+    });
+    return { sorted_goals, updateSortOrder, sortOrder };
+  }
+};
 
 const Goals = ({ navigation }) => {
   const logout = () => {
@@ -34,6 +52,7 @@ const Goals = ({ navigation }) => {
   };
 
   const { goals, refetch } = useGoalsPull();
+  const { sorted_goals, updateSortOrder, sortOrder } = GoalsSort({ goals });
   const { updateGoal } = useGoalUpdate();
   const { removeGoal } = useGoalDelete();
   const [notification, setNotification] = useState({});
@@ -48,14 +67,14 @@ const Goals = ({ navigation }) => {
         finalStatus = status;
       }
       if (finalStatus !== "granted") {
-        alert("Failed to get push token for push notification!");
+        // alert("Failed to get push token for push notification!");
         return;
       }
       let token = await Notifications.getExpoPushTokenAsync();
       console.log(token);
       setExpoPushToken(token);
     } else {
-      alert("Must use physical device for Push Notifications");
+      // alert("Must use physical device for Push Notifications");
     }
 
     if (Platform.OS === "android") {
@@ -112,12 +131,21 @@ const Goals = ({ navigation }) => {
           refetch();
         }}
       />
-      <AnimatedHeader title={"Goals"} sub_title={"List"} logout={logout} logout_text={"Logout"}>
+      <AnimatedHeader
+        title={"Goals"}
+        sub_title={"List"}
+        logout={logout}
+        logout_text={"Logout"}
+        goals={goals}
+        refetch={refetch}
+        updateSortOrder={updateSortOrder}
+        sortOrder={sortOrder}
+      >
         <FlatList
           bounces={false}
           showsVerticalScrollIndicator={false}
           style={styles.list}
-          data={goals}
+          data={sorted_goals}
           keyExtractor={goal => goal.id}
           renderItem={({ item }) => {
             return GoalItem({

@@ -8,16 +8,80 @@ import {
   Animated,
   SafeAreaView,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from "react-native";
 import Constants from "expo-constants";
 import { TextClass } from "../Atoms/Text";
 import Theme from "../Atoms/Theme";
+import { DataFlattenConvertGoals, determineOverDue } from "../Atoms/BarChart.functions";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
-const AnimatedHeader = ({ title, sub_title, logout, logout_text, children }) => {
+const AnimatedSubHeader = ({ scrollAnimation, goals, updateSortOrder, sortOrder }) => {
+  const number_of_goals = goals.length;
+  const number_of_pushes = DataFlattenConvertGoals(goals).length;
+  const completed_count = goals.filter(function(D) {
+    return determineOverDue({ ...D, goals });
+  }).length;
+  const complete_percentage = ((completed_count / number_of_goals) * 100).toFixed(0);
+
+  const transformOpacity = scrollAnimation.interpolate({
+    inputRange: [0, 60],
+    outputRange: [1, 0],
+    extrapolate: "clamp",
+  });
+
+  const transformY = scrollAnimation.interpolate({
+    inputRange: [0, 60],
+    outputRange: [0, -30],
+    extrapolate: "clamp",
+  });
+
+  return (
+    <AnimatedSafeAreaView
+      style={[
+        styles.subheader,
+        { opacity: transformOpacity, transform: [{ translateY: transformY }] },
+      ]} //, scaleY: 1
+    >
+      <Animated.View style={[styles.innerSubHeader]}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            console.log({ sortOrder });
+            updateSortOrder(sortOrder == "asc" ? "desc" : "asc");
+          }}
+        >
+          <View>
+            <AnimatedText type="large">Sort</AnimatedText>
+          </View>
+        </TouchableWithoutFeedback>
+        <View>
+          <AnimatedText type="large">{number_of_goals + " Goals"}</AnimatedText>
+        </View>
+        <View>
+          <AnimatedText type="large">{number_of_pushes + " Pushes"}</AnimatedText>
+        </View>
+        <View>
+          <AnimatedText type="large">{complete_percentage + " %"}</AnimatedText>
+        </View>
+      </Animated.View>
+    </AnimatedSafeAreaView>
+  );
+};
+
+const AnimatedHeader = ({
+  title,
+  sub_title,
+  logout,
+  logout_text,
+  children,
+  goals,
+  refetch,
+  updateSortOrder,
+  sortOrder,
+}) => {
   const [scrollAnimation] = React.useState(new Animated.Value(0));
 
   return (
@@ -31,10 +95,12 @@ const AnimatedHeader = ({ title, sub_title, logout, logout_text, children }) => 
             >
               {sub_title || ""}
             </AnimatedText>
+
             <AnimatedText type="header2" style={{ fontSize: 36, marginTop: 24 }}>
               {title || "title"}
             </AnimatedText>
           </View>
+
           <TouchableOpacity onPress={logout} style={styles.settings}>
             <View>
               <Text style={{ color: "white" }}>{logout_text}</Text>
@@ -42,6 +108,7 @@ const AnimatedHeader = ({ title, sub_title, logout, logout_text, children }) => 
           </TouchableOpacity>
         </Animated.View>
       </AnimatedSafeAreaView>
+      <AnimatedSubHeader {...{ scrollAnimation, goals, refetch, updateSortOrder, sortOrder }} />
 
       <Animated.ScrollView
         style={styles.scrollView}
@@ -71,6 +138,21 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     paddingTop: Constants.statusBarHeight + 100 + Theme.spacing.base,
   },
+  subheader: {
+    backgroundColor: main_background, // Theme.palette.background, //"white",
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 5,
+    elevation: 8,
+    zIndex: 100,
+  },
+  innerSubHeader: {
+    marginHorizontal: Theme.spacing.base,
+    marginVertical: Theme.spacing.tiny,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   header: {
     backgroundColor: main_background, //"white",
     shadowColor: "black",
@@ -79,6 +161,7 @@ const styles = StyleSheet.create({
     elevation: 8,
     zIndex: 10000,
   },
+
   innerHeader: {
     marginHorizontal: Theme.spacing.base,
     marginVertical: Theme.spacing.tiny,
