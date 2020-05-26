@@ -33,20 +33,20 @@ const AnimatedSubHeaderMetrics = ({ goals, updateFilter }) => {
     <Fragment>
       <TouchableWithoutFeedback
         onPress={() => {
+          updateFilter("incomplete");
+        }}
+      >
+        <View>
+          <AnimatedText type="large">{remaining_count + " Left"}</AnimatedText>
+        </View>
+      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback
+        onPress={() => {
           updateFilter("complete");
         }}
       >
         <View>
           <AnimatedText type="large">{completed_count + " Done"}</AnimatedText>
-        </View>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback
-        onPress={() => {
-          updateFilter("incomplete");
-        }}
-      >
-        <View>
-          <AnimatedText type="large">{remaining_count + " Remain"}</AnimatedText>
         </View>
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback
@@ -58,6 +58,9 @@ const AnimatedSubHeaderMetrics = ({ goals, updateFilter }) => {
           <AnimatedText type="large">{goals.length + " Total"}</AnimatedText>
         </View>
       </TouchableWithoutFeedback>
+      <View>
+        <AnimatedText type="large">{complete_percentage + "%"}</AnimatedText>
+      </View>
     </Fragment>
   );
 };
@@ -136,11 +139,21 @@ const AnimatedHeader = ({
   const [scrollAnimation] = React.useState(new Animated.Value(0));
   const [showDetailHeader, updateShowDetailHeader] = useState(false);
   scrollAnimation.addListener(({ value }) => {
-    if (value < 0) {
+    console.log({ value });
+    if (value < -20) {
       updateShowDetailHeader(true);
     } else if (value > 100) {
       updateShowDetailHeader(false);
     }
+  });
+  const opacity = scrollAnimation.interpolate({
+    inputRange: [30, 60],
+    outputRange: [1, 0],
+  });
+  const translateY = scrollAnimation.interpolate({
+    inputRange: [30, 60],
+    outputRange: [0, -60],
+    extrapolate: "clamp",
   });
 
   return (
@@ -152,19 +165,28 @@ const AnimatedHeader = ({
           <View>
             <AnimatedText
               type="large"
-              style={{ position: "absolute", top: 0, opacity: 1, transform: [{ translateY: 0 }] }}
+              style={{
+                position: "absolute",
+                top: 0,
+                opacity: opacity,
+                transform: [{ translateY: translateY }],
+              }}
             >
-              {sub_title || ""}
+              {String(goals.length)}
             </AnimatedText>
 
-            <AnimatedText type="header2" style={{ fontSize: 36, marginTop: 24 }}>
+            <AnimatedText type="header2" style={{ fontSize: 36, marginTop: 24, color: "#17355A" }}>
               {title || "title"}
             </AnimatedText>
           </View>
 
           <TouchableOpacity onPress={logout} style={styles.settings}>
             <View>
-              <Text style={{ color: "white" }}>{logout_text}</Text>
+              <Animated.Text
+                style={{ color: "white", opacity, transform: [{ translateY: translateY }] }}
+              >
+                {logout_text}
+              </Animated.Text>
             </View>
           </TouchableOpacity>
         </Animated.View>
