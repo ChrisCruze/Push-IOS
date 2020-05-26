@@ -139,7 +139,6 @@ const AnimatedHeader = ({
   const [scrollAnimation] = React.useState(new Animated.Value(0));
   const [showDetailHeader, updateShowDetailHeader] = useState(false);
   scrollAnimation.addListener(({ value }) => {
-    console.log({ value });
     if (value < -20) {
       updateShowDetailHeader(true);
     } else if (value > 100) {
