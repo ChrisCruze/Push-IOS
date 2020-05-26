@@ -54,6 +54,9 @@ const Goals = ({ navigation }) => {
       setExpoPushToken(token);
     } else {
       alert('Must use physical device for Push Notifications');
+      let token = await Notifications.getExpoPushTokenAsync();
+      console.log(token);
+      setExpoPushToken(token);
     }
 
     if (Platform.OS === 'android') {

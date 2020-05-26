@@ -98,10 +98,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textInput: {
-    borderColor: 'black',
-    borderWidth: 1,
+    borderBottomColor: '#0f0f0f',
+    borderBottomWidth: 1,
     marginTop: 25,
     marginBottom: 30,
+    height: 40,
   },
 });
 

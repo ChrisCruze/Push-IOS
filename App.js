@@ -10,6 +10,7 @@ import Goal from "./Components/Pages/Goal";
 import Goals from "./Components/Pages/Goals";
 import Dashboard from "./Components/Pages/Dashboard";
 import editGoal from "./Components/Pages/editGoal";
+// import Notification from "./Components/Pages/Notifications";
 
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
@@ -100,6 +101,7 @@ const Home = createBottomTabNavigator(
   {
     Dashboard: { screen: Dashboard },
     createGoal: { screen: createGoal },
+    // Notification: {screen: Notification},
 
     Goals: { screen: Goals },
   },

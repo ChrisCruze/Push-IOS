@@ -15,6 +15,7 @@ import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
 import AwesomeButton from "react-native-really-awesome-button";
 import AwesomeButtonRick from "react-native-really-awesome-button/src/themes/rick";
 import AwesomeButtonProgress from "react-native-really-awesome-button";
+import TextTicker from 'react-native-text-ticker';
 
 const GoalButtonBackDelete = ({ deleteGoal }) => {
   return (
@@ -103,7 +104,23 @@ const GoalButtonFront = ({ text, totalCount, cadence, pushGoal, lastTimeStampMes
           style={styles.neomorph}
         >
           <View style={styles.topRow}>
-            <Text style={styles.task}>{text}</Text>
+            {text.length > 10?(
+               <TextTicker
+               style={styles.task}
+               loop
+               scrollSpeed={400}
+               repeatSpacer={40}
+               marqueeDelay={30}
+               shouldAnimateTreshold={40}
+               bounce={false}
+             >
+             {text} 
+             </TextTicker>
+            ) :
+            <Text style={styles.task}>
+              {text} 
+            </Text>
+            }
             <View style={[styles.dash, { borderColor: color }]}>
               <Text style={[styles.frequency, { textDecorationColor: color, color: color }]}>
                 {totalCount}/{cadence}
@@ -243,31 +260,29 @@ const styles = StyleSheet.create({
   task: {
     fontWeight: "bold",
     color: "#17355A",
-    flex: 1,
+    flex: 2,
     fontSize: 28,
+    alignContent: "flex-start",
+    textAlign: "justify",
   },
   duration: {
     color: "#17355A",
-
     fontSize: 12,
     textAlign: "justify",
   },
   frequency: {
     flex: 1,
+    alignSelf: "baseline",
     color: "#17355A",
-
     fontSize: 32,
     textAlign: "right",
+    alignContent: "flex-end",
   },
   topRow: {
     width: 250,
     marginTop: 10,
-    marginLeft: 20,
-    marginRight: 10,
     flexDirection: "row",
     flex: 2,
-    alignSelf: "stretch",
-    textAlign: "left",
   },
   botRow: {
     marginTop: 10,
