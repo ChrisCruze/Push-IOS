@@ -7,66 +7,28 @@ import {
   View,
   Animated,
   SafeAreaView,
-  RefreshControl,
-  Platform,
-  TouchableWithoutFeedback,
   TouchableOpacity,
 } from "react-native";
 import Constants from "expo-constants";
 import { TextClass } from "../Atoms/Text";
 import Theme from "../Atoms/Theme";
-import { Text as RNText } from "react-native";
-import { Feather as Icon } from "@expo/vector-icons";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
 const Header = ({ title, sub_title, logout, logout_text }) => {
-  const [scrollAnimation, updateScrollAnimation] = React.useState(new Animated.Value(0));
-
-  const start = 30;
-  const opacity = scrollAnimation.interpolate({
-    inputRange: [start, 60],
-    outputRange: [1, 0],
-  });
-  const translateY = scrollAnimation.interpolate({
-    inputRange: [start, 60],
-    outputRange: [0, -60],
-    extrapolate: "clamp",
-  });
-  const fontSize = scrollAnimation.interpolate({
-    inputRange: [start, 60],
-    outputRange: [36, 24],
-    extrapolate: "clamp",
-  });
-  const height = scrollAnimation.interpolate({
-    inputRange: [start, 60],
-    outputRange: Platform.OS === "android" ? [70, 70] : [100, 60],
-    extrapolate: "clamp",
-  });
-  const marginTop = scrollAnimation.interpolate({
-    inputRange: [start, 60],
-    outputRange: [24, 0],
-    extrapolate: "clamp",
-  });
-  const shadowOpacity = scrollAnimation.interpolate({
-    inputRange: [start, 60],
-    outputRange: [0, 0.25],
-    extrapolate: "clamp",
-  });
-
   return (
-    <AnimatedSafeAreaView style={[styles.header, { shadowOpacity }]}>
-      <Animated.View style={[styles.innerHeader, { height }]}>
+    <AnimatedSafeAreaView style={[styles.header, { shadowOpacity: 0 }]}>
+      <Animated.View style={[styles.innerHeader, { height: Platform.OS === "android" ? 70 : 80 }]}>
         <View>
           <AnimatedText
             type="large"
-            style={{ position: "absolute", top: 0, opacity, transform: [{ translateY }] }}
+            style={{ position: "absolute", top: 0, opacity: 1, transform: [{ translateY: 0 }] }}
           >
             {sub_title || ""}
           </AnimatedText>
-          <AnimatedText type="header2" style={{ fontSize, marginTop }}>
+          <AnimatedText type="header2" style={{ fontSize: 36, marginTop: 24 }}>
             {title || "title"}
           </AnimatedText>
         </View>
@@ -75,11 +37,6 @@ const Header = ({ title, sub_title, logout, logout_text }) => {
             <Text style={{ color: "white" }}>{logout_text}</Text>
           </View>
         </TouchableOpacity>
-        {/* <TouchableWithoutFeedback onPress={this.profile}>
-          <View>
-            <Avatar {...profile.picture} />
-          </View>
-        </TouchableWithoutFeedback> */}
       </Animated.View>
     </AnimatedSafeAreaView>
   );

@@ -24,6 +24,48 @@ import moment from "moment";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
 import { AsyncStorage } from "react-native";
 import { NavigationEvents } from "react-navigation";
+import AnimatedHeader from "../Molecules/AnimatedHeader";
+import _ from "lodash";
+import { determineOverDue } from "../Atoms/BarChart.functions";
+
+const GoalsSort = ({ goals }) => {
+  const [sortOrder, updateSortOrder] = useState("none");
+  const goals_copy = [...goals];
+
+  if (sortOrder == "none") {
+    var sorted_goals = goals_copy;
+    return { sorted_goals, updateSortOrder, sortOrder };
+  } else if (sortOrder == "asc") {
+    var sorted_goals = _.sortBy(goals_copy, function(D) {
+      return D["timeStamps"].length;
+    });
+    return { sorted_goals, updateSortOrder, sortOrder };
+  } else {
+    var sorted_goals = _.sortBy(goals_copy, function(D) {
+      return D["timeStamps"].length * -1;
+    });
+    return { sorted_goals, updateSortOrder, sortOrder };
+  }
+};
+
+const GoalsFilter = ({ goals }) => {
+  const [filter, updateFilter] = useState("all");
+  const goals_copy = [...goals];
+
+  if (filter == "all") {
+    return { filtered_goals: goals, updateFilter, filter };
+  } else if (filter == "incomplete") {
+    var filtered_goals = goals.filter(function(D) {
+      return determineOverDue({ ...D, goals });
+    });
+    return { filtered_goals, updateFilter, filter };
+  } else if (filter == "complete") {
+    var filtered_goals = goals.filter(function(D) {
+      return !determineOverDue({ ...D, goals });
+    });
+    return { filtered_goals, updateFilter, filter };
+  }
+};
 
 const Goals = ({ navigation }) => {
   const logout = () => {
@@ -33,6 +75,9 @@ const Goals = ({ navigation }) => {
   };
 
   const { goals, refetch } = useGoalsPull();
+  const { filtered_goals, updateFilter } = GoalsFilter({ goals });
+  const { sorted_goals, updateSortOrder, sortOrder } = GoalsSort({ goals: filtered_goals });
+
   const { updateGoal } = useGoalUpdate();
   const { removeGoal } = useGoalDelete();
   const [notification, setNotification] = useState({});
@@ -47,14 +92,14 @@ const Goals = ({ navigation }) => {
         finalStatus = status;
       }
       if (finalStatus !== "granted") {
-        alert("Failed to get push token for push notification!");
+        // alert("Failed to get push token for push notification!");
         return;
       }
       let token = await Notifications.getExpoPushTokenAsync();
       console.log(token);
       setExpoPushToken(token);
     } else {
-      alert("Must use physical device for Push Notifications");
+      // alert("Must use physical device for Push Notifications");
     }
 
     if (Platform.OS === "android") {
@@ -69,7 +114,6 @@ const Goals = ({ navigation }) => {
 
   const _handleNotification = notification => {
     Vibration.vibrate();
-    console.log(notification);
     setNotification({ notification: notification });
   };
 
@@ -111,31 +155,42 @@ const Goals = ({ navigation }) => {
           refetch();
         }}
       />
-      <Header title={"Goals"} sub_title={"List"} logout={logout} logout_text={"Logout"} />
-      <FlatList
-        bounces={false}
-        showsVerticalScrollIndicator={false}
-        style={styles.list}
-        data={goals}
-        keyExtractor={goal => goal.id}
-        renderItem={({ item }) => {
-          return GoalItem({
-            ...item,
-            navigation,
-            goals,
-            updateGoal,
-            removeGoal,
-            refetch,
-          });
-        }}
-        ListEmptyComponent={
-          <View style={styles.post}>
-            <TouchableWithoutFeedback onPress={createNewGoal}>
-              <Icon name="plus-circle" color={Theme.palette.primary} size={25} />
-            </TouchableWithoutFeedback>
-          </View>
-        }
-      />
+      <AnimatedHeader
+        title={"Goals"}
+        sub_title={"List"}
+        logout={logout}
+        logout_text={"Logout"}
+        goals={goals}
+        refetch={refetch}
+        updateSortOrder={updateSortOrder}
+        sortOrder={sortOrder}
+        updateFilter={updateFilter}
+      >
+        <FlatList
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          style={styles.list}
+          data={sorted_goals}
+          keyExtractor={goal => goal.id}
+          renderItem={({ item }) => {
+            return GoalItem({
+              ...item,
+              navigation,
+              goals,
+              updateGoal,
+              removeGoal,
+              refetch,
+            });
+          }}
+          ListEmptyComponent={
+            <View style={styles.post}>
+              <TouchableWithoutFeedback onPress={createNewGoal}>
+                <Icon name="plus-circle" color={Theme.palette.primary} size={25} />
+              </TouchableWithoutFeedback>
+            </View>
+          }
+        />
+      </AnimatedHeader>
     </View>
   );
 };

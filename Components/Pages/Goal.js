@@ -21,7 +21,6 @@ import BarChart from "../Atoms/BarChart";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
 import GoalTimeStamps from "../Molecules/GoalTimeStamps";
 import Theme from "../Atoms/Theme";
-
 const GoalBarChart = ({ goals_filtered }) => {
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
     goals: goals_filtered,
