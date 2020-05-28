@@ -55,7 +55,7 @@ const GoalTimeStamp = ({
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#ECF0F3",
+    // backgroundColor: "#ECF0F3",
     flex: 1,
     marginTop: 15,
     marginBottom: 15,

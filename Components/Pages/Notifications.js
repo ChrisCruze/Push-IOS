@@ -1,11 +1,15 @@
 import * as React from "react";
 import CreateContainer from "../Molecules/createContainer";
 import { StyleSheet } from "react-native";
-
 import { TextField } from "../Atoms/Fields";
 import { Dropdown } from "react-native-material-dropdown";
 
 const Notification = ({ navigation }) => {
+  // const { createGoal } = useGoalCreate();
+  // const [selectedValue, setSelectedValue] = useState("daily");
+  // const [textValue, updateSelectedText] = useState("default");
+  // const [cadenceValue, updateCadenceValue] = useState("0");
+
   function pressNextSubmit() {
     navigation.navigate("Goals");
   }
@@ -24,7 +28,7 @@ const Notification = ({ navigation }) => {
       <TextField
         style={styles.textInput}
         placeholder="Create goal"
-        keyboardType="textInput"
+        keyboardType="default"
         autoCapitalize="none"
         returnKeyType="next"
         onChangeText={text => updateSelectedText(text)}
@@ -33,7 +37,7 @@ const Notification = ({ navigation }) => {
       <TextField
         style={styles.textInput}
         placeholder="Enter Cadence Goal"
-        keyboardType="textInput"
+        keyboardType="default"
         autoCapitalize="none"
         returnKeyType="next"
         onChangeText={text => updateCadenceValue(text)}

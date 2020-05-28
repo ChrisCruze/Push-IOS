@@ -61,7 +61,7 @@ export const useGoalsPull = () => {
       }
     }
   `;
-  const { loading, error, data, refetch } = useQuery(GoalsQuery, { pollInterval: 500 });
+  const { loading, error, data, refetch } = useQuery(GoalsQuery);
   const goals = goals_from_data({ loading, error, data });
   return { loading, error, data, goals, refetch };
 };

@@ -50,7 +50,6 @@ const GoalPageButtons = ({
 const styles = StyleSheet.create({
   row_container: {
     flexDirection: "row",
-    backgroundColor: "#ECF0F3",
     justifyContent: "center",
   },
 });

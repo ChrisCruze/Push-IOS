@@ -50,9 +50,11 @@ const Dashboard = ({ navigation }) => {
 const avatarSize = 100;
 const { width } = Dimensions.get("window");
 const { statusBarHeight } = Constants;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Theme.palette.background,
   },
   list: {
     flex: 1,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import TableGrid from "../Molecules/TableGrid";
 import GoalPageButtons from "../Molecules/GoalPageButtons";
@@ -11,7 +11,7 @@ import {
 import BarChart from "../Atoms/BarChart";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
 import GoalTimeStamps from "../Molecules/GoalTimeStamps";
-
+import Theme from "../Atoms/Theme";
 const GoalBarChart = ({ goals_filtered }) => {
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
     goals: goals_filtered,
@@ -34,12 +34,7 @@ const GoalTableGrid = ({ goals_filtered }) => {
 const GoalHeader = ({ goals_filtered, back }) => {
   const goals_dict = goals_filtered[0];
   return (
-    <Header
-      title={goals_dict.title || "-"}
-      sub_title={String(goals_dict.totalCount) || "0"}
-      logout={back}
-      logout_text={"Back"}
-    />
+    <Header title={goals_dict.title || "-"} sub_title={" "} logout={back} logout_text={"Back"} />
   );
 };
 
@@ -68,7 +63,7 @@ const Goal = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ECF0F3",
+    backgroundColor: Theme.palette.background,
   },
 });
 

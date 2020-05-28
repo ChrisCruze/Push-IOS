@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -44,32 +44,6 @@ const GoalButtonBack = ({ deleteGoal, navigateToGoal }) => {
   );
 };
 
-const GoalButtonFrontOLD = ({ text, totalCount, pushGoal, lastTimeStampMessage, is_overdue }) => {
-  const color = "#17355A"; //"#2DAAFF"; //is_overdue ? "red" : "green";
-  const color_shade = is_overdue ? "#C94818" : "#193162";
-
-  return (
-    <TouchableWithoutFeedback onPress={pushGoal}>
-      <Neomorph
-        darkShadowColor={color_shade} //"#D1CDC7" // <- set this
-        lightShadowColor="#FFF" //{color_shade} ///
-        style={styles.neomorph}
-      >
-        <View style={styles.topRow}>
-          <Text style={styles.task}>{text}</Text>
-          <View style={[styles.dash, { borderColor: color }]}>
-            <Text style={[styles.frequency, { textDecorationColor: color, color: color }]}>
-              {totalCount}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.botRow}>
-          <Text style={styles.duration}>Last Updated: {lastTimeStampMessage}</Text>
-        </View>
-      </Neomorph>
-    </TouchableWithoutFeedback>
-  );
-};
 const GoalButtonFront = ({
   text,
   totalCount,
@@ -78,32 +52,40 @@ const GoalButtonFront = ({
   lastTimeStampMessage,
   is_overdue,
 }) => {
+  const [fadeAnim] = useState(new Animated.Value(1));
+  const [moveAnim] = useState(new Animated.Value(0));
+
+  // const fadeAnim = new Animated.Value(0)
   const color = "#17355A"; //"#2DAAFF"; //is_overdue ? "red" : "green";
   const color_shade = is_overdue ? "#C94818" : "#193162";
   const main_background = "#FFF9FD";
+
+  const pushGoalAnimate = () => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 800,
+      }),
+      Animated.timing(moveAnim, {
+        toValue: 20,
+        duration: 800,
+      }),
+    ]).start(() => {
+      Animated.timing(moveAnim, {
+        toValue: 0,
+        duration: 0,
+      }).start(() => {
+        pushGoal();
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 1500,
+        }).start();
+      });
+    });
+  };
+
   return (
-    <TouchableWithoutFeedback onPress={pushGoal}>
-      {/* <AwesomeButtonProgress
-        progress
-        height={115}
-        activityColor={main_background}
-        backgroundColor={main_background}
-        backgroundShadow={main_background}
-        backgroundDarker={main_background}
-        backgroundPlaceholder={main_background}
-        backgroundActive={main_background} //"#C0C0C0"}
-        backgroundProgress={main_background}
-        activeOpacity={70}
-        borderColor={main_background}
-        progressLoadingTime={10000}
-        width={Dimensions.get("window").width * 85}
-        raiseLevel={0}
-        action={(element, next) => doSomethingThenCall(next)}
-        onPress={next => {
-          pushGoal();
-          next();
-        }}
-      > */}
+    <TouchableWithoutFeedback onPress={pushGoalAnimate}>
       <Neomorph
         darkShadowColor={color_shade} //"#D1CDC7" // <- set this
         lightShadowColor="#FFF" //{color_shade} ///
@@ -112,41 +94,21 @@ const GoalButtonFront = ({
         <View style={styles.topRow}>
           <Text style={styles.task}>{text}</Text>
           <View style={[styles.dash, { borderColor: color }]}>
-            <Text style={[styles.frequency, { textDecorationColor: color, color: color }]}>
+            <Animated.Text
+              style={[
+                styles.frequency,
+                { textDecorationColor: color, color: color, opacity: fadeAnim, bottom: moveAnim },
+              ]}
+            >
               {totalCount}/{cadence}
-            </Text>
+            </Animated.Text>
           </View>
         </View>
         <View style={styles.botRow}>
           <Text style={styles.duration}>Last Updated: {lastTimeStampMessage}</Text>
         </View>
       </Neomorph>
-      {/* </AwesomeButtonProgress> */}
     </TouchableWithoutFeedback>
-
-    // <AwesomeButton progress width={Dimensions.get("window") * 0.8} height={95}>
-    //   {/* <Image source="require('send-icon.png)" /> */}
-    //   {/* <Text>Send it</Text> */}
-
-    //   <Neomorph
-    //     darkShadowColor={color_shade} //"#D1CDC7" // <- set this
-    //     lightShadowColor="#FFF" //{color_shade} ///
-    //     style={styles.neomorph}
-    //   >
-    //     <View style={styles.topRow}>
-    //       <Text style={styles.task}>{text}</Text>
-    //       <View style={[styles.dash, { borderColor: color }]}>
-    //         <Text style={[styles.frequency, { textDecorationColor: color, color: color }]}>
-    //           {totalCount}
-    //         </Text>
-    //       </View>
-    //     </View>
-    //     <View style={styles.botRow}>
-    //       <Text style={styles.duration}>Last Updated: {lastTimeStampMessage}</Text>
-    //     </View>
-    //   </Neomorph>
-
-    // </AwesomeButton>
   );
 };
 const GoalListItem = ({
@@ -262,7 +224,6 @@ const styles = StyleSheet.create({
   frequency: {
     flex: 1,
     color: "#17355A",
-
     fontSize: 32,
     textAlign: "right",
   },
@@ -287,7 +248,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   dash: {
-    borderBottomWidth: 3,
+    // borderBottomWidth: 3,
   },
   buttonText: {
     alignSelf: "center",
