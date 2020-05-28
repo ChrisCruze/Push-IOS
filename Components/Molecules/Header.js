@@ -28,7 +28,7 @@ const Header = ({ title, sub_title, logout, logout_text }) => {
           >
             {sub_title || ""}
           </AnimatedText>
-          <AnimatedText type="header2" style={{ fontSize: 36, marginTop: 24 }}>
+          <AnimatedText type="header2" style={{ fontSize: 36, marginTop: 24, color: "white" }}>
             {title || "title"}
           </AnimatedText>
         </View>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight + 100 + Theme.spacing.base,
   },
   header: {
-    backgroundColor: main_background, //"white",
+    backgroundColor: "black", //"white",
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
