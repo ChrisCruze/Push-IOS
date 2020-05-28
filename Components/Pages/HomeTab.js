@@ -1,7 +1,6 @@
 import * as React from "react";
-import { StyleSheet, TouchableWithoutFeedback, SafeAreaView, View, Dimensions } from "react-native";
+import { StyleSheet, TouchableWithoutFeedback, SafeAreaView, View } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
-import Theme from "../Atoms/Theme";
 import { Neomorph } from "react-native-neomorph-shadows";
 
 const HomeTabButtonActive = ({ info }) => {
@@ -18,10 +17,7 @@ const HomeTabButtonInactive = ({ info }) => {
   const color = "black";
   return (
     <Neomorph
-      // darkShadowColor={"#D1CDC7"} //"#D1CDC7" // <- set this
       lightShadowColor="#FFF"
-      // inner // <- enable shadow inside of neomorph
-      // swapShadows // <- change zIndex of each shadow color
       style={{
         alignItems: "center",
         justifyContent: "center",
@@ -30,9 +26,6 @@ const HomeTabButtonInactive = ({ info }) => {
         backgroundColor: "#DDDDDD",
         width: 50,
         height: 50,
-
-        // darkShadowColor="#D1CDC7", //"#D1CDC7" // <- set this
-        // lightShadowColor="#FFF" ,//{color_shade} ///
         shadowOpacity: 0.7, // <- and this or yours opacity
         shadowRadius: 7,
         borderTopColor: "#FFF",
@@ -44,10 +37,6 @@ const HomeTabButtonInactive = ({ info }) => {
     >
       <Icon name={info.icon} size={30} {...{ color }} />
     </Neomorph>
-
-    // <View style={[styles.tabButton, { backgroundColor: "white" }]}>
-    //   <Icon name={info.icon} size={30} {...{ color }} />
-    // </View>
   );
 };
 const HomeTabButton = ({ i, current, info }) => {
@@ -88,8 +77,7 @@ const HomeTab = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-const { width, height } = Dimensions.get("window");
-console.log({ width, height });
+
 const styles = StyleSheet.create({
   tabButton: {
     borderRadius: 12,
