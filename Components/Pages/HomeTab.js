@@ -37,7 +37,7 @@ const HomeTab = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   tabs: {
-    backgroundColor: "#17355A", //"#FFF9FD",
+    backgroundColor: "black", //"#FFF9FD",
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,

@@ -174,7 +174,7 @@ const AnimatedHeader = ({
               {String(goals.length)}
             </AnimatedText>
 
-            <AnimatedText type="header2" style={{ fontSize: 36, marginTop: 24, color: "#17355A" }}>
+            <AnimatedText type="header2" style={{ fontSize: 36, marginTop: 24, color: "white" }}>
               {title || "title"}
             </AnimatedText>
           </View>
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   header: {
-    backgroundColor: main_background, //"white",
+    backgroundColor: "black", //"white",
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
