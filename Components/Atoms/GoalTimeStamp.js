@@ -1,15 +1,5 @@
 import React, { useState, Fragment, useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Dimensions,
-  FlatList,
-  Animated,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
 import _ from "lodash";
 import moment from "moment";
 import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";

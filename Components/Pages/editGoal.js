@@ -1,18 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import CreateContainer from "../Molecules/createContainer";
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  Linking,
-  FlatList,
-  TouchableOpacity,
-  Image,
-  TextInput,
-} from "react-native";
-
-import Constants from "expo-constants";
+import { StyleSheet } from "react-native";
 import { TextField } from "../Atoms/Fields";
 import { Dropdown } from "react-native-material-dropdown";
 import { useGoalUpdate, useGoalsPull } from "../../API";
@@ -66,7 +55,6 @@ const editGoal = ({ navigation }) => {
       back={() => navigation.navigate("Goals")}
       nextLabel="Push"
       next={pressNextSubmit}
-      // onSubmitEditing={createNew}
       first
       {...{ navigation }}
     >

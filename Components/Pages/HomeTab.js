@@ -1,12 +1,10 @@
 import * as React from "react";
 import { StyleSheet, TouchableWithoutFeedback, SafeAreaView, View } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
-import Theme from "../Atoms/Theme";
 
 const HomeTab = ({ navigation }) => {
   const navigate = i => navigation.navigate(i);
   const tabs = [
-    // { label: "Profile", icon: "home" },
     { label: "Dashboard", icon: "bar-chart" },
     { label: "createGoal", icon: "plus-circle" },
     { label: "Goals", icon: "list" },

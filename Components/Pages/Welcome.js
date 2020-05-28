@@ -1,16 +1,11 @@
 import * as React from "react";
-import { StyleSheet, Dimensions, Linking, TouchableOpacity } from "react-native";
-// import { Text, Button, Container, Logo, Theme, AnimatedView } from "../components";
+import { StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import Theme from "../Atoms/Theme";
 import Text from "../Atoms/Text";
 import Button from "../Atoms/Button";
-
 import Container from "../Atoms/Container";
 import { AnimatedView } from "../Atoms/Animations";
 import Logo from "../Molecules/Logo";
-import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, gql } from "apollo-boost";
-
-import { APIClient, useAPI } from "../../API";
 import { AsyncStorage } from "react-native";
 import moment from "moment";
 

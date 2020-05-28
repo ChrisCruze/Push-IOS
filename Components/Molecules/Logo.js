@@ -1,7 +1,6 @@
 import * as React from "react";
 import { StyleSheet, SafeAreaView, View, Image, Dimensions } from "react-native";
-import { AnimatedView, simpleInterpolation, directInterpolation } from "../Atoms/Animations";
-import Theme from "../Atoms/Theme";
+
 import Images from "../Atoms/Images";
 
 const Logo = () => {
