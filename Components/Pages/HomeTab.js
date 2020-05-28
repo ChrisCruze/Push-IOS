@@ -51,7 +51,7 @@ const HomeTab = ({ navigation }) => {
   const navigate = i => navigation.navigate(i);
   const tabs = [
     { label: "Dashboard", icon: "bar-chart" },
-    { label: "createGoal", icon: "plus-circle" },
+    { label: "createGoal", icon: "plus" },
     { label: "Goals", icon: "list" },
   ];
   const navState = navigation.state;
