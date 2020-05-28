@@ -9,7 +9,7 @@ const Theme = {
     sidebar: "#484848",
     lightGray: "#BFBFBF",
     borderColor: "#F5F5F5",
-    background: "#FFF9FD", //E0E5EC
+    background: "white", //E0E5EC
   },
   typography: {
     color: "#666666",

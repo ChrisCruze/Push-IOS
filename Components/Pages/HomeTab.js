@@ -18,7 +18,7 @@ const HomeTab = ({ navigation }) => {
     <SafeAreaView style={styles.tabs}>
       <View style={styles.container}>
         {tabs.map((info, i) => {
-          const color = "white"; //i === current ? Theme.palette.primary : Theme.palette.lightGray;
+          const color = "black"; //i === current ? Theme.palette.primary : Theme.palette.lightGray;
           return (
             <TouchableWithoutFeedback
               key={info.label}
@@ -37,7 +37,7 @@ const HomeTab = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   tabs: {
-    backgroundColor: "black", //"#FFF9FD",
+    backgroundColor: "white", //"#FFF9FD",
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
