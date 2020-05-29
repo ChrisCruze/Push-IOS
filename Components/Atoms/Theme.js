@@ -1,6 +1,7 @@
 const Theme = {
   palette: {
-    primary: "#00AAFF",
+    primary: "black",
+    buttonTheme: "black",
     info: "#00A699",
     secondary: "#f7555c",
     success: "#5cb85c",
@@ -12,7 +13,7 @@ const Theme = {
     background: "white", //E0E5EC
   },
   typography: {
-    color: "#666666",
+    color: "grey",
     bold: "SFProText-Bold",
     semibold: "SFProText-Semibold",
     normal: "SFProText-Medium",

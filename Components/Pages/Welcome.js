@@ -53,7 +53,7 @@ const Welcome = ({ navigation }) => {
         </Text>
       </AnimatedView>
       <AnimatedView style={styles.container} delay={600} duration={300}>
-        <Button label="Login" onPress={login} full primary />
+        <Button label="Login" onPress={login} full white style={{backgroundColor:Theme.palette.buttonTheme,borderRadius:32}} />
         <Button label="Sign Up" onPress={signUp} full />
       </AnimatedView>
       <TouchableOpacity style={styles.framer} onPress={Welcome.framer}>

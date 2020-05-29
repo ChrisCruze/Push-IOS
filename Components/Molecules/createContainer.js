@@ -16,7 +16,7 @@ const CreateContainer = ({ title, subtitle, next, children, nextLabel, back }) =
             {title}
           </Text>
           <View style={styles.innerChildren}>{children}</View>
-          <Button label={nextLabel || "Next"} onPress={next} full primary />
+          <Button label={nextLabel || "Next"} onPress={next} full white style={{backgroundColor:Theme.palette.buttonTheme,borderRadius:32}}/>
           <Button label="Back" onPress={back} full />
         </View>
       </Content>
