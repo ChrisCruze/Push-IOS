@@ -51,6 +51,7 @@ const Dashboard = ({ navigation }) => {
       chunk_size: 7,
     },
   );
+  let data =goals_count_by_day_array.map(data => data.count)
   return (
     <View style={styles.container}>
       <Header title={"Dashboard"} sub_title={"Today"} logout={logout} />
@@ -64,9 +65,34 @@ const Dashboard = ({ navigation }) => {
           }
         ]
       }}
-      width={400}
+      width={Dimensions.get("window").width}
       height={256}
       verticalLabelRotation={30}
+      chartConfig={{
+        backgroundColor: "#000000",
+        decimalPlaces: 0, // optional, defaults to 2dp
+        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+        style: {
+          borderRadius: 16
+        },
+        propsForDots: {
+          r: "6",
+          strokeWidth: "2",
+          stroke: "#ffa726"
+        }
+      }}
+      bezier
+    ></LineChart>
+
+    {/* <StackedBarChart
+      data={{
+        labels:  goals_count_by_day_array.map(data => data.date),
+        data: [[60, 60, 60], [30, 30, 60]],
+        barColors: ["#dfe4ea", "#ced6e0", "#a4b0be"]
+      }}
+      width={Dimensions.get("window").width}
+      height={256}
       chartConfig={{
         backgroundColor: "#e26a00",
         backgroundGradientFrom: "#fb8c00",
@@ -83,8 +109,9 @@ const Dashboard = ({ navigation }) => {
           stroke: "#ffa726"
         }
       }}
-      bezier
-    >{console.log(goals_count_by_day_array)}</LineChart>
+      showLegend={false}
+    /> */}
+    {/* {console.log(goals_count_by_day_array, goals, goals_count_by_day_array_chunked)} */}
       <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
       <DashboardTimeStamps timeStamps={timeStamps} navigation={navigation} />
     </View>

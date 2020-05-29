@@ -100,7 +100,7 @@ const GoalButtonFront = ({
                 { textDecorationColor: color, color: color, opacity: fadeAnim, bottom: moveAnim },
               ]}
             >
-              {totalCount}/{cadence}
+              {/* Convert into percentage: */} {totalCount/cadence} 
             </Animated.Text>
           </View>
         </View>

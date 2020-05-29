@@ -143,6 +143,8 @@ const Goals = ({ navigation }) => {
     registerForPushNotificationsAsync();
     notificationSubscription = Notifications.addListener(_handleNotification);
     console.log(notificationSubscription);
+    //update goal timestamp
+    //update daily push value
   }, []);
   const createNewGoal = () => {
     navigation.navigate("createGoal");
