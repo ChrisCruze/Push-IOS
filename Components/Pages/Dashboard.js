@@ -17,6 +17,7 @@ import BarChart from "../Atoms/BarChart";
 import { AsyncStorage } from "react-native";
 import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
 import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
+import ProgressCircle from 'react-native-progress-circle';
 
 import {
   LineChart,
@@ -56,7 +57,7 @@ const Dashboard = ({ navigation }) => {
     <View style={styles.container}>
       <Header title={"Dashboard"} sub_title={"Today"} logout={logout} />
       {/* <BarChart chartData={goals_count_by_day_array} /> */}
-      <LineChart
+      {/* <LineChart
       data={{
         labels: goals_count_by_day_array.map(data => data.date),
         datasets: [
@@ -69,9 +70,9 @@ const Dashboard = ({ navigation }) => {
       height={256}
       verticalLabelRotation={30}
       chartConfig={{
-        backgroundColor: "#000000",
+        backgroundColor: "#FFFFFF",
         decimalPlaces: 0, // optional, defaults to 2dp
-        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+        color: (opacity = 1) => `rgba(25, 215, 155, ${opacity})`,
         labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         style: {
           borderRadius: 16
@@ -79,11 +80,24 @@ const Dashboard = ({ navigation }) => {
         propsForDots: {
           r: "6",
           strokeWidth: "2",
-          stroke: "#ffa726"
+          stroke: "#FFFFFF"
         }
       }}
       bezier
-    ></LineChart>
+    ></LineChart> */}
+
+        <ProgressCircle
+            percent={30}
+            radius={100}
+            borderWidth={20}
+            color="#3399FF"
+            shadowColor="#999"
+            bgColor="#fff"
+            alignSelf="center"
+        >
+            <Text style={{ fontSize: 24 }}>{'30%'}</Text>
+        </ProgressCircle>
+
 
     {/* <StackedBarChart
       data={{
