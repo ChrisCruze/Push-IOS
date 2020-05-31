@@ -20,7 +20,7 @@ import { NavigationEvents } from "react-navigation";
 import AnimatedHeader from "../Molecules/AnimatedHeader";
 import _ from "lodash";
 import { determineOverDue } from "../Atoms/BarChart.functions";
-import ConfettiCannon from "react-native-confetti-cannon";
+import Confetti from "../Molecules/Confetti";
 
 const GoalsSort = ({ goals }) => {
   const [sortOrder, updateSortOrder] = useState("none");
@@ -142,7 +142,6 @@ const Goals = ({ navigation }) => {
     navigation.navigate("createGoal");
   };
   const refToConfetti = useRef(null);
-  const windowWidth = Dimensions.get("window").width;
 
   return (
     <View style={styles.container}>
@@ -188,14 +187,7 @@ const Goals = ({ navigation }) => {
           }
         />
       </AnimatedHeader>
-      <ConfettiCannon
-        count={200}
-        origin={{ x: windowWidth / 2, y: -10 }}
-        autoStart={false}
-        ref={refToConfetti}
-        fadeOut={true}
-        fallSpeed={5000}
-      />
+      <Confetti ref={refToConfetti} />
     </View>
   );
 };
