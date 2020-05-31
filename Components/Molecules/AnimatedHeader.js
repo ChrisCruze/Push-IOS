@@ -14,20 +14,25 @@ import {
 import Constants from "expo-constants";
 import { TextClass } from "../Atoms/Text";
 import Theme from "../Atoms/Theme";
-import { DataFlattenConvertGoals, determineOverDue } from "../Atoms/BarChart.functions";
+import {
+  DataFlattenConvertGoals,
+  determineOverDue,
+  GoalsFilterCadence,
+} from "../Atoms/BarChart.functions";
 import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
 
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
 const AnimatedSubHeaderMetrics = ({ goals, updateFilter, filter }) => {
-  const number_of_goals = goals.length;
-  const number_of_pushes = DataFlattenConvertGoals(goals).length;
-  const completed_count = goals.filter(function(D) {
-    return !determineOverDue({ ...D, goals });
+  const filtered_goals = GoalsFilterCadence({ goals, cadence: filter.cadence });
+  const number_of_goals = filtered_goals.length;
+  const number_of_pushes = DataFlattenConvertGoals(filtered_goals).length;
+  const completed_count = filtered_goals.filter(function(D) {
+    return !determineOverDue({ ...D, goals: filtered_goals });
   }).length;
-  const remaining_count = goals.filter(function(D) {
-    return determineOverDue({ ...D, goals });
+  const remaining_count = filtered_goals.filter(function(D) {
+    return determineOverDue({ ...D, goals: filtered_goals });
   }).length;
   const complete_percentage = ((completed_count / number_of_goals) * 100).toFixed(0);
   return (
@@ -56,7 +61,7 @@ const AnimatedSubHeaderMetrics = ({ goals, updateFilter, filter }) => {
         }}
       >
         <View>
-          <AnimatedText type="large">{goals.length + " Total"}</AnimatedText>
+          <AnimatedText type="large">{filtered_goals.length + " Total"}</AnimatedText>
         </View>
       </TouchableWithoutFeedback>
       <View>

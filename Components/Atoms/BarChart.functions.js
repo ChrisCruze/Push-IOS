@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import _ from "lodash";
 import moment from "moment";
 
@@ -168,4 +168,51 @@ export const determineOverDue = ({ cadence, cadenceCount, goals, id }) => {
   const cadenceInt = cadenceCount == 0 ? 1 : cadenceCount;
   const is_overdue = cadenceInt > filteredTimeStamps.length;
   return is_overdue;
+};
+
+export const GoalsSort = ({ goals }) => {
+  const [sortOrder, updateSortOrder] = useState("none");
+  const goals_copy = [...goals];
+
+  if (sortOrder == "none") {
+    var sorted_goals = goals_copy;
+    return { sorted_goals, updateSortOrder, sortOrder };
+  } else if (sortOrder == "asc") {
+    var sorted_goals = _.sortBy(goals_copy, function(D) {
+      return D["timeStamps"].length;
+    });
+    return { sorted_goals, updateSortOrder, sortOrder };
+  } else {
+    var sorted_goals = _.sortBy(goals_copy, function(D) {
+      return D["timeStamps"].length * -1;
+    });
+    return { sorted_goals, updateSortOrder, sortOrder };
+  }
+};
+
+export const GoalsFilterState = ({ goals, state }) => {
+  if (state == "all") {
+    return goals;
+  } else if (state == "incomplete") {
+    var filtered_goals = goals.filter(function(D) {
+      return determineOverDue({ ...D, goals });
+    });
+    return filtered_goals;
+  } else if (state == "complete") {
+    var filtered_goals = goals.filter(function(D) {
+      return !determineOverDue({ ...D, goals });
+    });
+    return filtered_goals;
+  }
+};
+
+export const GoalsFilterCadence = ({ goals, cadence }) => {
+  if (cadence == "all") {
+    return goals;
+  } else {
+    var filtered_goals = goals.filter(function(D) {
+      return String(D["cadence"]).toLowerCase() == cadence;
+    });
+    return filtered_goals;
+  }
 };
