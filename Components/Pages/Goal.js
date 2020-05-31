@@ -12,7 +12,7 @@ import BarChart from "../Atoms/BarChart";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
 import GoalTimeStamps from "../Molecules/GoalTimeStamps";
 import Theme from "../Atoms/Theme";
-import ConfettiCannon from "react-native-confetti-cannon";
+import Confetti from "../Molecules/Confetti";
 
 const GoalBarChart = ({ goals_filtered }) => {
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
@@ -52,18 +52,9 @@ const Goal = ({ navigation }) => {
   });
 
   const refToConfetti = useRef(null);
-  const windowWidth = Dimensions.get("window").width;
 
   return (
     <View style={styles.container}>
-      <ConfettiCannon
-        count={200}
-        origin={{ x: windowWidth / 2, y: -10 }}
-        autoStart={false}
-        ref={refToConfetti}
-        fadeOut={true}
-        fallSpeed={5000}
-      />
       <GoalHeader goals_filtered={goals_filtered} back={back} />
       <GoalBarChart goals_filtered={goals_filtered} />
       <GoalTableGrid goals_filtered={goals_filtered} />
@@ -72,9 +63,10 @@ const Goal = ({ navigation }) => {
         _id={_id}
         navigation={navigation}
         refetch={refetch}
-        confetti={() => refToConfetti.current.start()}
+        goalDetailsConfetti={() => refToConfetti.current.start()}
       />
       <GoalTimeStamps {...goals_filtered[0]} navigation={navigation} />
+      <Confetti ref={refToConfetti} />
     </View>
   );
 };
