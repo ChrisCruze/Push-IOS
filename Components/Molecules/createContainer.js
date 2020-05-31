@@ -31,12 +31,11 @@ const CreateContainer = ({ title, subtitle, next, children, nextLabel, back }) =
 };
 
 const { height } = Dimensions.get("window");
-console.log({ height });
 const styles = StyleSheet.create({
   content: {
     padding: Theme.spacing.base,
-    marginBottom: 50,
-    marginTop: 150,
+    marginBottom: 25,
+    marginTop: 50,
   },
   innerContent: {
     // height: height - Theme.spacing.base,
