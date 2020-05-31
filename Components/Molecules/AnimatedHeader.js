@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  Dimensions,
 } from "react-native";
 import Constants from "expo-constants";
 import { TextClass } from "../Atoms/Text";
@@ -19,7 +20,7 @@ import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
-const AnimatedSubHeaderMetrics = ({ goals, updateFilter }) => {
+const AnimatedSubHeaderMetrics = ({ goals, updateFilter, filter }) => {
   const number_of_goals = goals.length;
   const number_of_pushes = DataFlattenConvertGoals(goals).length;
   const completed_count = goals.filter(function(D) {
@@ -33,7 +34,7 @@ const AnimatedSubHeaderMetrics = ({ goals, updateFilter }) => {
     <Fragment>
       <TouchableWithoutFeedback
         onPress={() => {
-          updateFilter("incomplete");
+          updateFilter({ ...filter, state: "incomplete" });
         }}
       >
         <View>
@@ -42,7 +43,7 @@ const AnimatedSubHeaderMetrics = ({ goals, updateFilter }) => {
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback
         onPress={() => {
-          updateFilter("complete");
+          updateFilter({ ...filter, state: "complete" });
         }}
       >
         <View>
@@ -51,7 +52,7 @@ const AnimatedSubHeaderMetrics = ({ goals, updateFilter }) => {
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback
         onPress={() => {
-          updateFilter("all");
+          updateFilter({ ...filter, state: "all" });
         }}
       >
         <View>
@@ -91,6 +92,7 @@ const AnimatedSubHeader = ({
   updateSortOrder,
   sortOrder,
   updateFilter,
+  filter,
 }) => {
   const [fadeAnim] = useState(new Animated.Value(0));
   const transformOpacity = scrollAnimation.interpolate({
@@ -118,12 +120,59 @@ const AnimatedSubHeader = ({
     >
       <Animated.View style={[styles.innerSubHeader, { opacity: fadeAnim }]}>
         <AnimatedSubHeaderSort sortOrder={sortOrder} updateSortOrder={updateSortOrder} />
-        <AnimatedSubHeaderMetrics goals={goals} updateFilter={updateFilter} />
+        <AnimatedSubHeaderMetrics goals={goals} updateFilter={updateFilter} filter={filter} />
       </Animated.View>
     </AnimatedSafeAreaView>
   );
 };
 
+const AnimatedSubHeaderTimeIntervalText = ({ text, cadence, updateFilter, filter }) => {
+  const is_active = filter.cadence == cadence;
+  const background_color = is_active ? "#005AFF" : "black";
+  return (
+    <TouchableWithoutFeedback
+      onPress={() => {
+        updateFilter({ ...filter, cadence });
+      }}
+    >
+      <View style={[styles.innerTimeSubHeaderSelected, { backgroundColor: background_color }]}>
+        <AnimatedText type="header3" style={{ fontSize: 12, color: "white" }}>
+          {text}
+        </AnimatedText>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+};
+const AnimatedSubHeaderTimeInterval = ({ filter, updateFilter }) => {
+  return (
+    <View style={[styles.innerTimeSubHeader]}>
+      <AnimatedSubHeaderTimeIntervalText
+        text={"All"}
+        filter={filter}
+        updateFilter={updateFilter}
+        cadence={"all"}
+      />
+      <AnimatedSubHeaderTimeIntervalText
+        text={"Today"}
+        filter={filter}
+        updateFilter={updateFilter}
+        cadence={"daily"}
+      />
+      <AnimatedSubHeaderTimeIntervalText
+        text={"Week"}
+        filter={filter}
+        updateFilter={updateFilter}
+        cadence={"weekly"}
+      />
+      <AnimatedSubHeaderTimeIntervalText
+        text={"Month"}
+        filter={filter}
+        updateFilter={updateFilter}
+        cadence={"monthly"}
+      />
+    </View>
+  );
+};
 const AnimatedHeader = ({
   title,
   sub_title,
@@ -135,6 +184,7 @@ const AnimatedHeader = ({
   updateSortOrder,
   sortOrder,
   updateFilter,
+  filter,
 }) => {
   const [scrollAnimation] = React.useState(new Animated.Value(0));
   const [showDetailHeader, updateShowDetailHeader] = useState(false);
@@ -162,37 +212,41 @@ const AnimatedHeader = ({
           style={[styles.innerHeader, { height: Platform.OS === "android" ? 70 : 80 }]}
         >
           <View>
+            <TouchableOpacity onPress={logout} style={styles.settings}>
+              <View>
+                <Animated.Text
+                  style={{
+                    color: "white",
+                    position: "absolute",
+                    top: 0,
+                    right: 10,
+
+                    opacity,
+                    transform: [{ translateY: translateY }],
+                  }}
+                >
+                  {logout_text}
+                </Animated.Text>
+              </View>
+            </TouchableOpacity>
             <AnimatedText
-              type="large"
+              type="header2"
               style={{
-                position: "absolute",
-                top: 0,
-                opacity: opacity,
-                transform: [{ translateY: translateY }],
+                fontSize: 36,
+                marginTop: 24,
+                color: "white",
+                width: Dimensions.get("window").width * 0.9,
               }}
             >
-              {String(goals.length)}
-            </AnimatedText>
-
-            <AnimatedText type="header2" style={{ fontSize: 36, marginTop: 24, color: "white" }}>
               {title || "title"}
             </AnimatedText>
+            <AnimatedSubHeaderTimeInterval filter={filter} updateFilter={updateFilter} />
           </View>
-
-          <TouchableOpacity onPress={logout} style={styles.settings}>
-            <View>
-              <Animated.Text
-                style={{ color: "white", opacity, transform: [{ translateY: translateY }] }}
-              >
-                {logout_text}
-              </Animated.Text>
-            </View>
-          </TouchableOpacity>
         </Animated.View>
       </AnimatedSafeAreaView>
       {showDetailHeader ? (
         <AnimatedSubHeader
-          {...{ scrollAnimation, goals, refetch, updateSortOrder, sortOrder, updateFilter }}
+          {...{ scrollAnimation, goals, refetch, updateSortOrder, sortOrder, updateFilter, filter }}
         />
       ) : null}
       <Animated.ScrollView
@@ -241,6 +295,8 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 8,
     zIndex: 10000,
+    // borderTopLeftRadius: 25,
+    // borderTopRightRadius: 25,
     borderBottomLeftRadius: 25,
   },
   innerHeader: {
@@ -249,6 +305,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 20,
+  },
+  innerTimeSubHeader: {
+    marginHorizontal: 20,
+    marginVertical: Theme.spacing.tiny,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    alignSelf: "stretch",
+  },
+  innerTimeSubHeaderSelected: {
+    borderRadius: 25,
+    paddingHorizontal: 15,
   },
 });
 export default AnimatedHeader;

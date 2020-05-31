@@ -41,23 +41,51 @@ const GoalsSort = ({ goals }) => {
   }
 };
 
-const GoalsFilter = ({ goals }) => {
-  const [filter, updateFilter] = useState("all");
-  const goals_copy = [...goals];
-
-  if (filter == "all") {
-    return { filtered_goals: goals, updateFilter, filter };
-  } else if (filter == "incomplete") {
+const GoalsFilterState = ({ goals, state }) => {
+  if (state == "all") {
+    return goals;
+  } else if (state == "incomplete") {
     var filtered_goals = goals.filter(function(D) {
       return determineOverDue({ ...D, goals });
     });
-    return { filtered_goals, updateFilter, filter };
-  } else if (filter == "complete") {
+    return filtered_goals;
+  } else if (state == "complete") {
     var filtered_goals = goals.filter(function(D) {
       return !determineOverDue({ ...D, goals });
     });
-    return { filtered_goals, updateFilter, filter };
+    return filtered_goals;
   }
+};
+
+const GoalsFilterCadence = ({ goals, cadence }) => {
+  if (cadence == "all") {
+    return goals;
+  } else if (cadence == "daily") {
+    var filtered_goals = goals.filter(function(D) {
+      return String(D["cadence"]).toLowerCase() == "daily";
+    });
+    return filtered_goals;
+  } else if (cadence == "weekly") {
+    var filtered_goals = goals.filter(function(D) {
+      return String(D["cadence"]).toLowerCase() == "weekly";
+    });
+    return filtered_goals;
+  } else if (cadence == "monthly") {
+    var filtered_goals = goals.filter(function(D) {
+      return String(D["cadence"]).toLowerCase() == "monthly";
+    });
+    return filtered_goals;
+  }
+};
+const GoalsFilter = ({ goals }) => {
+  const [filter, updateFilter] = useState({ state: "all", cadence: "all" });
+
+  const filtered_state_goals = GoalsFilterState({ goals, state: filter.state });
+  const filtered_cadence_goals = GoalsFilterCadence({
+    goals: filtered_state_goals,
+    cadence: filter.cadence,
+  });
+  return { filtered_goals: filtered_cadence_goals, updateFilter, filter };
 };
 
 const Goals = ({ navigation }) => {
@@ -68,7 +96,7 @@ const Goals = ({ navigation }) => {
   };
 
   const { goals, refetch } = useGoalsPull();
-  const { filtered_goals, updateFilter } = GoalsFilter({ goals });
+  const { filtered_goals, updateFilter, filter } = GoalsFilter({ goals });
   const { sorted_goals, updateSortOrder, sortOrder } = GoalsSort({ goals: filtered_goals });
 
   const { updateGoal } = useGoalUpdate();
@@ -158,6 +186,7 @@ const Goals = ({ navigation }) => {
         updateSortOrder={updateSortOrder}
         sortOrder={sortOrder}
         updateFilter={updateFilter}
+        filter={filter}
       >
         <FlatList
           bounces={false}
