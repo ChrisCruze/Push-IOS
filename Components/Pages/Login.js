@@ -34,6 +34,7 @@ const Login = ({ navigation }) => {
           password,
         })
         .then(response => {
+
           AsyncStorage.setItem("token_created_date", moment().format());
           AsyncStorage.setItem("token", response["data"]["token"]);
         })
@@ -43,6 +44,7 @@ const Login = ({ navigation }) => {
         })
         .catch(error => {
           updateLoading(false);
+          console.log(error);
           if (error.message === "Request failed with status code 404") {
             setMessage("User not found");
           } else if (error.message === "Request failed with status code 401") {

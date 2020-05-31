@@ -89,6 +89,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textInput: {
+    borderBottomWidth: 2,
+    height: 30,
     marginTop: 25,
     marginBottom: 30,
   },
