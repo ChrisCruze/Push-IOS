@@ -62,6 +62,7 @@ const Goal = ({ navigation }) => {
         autoStart={false}
         ref={refToConfetti}
         fadeOut={true}
+        fallSpeed={5000}
       />
       <GoalHeader goals_filtered={goals_filtered} back={back} />
       <GoalBarChart goals_filtered={goals_filtered} />
