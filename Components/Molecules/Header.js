@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 8,
     zIndex: 10000,
-    borderBottomLeftRadius: 24,
   },
   innerHeader: {
     marginHorizontal: Theme.spacing.base,
@@ -70,5 +69,8 @@ const styles = StyleSheet.create({
   list: {
     paddingHorizontal: Theme.spacing.small,
   },
+  settings: {
+    color: "#FFFFFF"
+  }
 });
 export default Header;

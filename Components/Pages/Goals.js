@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   Vibration,
   Platform,
+  Text,
 } from "react-native";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
@@ -115,8 +116,8 @@ const Goals = ({ navigation }) => {
     const message = {
       to: expoPushToken,
       sound: "default",
-      title: "Original Title",
-      body: "And here is the body!",
+      title: "Push",
+      body: '🏴‍☠️ Arg! Walk the plank',
       data: { data: "goes here" },
       _displayInForeground: true,
     };
@@ -162,18 +163,19 @@ const Goals = ({ navigation }) => {
         sortOrder={sortOrder}
         updateFilter={updateFilter}
       >
-        <View
+        {/*The code below is for testing notifications*/}
+        {/* <View
         style={{
           flex: 1,
           alignItems: 'center',
           justifyContent: 'space-around',
         }}>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Text>Origin: {this.state.notification.origin}</Text>
-          <Text>Data: {JSON.stringify(this.state.notification.data)}</Text>
+          <Text>Origin: {notification.origin}</Text>
+          <Text>Data: {JSON.stringify(notification.data)}</Text>
         </View>
-        <Button title={'Press to Send Notification'} onPress={() => this.sendPushNotification()} />
-      </View>
+        <Button title={'Press to Send Notification'} onPress={() => sendPushNotification()} />
+      </View> */}
         <FlatList
           bounces={false}
           showsVerticalScrollIndicator={false}

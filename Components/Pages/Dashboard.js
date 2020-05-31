@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Dimensions, FlatList, TouchableOpacity, Image } from "react-native";
+import { View, StyleSheet, Dimensions, FlatList, TouchableOpacity, Image, Text } from "react-native";
 import Constants from "expo-constants";
 import Theme from "../Atoms/Theme";
 import Header from "../Molecules/Header";
@@ -50,9 +50,9 @@ const Dashboard = ({ navigation }) => {
   let data =goals_count_by_day_array.map(data => data.count)
   return (
     <View style={styles.container}>
-      <Header title={"Dashboard"} sub_title={"Today"} logout={logout} />
+      <Header title={"Dashboard"} sub_title={"Today"} logout={logout} logout_text={"Logout"} />
       {/* <BarChart chartData={goals_count_by_day_array} /> */}
-      {/* <LineChart
+      <LineChart
       data={{
         labels: goals_count_by_day_array.map(data => data.date),
         datasets: [
@@ -67,10 +67,10 @@ const Dashboard = ({ navigation }) => {
       chartConfig={{
         backgroundColor: "#FFFFFF",
         decimalPlaces: 0, // optional, defaults to 2dp
-        color: (opacity = 1) => `rgba(25, 215, 155, ${opacity})`,
+        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         style: {
-          borderRadius: 16
+          borderRadius: 16,
         },
         propsForDots: {
           r: "6",
@@ -79,9 +79,9 @@ const Dashboard = ({ navigation }) => {
         }
       }}
       bezier
-    ></LineChart> */}
+    ></LineChart>
 
-        <ProgressCircle
+        {/* <ProgressCircle
             percent={30}
             radius={100}
             borderWidth={20}
@@ -91,36 +91,8 @@ const Dashboard = ({ navigation }) => {
             alignSelf="center"
         >
             <Text style={{ fontSize: 24 }}>{'30%'}</Text>
-        </ProgressCircle>
+        </ProgressCircle> */}
 
-
-    {/* <StackedBarChart
-      data={{
-        labels:  goals_count_by_day_array.map(data => data.date),
-        data: [[60, 60, 60], [30, 30, 60]],
-        barColors: ["#dfe4ea", "#ced6e0", "#a4b0be"]
-      }}
-      width={Dimensions.get("window").width}
-      height={256}
-      chartConfig={{
-        backgroundColor: "#e26a00",
-        backgroundGradientFrom: "#fb8c00",
-        backgroundGradientTo: "#ffa726",
-        decimalPlaces: 2, // optional, defaults to 2dp
-        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        style: {
-          borderRadius: 16
-        },
-        propsForDots: {
-          r: "6",
-          strokeWidth: "2",
-          stroke: "#ffa726"
-        }
-      }}
-      showLegend={false}
-    /> */}
-    {/* {console.log(goals_count_by_day_array, goals, goals_count_by_day_array_chunked)} */}
       <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
       <DashboardTimeStamps timeStamps={timeStamps} navigation={navigation} />
     </View>

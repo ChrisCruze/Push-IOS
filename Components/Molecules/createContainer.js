@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   content: {
     padding: Theme.spacing.base,
     marginBottom: 50,
-    marginTop: 150,
+    marginTop: 50,
   },
   innerContent: {
     // height: height - Theme.spacing.base,

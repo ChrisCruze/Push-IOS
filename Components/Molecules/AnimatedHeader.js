@@ -249,5 +249,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+  settings: {
+    color: "#ffffff",
+  }
 });
 export default AnimatedHeader;
