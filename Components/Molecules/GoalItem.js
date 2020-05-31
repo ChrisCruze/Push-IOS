@@ -49,7 +49,7 @@ const GoalItem = ({
   updateGoal,
   removeGoal,
   refetch,
-  confetti,
+  goalsListConfetti,
 }) => {
   const totalCount = GoalCountGet({ goals, id });
   const lastTimeStamp = GoalLastTimeStamp({ goals, id });
@@ -73,7 +73,7 @@ const GoalItem = ({
     });
     Vibration.vibrate();
     refetch();
-    confetti();
+    goalsListConfetti();
   };
   const deleteGoalPress = () => {
     removeGoal({ variables: { _id } });

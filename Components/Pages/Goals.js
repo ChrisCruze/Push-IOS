@@ -175,7 +175,7 @@ const Goals = ({ navigation }) => {
               updateGoal,
               removeGoal,
               refetch,
-              confetti: () => refToConfetti.current.start(),
+              goalsListConfetti: () => refToConfetti.current.start(),
             });
           }}
           ListEmptyComponent={
