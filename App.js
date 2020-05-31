@@ -10,7 +10,6 @@ import Goals from "./Components/Pages/Goals";
 import ForgotPassword from "./Components/Pages/ForgotPassword";
 import Dashboard from "./Components/Pages/Dashboard";
 import editGoal from "./Components/Pages/editGoal";
-
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import { Feather } from "@expo/vector-icons";
@@ -19,7 +18,6 @@ import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import { ApolloProvider } from "@apollo/react-hooks";
-
 import { APIClient } from "./API";
 
 const SFProTextMedium = require("./assets/fonts/SF-Pro-Text-Medium.otf");
@@ -56,7 +54,6 @@ class App extends React.Component {
   }
   async loadStaticResources() {
     try {
-      // const images = Images.downloadAsync();
       const images = [require("./assets/images/logo.jpg")];
       const cacheImages = images.map(image => {
         return Asset.fromModule(image).downloadAsync();
@@ -73,7 +70,6 @@ class App extends React.Component {
       });
       const icons = Font.loadAsync(Feather.font);
       await Promise.all([...cacheImages, fonts, icons]);
-      // await Promise.all([fonts, icons]);
     } catch (error) {
       console.error(error);
     }
@@ -124,7 +120,5 @@ const AppNavigator = createAppContainer(
     StackNavigatorOptions,
   ),
 );
-
-export { AppNavigator };
 
 export default App;

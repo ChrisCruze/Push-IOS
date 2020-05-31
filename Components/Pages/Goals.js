@@ -4,8 +4,6 @@ import {
   StyleSheet,
   Dimensions,
   FlatList,
-  TouchableOpacity,
-  Image,
   TouchableWithoutFeedback,
   Vibration,
   Platform,
@@ -15,12 +13,7 @@ import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
 import { Feather as Icon } from "@expo/vector-icons";
 import Theme from "../Atoms/Theme";
-import Text from "../Atoms/Text";
-import Images from "../Atoms/Images";
-import FirstPost from "../Atoms/FirstPost";
 import GoalItem from "../Molecules/GoalItem";
-import Header from "../Molecules/Header";
-import moment from "moment";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
 import { AsyncStorage } from "react-native";
 import { NavigationEvents } from "react-navigation";

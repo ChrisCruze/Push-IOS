@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Vibration } from "react-native";
-import APIStore from "../Atoms/APIStore";
-import GoalComponent from "../Atoms/GoalComponent";
+import { Vibration } from "react-native";
+
 import moment from "moment";
-import GoalButton from "../Atoms/GoalButton";
 import GoalListItem from "../Atoms/GoalListItem";
 import _ from "lodash";
 import { determineOverDue } from "../Atoms/BarChart.functions.js";
