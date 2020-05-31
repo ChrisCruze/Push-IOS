@@ -103,7 +103,7 @@ export const goals_data_last_n_days_from_transformed_goals_array = ({ goals, num
 
 const background_color_attribute_add_based_on_count = array => {
   return _.map(array, D => {
-    return { ...D, backgroundColor: D.count == 0 ? "#ebedf0" : "#00ff00" };
+    return { ...D, color: D.count == 0 ? "black" : "white", backgroundColor: D.count == 0 ? "#ebedf0" : "black" };
   });
 };
 export const goals_data_last_n_days_from_transformed_goals_array_chunked = ({

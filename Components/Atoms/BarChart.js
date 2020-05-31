@@ -10,7 +10,7 @@ const BarChart = ({ chartData, x, y }) => {
         x={x || "date"}
         y={y || "count"}
         style={{
-          data: { fill: "#006bb6" },
+          data: { fill: "black" },
         }}
       />
       <VictoryAxis />

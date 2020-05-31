@@ -64,11 +64,11 @@ const GoalButtonFront = ({
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 0,
-        duration: 800,
+        duration: 100,
       }),
       Animated.timing(moveAnim, {
         toValue: 20,
-        duration: 800,
+        duration: 100,
       }),
     ]).start(() => {
       Animated.timing(moveAnim, {
