@@ -12,6 +12,16 @@ import BarChart from "../Atoms/BarChart";
 import { AsyncStorage } from "react-native";
 import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
 import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
+import ProgressCircle from 'react-native-progress-circle';
+
+import {
+  LineChart,
+  // BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart
+} from "react-native-chart-kit";
 
 import { useGoalsPull } from "../../API";
 const Dashboard = ({ navigation }) => {
@@ -37,10 +47,80 @@ const Dashboard = ({ navigation }) => {
       chunk_size: 7,
     },
   );
+  let data =goals_count_by_day_array.map(data => data.count)
   return (
     <View style={styles.container}>
       <Header title={"Dashboard"} sub_title={"Today"} logout={logout} />
-      <BarChart chartData={goals_count_by_day_array} />
+      {/* <BarChart chartData={goals_count_by_day_array} /> */}
+      {/* <LineChart
+      data={{
+        labels: goals_count_by_day_array.map(data => data.date),
+        datasets: [
+          {
+            data: goals_count_by_day_array.map(data => data.count)
+          }
+        ]
+      }}
+      width={Dimensions.get("window").width}
+      height={256}
+      verticalLabelRotation={30}
+      chartConfig={{
+        backgroundColor: "#FFFFFF",
+        decimalPlaces: 0, // optional, defaults to 2dp
+        color: (opacity = 1) => `rgba(25, 215, 155, ${opacity})`,
+        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+        style: {
+          borderRadius: 16
+        },
+        propsForDots: {
+          r: "6",
+          strokeWidth: "2",
+          stroke: "#FFFFFF"
+        }
+      }}
+      bezier
+    ></LineChart> */}
+
+        <ProgressCircle
+            percent={30}
+            radius={100}
+            borderWidth={20}
+            color="#3399FF"
+            shadowColor="#999"
+            bgColor="#fff"
+            alignSelf="center"
+        >
+            <Text style={{ fontSize: 24 }}>{'30%'}</Text>
+        </ProgressCircle>
+
+
+    {/* <StackedBarChart
+      data={{
+        labels:  goals_count_by_day_array.map(data => data.date),
+        data: [[60, 60, 60], [30, 30, 60]],
+        barColors: ["#dfe4ea", "#ced6e0", "#a4b0be"]
+      }}
+      width={Dimensions.get("window").width}
+      height={256}
+      chartConfig={{
+        backgroundColor: "#e26a00",
+        backgroundGradientFrom: "#fb8c00",
+        backgroundGradientTo: "#ffa726",
+        decimalPlaces: 2, // optional, defaults to 2dp
+        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+        style: {
+          borderRadius: 16
+        },
+        propsForDots: {
+          r: "6",
+          strokeWidth: "2",
+          stroke: "#ffa726"
+        }
+      }}
+      showLegend={false}
+    /> */}
+    {/* {console.log(goals_count_by_day_array, goals, goals_count_by_day_array_chunked)} */}
       <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
       <DashboardTimeStamps timeStamps={timeStamps} navigation={navigation} />
     </View>

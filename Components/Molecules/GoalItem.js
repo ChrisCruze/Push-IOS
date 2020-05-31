@@ -18,6 +18,9 @@ const GoalCountGet = ({ goals, id }) => {
     goals.find(function(D) {
       return D["id"] == id;
     })["timeStamps"] || [];
+    console.log(goals_filtered);
+    // filter for todays goals
+    goals_filtered.map(date => moment(date).isSame(moment(), 'day')?date:null)
   const totalCount = goals_filtered.length;
   return totalCount;
 };

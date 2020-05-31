@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   View,
+  Button,
   StyleSheet,
   Dimensions,
   FlatList,
@@ -136,6 +137,8 @@ const Goals = ({ navigation }) => {
     registerForPushNotificationsAsync();
     notificationSubscription = Notifications.addListener(_handleNotification);
     console.log(notificationSubscription);
+    //update goal timestamp
+    //update daily push value
   }, []);
   const createNewGoal = () => {
     navigation.navigate("createGoal");
@@ -159,6 +162,18 @@ const Goals = ({ navigation }) => {
         sortOrder={sortOrder}
         updateFilter={updateFilter}
       >
+        <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'space-around',
+        }}>
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <Text>Origin: {this.state.notification.origin}</Text>
+          <Text>Data: {JSON.stringify(this.state.notification.data)}</Text>
+        </View>
+        <Button title={'Press to Send Notification'} onPress={() => this.sendPushNotification()} />
+      </View>
         <FlatList
           bounces={false}
           showsVerticalScrollIndicator={false}
