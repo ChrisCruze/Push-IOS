@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   subheader: {
-    backgroundColor: Theme.palette.background, // Theme.palette.background, //"white",
+    backgroundColor: "#FFF9FD", // Theme.palette.background, // Theme.palette.background, //"white",
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
@@ -241,6 +241,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 8,
     zIndex: 10000,
+    borderBottomLeftRadius: 25,
   },
   innerHeader: {
     marginHorizontal: Theme.spacing.base,
