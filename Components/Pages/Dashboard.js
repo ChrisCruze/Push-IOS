@@ -13,6 +13,7 @@ import { AsyncStorage } from "react-native";
 import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
 import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
 import ProgressCircle from 'react-native-progress-circle';
+import { Dropdown } from "react-native-material-dropdown";
 
 import {
   LineChart,
@@ -24,7 +25,21 @@ import {
 } from "react-native-chart-kit";
 
 import { useGoalsPull } from "../../API";
+
+
 const Dashboard = ({ navigation }) => {
+
+  let dropdownData = [
+    {
+      value: "Bar Chart",
+    },
+    {
+      value: "Line Chart",
+    },
+  ];
+
+  const [selectedValue, setSelectedValue] = useState('');
+
   const logout = () => {
     AsyncStorage.setItem("token", "")
       .then(() => AsyncStorage.setItem("token_created_date", ""))
@@ -51,7 +66,9 @@ const Dashboard = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Header title={"Dashboard"} sub_title={"Today"} logout={logout} logout_text={"Logout"} />
-      {/* <BarChart chartData={goals_count_by_day_array} /> */}
+      {
+        selectedValue==="Bar Chart"?
+      <BarChart chartData={goals_count_by_day_array} />:
       <LineChart
       data={{
         labels: goals_count_by_day_array.map(data => data.date),
@@ -80,6 +97,7 @@ const Dashboard = ({ navigation }) => {
       }}
       bezier
     ></LineChart>
+}
 
         {/* <ProgressCircle
             percent={30}
@@ -92,9 +110,10 @@ const Dashboard = ({ navigation }) => {
         >
             <Text style={{ fontSize: 24 }}>{'30%'}</Text>
         </ProgressCircle> */}
-
+      <Dropdown label="Chart Type" data={dropdownData} value={selectedValue} onChangeText={setSelectedValue} />
       <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
       <DashboardTimeStamps timeStamps={timeStamps} navigation={navigation} />
+      
     </View>
   );
 };
