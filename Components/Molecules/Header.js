@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
     elevation: 8,
-    zIndex: 10000,
   },
   innerHeader: {
     marginHorizontal: Theme.spacing.base,

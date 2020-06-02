@@ -15,7 +15,7 @@ const GoalOptionsPress = ({ id, navigation, goals }) => {
 
 const GoalCountGet = ({ goals, id }) => {
   const goals_filtered =
-    goals.find(function(D) {
+    goals.find(function (D) {
       return D["id"] == id;
     })["timeStamps"] || [];
     // filter for todays goals
@@ -26,10 +26,10 @@ const GoalCountGet = ({ goals, id }) => {
 
 const GoalLastTimeStamp = ({ goals, id }) => {
   const goals_filtered =
-    goals.find(function(D) {
+    goals.find(function (D) {
       return D["id"] == id;
     })["timeStamps"] || [];
-  const lastTimeStamp = _.max(goals_filtered, function(timeStamp) {
+  const lastTimeStamp = _.max(goals_filtered, function (timeStamp) {
     return moment(timeStamp).unix();
   });
   return lastTimeStamp;
@@ -51,6 +51,7 @@ const GoalItem = ({
   updateGoal,
   removeGoal,
   refetch,
+  goalsListConfetti,
 }) => {
   const totalCount = GoalCountGet({ goals, id });
   const lastTimeStamp = GoalLastTimeStamp({ goals, id });
@@ -74,6 +75,7 @@ const GoalItem = ({
     });
     Vibration.vibrate();
     refetch();
+    goalsListConfetti();
   };
   const deleteGoalPress = () => {
     removeGoal({ variables: { _id } });
