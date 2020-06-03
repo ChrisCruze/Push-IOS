@@ -93,6 +93,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 5,
     elevation: 8,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
   },
   container: {
     alignItems: "center",

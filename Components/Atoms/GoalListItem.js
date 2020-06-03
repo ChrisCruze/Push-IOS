@@ -44,9 +44,17 @@ const GoalButtonBack = ({ deleteGoal, navigateToGoal }) => {
   );
 };
 
+const calculatePercentage = (totalCount, cadence) => {
+  const percentage = totalCount / cadence;
+
+  const percentageFormatted = (percentage * 100).toFixed(0);
+  return percentageFormatted + "%";
+};
+
 const GoalButtonFront = ({
   text,
   totalCount,
+  cadenceCount,
   cadence,
   pushGoal,
   lastTimeStampMessage,
@@ -100,12 +108,15 @@ const GoalButtonFront = ({
                 { textDecorationColor: color, color: color, opacity: fadeAnim, bottom: moveAnim },
               ]}
             >
-              {totalCount}/{cadence}
+              {calculatePercentage(totalCount, cadenceCount)}
             </Animated.Text>
           </View>
         </View>
         <View style={styles.botRow}>
-          <Text style={styles.duration}>Last Updated: {lastTimeStampMessage}</Text>
+          <Text style={styles.duration}>{lastTimeStampMessage}</Text>
+          <Text style={styles.duration}>
+            {totalCount} / {cadenceCount} ({cadence})
+          </Text>
         </View>
       </Neomorph>
     </TouchableWithoutFeedback>
@@ -117,6 +128,7 @@ const GoalListItem = ({
   pushGoal,
   totalCount,
   cadence,
+  cadenceCount,
   deleteGoal,
   lastTimeStampMessage,
   is_overdue,
@@ -146,6 +158,7 @@ const GoalListItem = ({
             text={text}
             totalCount={totalCount}
             cadence={cadence}
+            cadenceCount={cadenceCount}
             pushGoal={pushGoal}
             lastTimeStampMessage={lastTimeStampMessage}
             is_overdue={is_overdue}
@@ -217,7 +230,6 @@ const styles = StyleSheet.create({
   },
   duration: {
     color: "#17355A",
-
     fontSize: 12,
     textAlign: "justify",
   },
@@ -234,19 +246,23 @@ const styles = StyleSheet.create({
     marginRight: 10,
     flexDirection: "row",
     flex: 2,
+
     alignSelf: "stretch",
     textAlign: "left",
   },
   botRow: {
     marginTop: 10,
     marginLeft: 20,
+    marginRight: 15,
     fontSize: 14,
     fontWeight: "bold",
     flex: 2,
+    justifyContent: "space-between",
+    alignItems: "center",
     flexDirection: "row",
     alignSelf: "stretch",
-    textAlign: "left",
   },
+
   dash: {
     // borderBottomWidth: 3,
   },

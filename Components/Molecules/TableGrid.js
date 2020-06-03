@@ -24,13 +24,9 @@ const TableGrid = ({ list_of_lists }) => {
 const styles = StyleSheet.create({
   row_container: {
     flexDirection: "row",
-    justifyContent: "center",
-  },
-  cell_container: {
-    backgroundColor: "#ebedf0",
-    margin: 2,
-    height: 20,
-    width: 20,
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginHorizontal: 50,
   },
 });
 export default TableGrid;

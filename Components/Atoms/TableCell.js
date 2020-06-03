@@ -5,15 +5,15 @@ const TableCell = ({ cell }) => {
   return (
     <View
       style={{
-        backgroundColor: cell.backgroundColor|| "#ebedf0",
-        
+        backgroundColor: cell.backgroundColor || "#ebedf0",
+
         margin: 2,
         height: 20,
-        width: 20,
+        width: 30,
         alignItems: "center",
       }}
     >
-      <Text style={{color: cell.color|| "#ebedf0",}}>{cell.count > 0 ? cell.count : "-"}</Text>
+      <Text style={{ color: cell.color || "#ebedf0" }}>{cell.count > 0 ? cell.count : "-"}</Text>
     </View>
   );
 };
