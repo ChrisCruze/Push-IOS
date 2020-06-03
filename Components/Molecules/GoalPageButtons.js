@@ -12,6 +12,7 @@ const GoalPageButtons = ({
   cadenceCount,
   timeStamps,
   refetch,
+  goalDetailsConfetti,
 }) => {
   const { removeGoal } = useGoalDelete();
   const { updateGoal } = useGoalUpdate();
@@ -36,6 +37,7 @@ const GoalPageButtons = ({
       },
     });
     refetch();
+    goalDetailsConfetti();
   };
 
   return (
