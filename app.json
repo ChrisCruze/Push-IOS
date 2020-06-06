@@ -23,7 +23,7 @@
     },
     "android": {
       "package": "com.push.xyz",
-      "versionCode": 1
+      "versionCode": 6
     },
     "description": "Push your way to success"
   }
