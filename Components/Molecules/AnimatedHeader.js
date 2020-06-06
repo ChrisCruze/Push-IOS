@@ -214,16 +214,16 @@ const AnimatedHeader = ({
     <View style={styles.container}>
       <AnimatedSafeAreaView style={[styles.header, { shadowOpacity: 0 }]}>
         <Animated.View
-          style={[styles.innerHeader, { height: Platform.OS === "android" ? 70 : 80 }]}
+          style={[styles.innerHeader, { height: Platform.OS === "android" ? 120 : 80 }]}
         >
           <View>
-            <TouchableOpacity onPress={logout} style={styles.settings}>
+            {/* <TouchableOpacity onPress={logout} style={[styles.settings,{ zIndex: 20000}]}>
               <View>
                 <Animated.Text
                   style={{
                     color: "white",
                     position: "absolute",
-                    top: 0,
+                    top: Platform.OS === "android" ? 30 : 30,
                     right: 10,
 
                     opacity,
@@ -233,11 +233,12 @@ const AnimatedHeader = ({
                   {logout_text}
                 </Animated.Text>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <AnimatedText
               type="header2"
               style={{
                 fontSize: 36,
+          
                 marginTop: 24,
                 color: "white",
                 width: Dimensions.get("window").width * 0.9,
@@ -247,6 +248,12 @@ const AnimatedHeader = ({
             </AnimatedText>
             <AnimatedSubHeaderTimeInterval filter={filter} updateFilter={updateFilter} />
           </View>
+          <TouchableOpacity onPress={logout} style={[styles.settings,{right: 60}]}>
+          <View>
+            <Text style={{ color: "white" }}>{logout_text}</Text>
+          </View>
+        </TouchableOpacity>
+
         </Animated.View>
       </AnimatedSafeAreaView>
       {showDetailHeader ? (
