@@ -53,14 +53,14 @@ const editGoal = ({ navigation }) => {
       title="Edit Goal"
       subtitle="Let's push"
       back={() => navigation.navigate("Goals")}
-      nextLabel="Push"
+      nextLabel="Update"
       next={pressNextSubmit}
       first
       {...{ navigation }}
     >
       <TextField
         style={styles.textInput}
-        placeholder="Edit goal"
+        placeholder="Title"
         keyboardType="default"
         autoCapitalize="none"
         returnKeyType="next"
@@ -70,8 +70,8 @@ const editGoal = ({ navigation }) => {
       />
       <TextField
         style={styles.textInput}
-        placeholder="Enter Cadence Goal"
-        keyboardType="default"
+        placeholder="Frequency Count"
+        keyboardType="numeric"
         autoCapitalize="none"
         returnKeyType="next"
         value={String(cadenceValue)}
@@ -79,7 +79,12 @@ const editGoal = ({ navigation }) => {
         contrast
       />
 
-      <Dropdown label="Cadence" data={data} value={selectedValue} onChangeText={setSelectedValue} />
+      <Dropdown
+        label="Frequency"
+        data={data}
+        value={selectedValue}
+        onChangeText={setSelectedValue}
+      />
     </CreateContainer>
   );
 };

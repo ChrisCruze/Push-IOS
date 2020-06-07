@@ -62,7 +62,7 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
       />
       <TextField
         style={styles.textInput}
-        placeholder="Cadence Count"
+        placeholder="Frequency Count"
         keyboardType="numeric"
         autoCapitalize="none"
         returnKeyType="next"
@@ -70,7 +70,12 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
         value={cadenceValue}
         contrast
       />
-      <Dropdown label="Cadence" data={data} value={selectedValue} onChangeText={setSelectedValue} />
+      <Dropdown
+        label="Frequency"
+        data={data}
+        value={selectedValue}
+        onChangeText={setSelectedValue}
+      />
     </CreateContainer>
   );
 };
