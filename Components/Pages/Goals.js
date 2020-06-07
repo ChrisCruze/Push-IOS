@@ -21,46 +21,18 @@ import { AsyncStorage } from "react-native";
 import { NavigationEvents } from "react-navigation";
 import AnimatedHeader from "../Molecules/AnimatedHeader";
 import _ from "lodash";
-import { determineOverDue } from "../Atoms/BarChart.functions";
 import Confetti from "../Molecules/Confetti";
-
-const GoalsSort = ({ goals }) => {
-  const [sortOrder, updateSortOrder] = useState("none");
-  const goals_copy = [...goals];
-
-  if (sortOrder == "none") {
-    var sorted_goals = goals_copy;
-    return { sorted_goals, updateSortOrder, sortOrder };
-  } else if (sortOrder == "asc") {
-    var sorted_goals = _.sortBy(goals_copy, function (D) {
-      return D["timeStamps"].length;
-    });
-    return { sorted_goals, updateSortOrder, sortOrder };
-  } else {
-    var sorted_goals = _.sortBy(goals_copy, function (D) {
-      return D["timeStamps"].length * -1;
-    });
-    return { sorted_goals, updateSortOrder, sortOrder };
-  }
-};
+import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
 
 const GoalsFilter = ({ goals }) => {
-  const [filter, updateFilter] = useState("all");
-  const goals_copy = [...goals];
+  const [filter, updateFilter] = useState({ state: "all", cadence: "all" });
 
-  if (filter == "all") {
-    return { filtered_goals: goals, updateFilter, filter };
-  } else if (filter == "incomplete") {
-    var filtered_goals = goals.filter(function (D) {
-      return determineOverDue({ ...D, goals });
-    });
-    return { filtered_goals, updateFilter, filter };
-  } else if (filter == "complete") {
-    var filtered_goals = goals.filter(function (D) {
-      return !determineOverDue({ ...D, goals });
-    });
-    return { filtered_goals, updateFilter, filter };
-  }
+  const filtered_state_goals = GoalsFilterState({ goals, state: filter.state });
+  const filtered_cadence_goals = GoalsFilterCadence({
+    goals: filtered_state_goals,
+    cadence: filter.cadence,
+  });
+  return { filtered_goals: filtered_cadence_goals, updateFilter, filter };
 };
 
 const Goals = ({ navigation }) => {
@@ -71,7 +43,7 @@ const Goals = ({ navigation }) => {
   };
 
   const { goals, refetch } = useGoalsPull();
-  const { filtered_goals, updateFilter } = GoalsFilter({ goals });
+  const { filtered_goals, updateFilter, filter } = GoalsFilter({ goals });
   const { sorted_goals, updateSortOrder, sortOrder } = GoalsSort({ goals: filtered_goals });
 
   const { updateGoal } = useGoalUpdate();
@@ -164,6 +136,7 @@ const Goals = ({ navigation }) => {
         updateSortOrder={updateSortOrder}
         sortOrder={sortOrder}
         updateFilter={updateFilter}
+        filter={filter}
       >
         {/*The code below is for testing notifications*/}
         {/* <View
