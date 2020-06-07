@@ -101,27 +101,15 @@ const AnimatedSubHeader = ({
   filter,
 }) => {
   const [fadeAnim] = useState(new Animated.Value(0));
-  const transformOpacity = scrollAnimation.interpolate({
-    inputRange: [0, 60],
-    outputRange: [1, 0],
-    extrapolate: "clamp",
-  });
-
-  const transformY = scrollAnimation.interpolate({
-    inputRange: [0, 60],
-    outputRange: [0, -30],
-    extrapolate: "clamp",
-  });
 
   useEffect(() => {
     Animated.timing(fadeAnim, { toValue: 1, duration: 1000 }).start();
   }, []);
-
   return (
     <AnimatedSafeAreaView
       style={[
         styles.subheader,
-        { opacity: transformOpacity, transform: [{ translateY: transformY }] }, //translateY: transformY
+        { opacity: 1, transform: [{ translateY: 0 }] }, //translateY: transformY
       ]}
     >
       <Animated.View style={[styles.innerSubHeader, { opacity: fadeAnim }]}>
@@ -192,15 +180,8 @@ const AnimatedHeader = ({
   sortOrder,
   updateFilter,
   filter,
-  sorted_goals,
-  GoalItem,
-  navigation,
-  updateGoal,
-  removeGoal,
-  refToConfetti,
-  createNewGoal,
+  scrollAnimation,
 }) => {
-  const [scrollAnimation] = React.useState(new Animated.Value(0));
   const [showDetailHeader, updateShowDetailHeader] = useState(false);
   scrollAnimation.addListener(({ value }) => {
     if (value < -20) {
@@ -247,40 +228,10 @@ const AnimatedHeader = ({
           </TouchableOpacity>
         </Animated.View>
       </AnimatedSafeAreaView>
-      {showDetailHeader ? (
-        <AnimatedSubHeader
-          {...{ scrollAnimation, goals, refetch, updateSortOrder, sortOrder, updateFilter, filter }}
-        />
-      ) : null}
-
-      <AnimatedFlatList
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: { contentOffset: { y: scrollAnimation } },
-            },
-          ],
-          {
-            useNativeDriver: true,
-          },
-        )}
-        bounces={false}
-        showsVerticalScrollIndicator={false}
-        style={styles.list}
-        data={sorted_goals}
-        keyExtractor={goal => goal.id}
-        renderItem={({ item }) => {
-          return GoalItem({
-            ...item,
-            navigation,
-            goals,
-            updateGoal,
-            removeGoal,
-            refetch,
-            goalsListConfetti: () => refToConfetti.current.start(),
-          });
-        }}
+      <AnimatedSubHeader
+        {...{ scrollAnimation, goals, refetch, updateSortOrder, sortOrder, updateFilter, filter }}
       />
+      {children}
     </View>
   );
 };

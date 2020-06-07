@@ -3,6 +3,7 @@ import {
   View,
   StyleSheet,
   Dimensions,
+  Animated,
   FlatList,
   TouchableWithoutFeedback,
   Vibration,
@@ -22,6 +23,8 @@ import _ from "lodash";
 import Confetti from "../Molecules/Confetti";
 import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
 
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+
 const GoalsFilter = ({ goals }) => {
   const [filter, updateFilter] = useState({ state: "all", cadence: "all" });
 
@@ -39,6 +42,7 @@ const Goals = ({ navigation }) => {
       .then(() => AsyncStorage.setItem("token_created_date", ""))
       .then(() => navigation.navigate("Login"));
   };
+  const [scrollAnimation] = React.useState(new Animated.Value(0));
 
   const { goals, refetch, loading, networkStatus } = useGoalsPull();
   const { filtered_goals, updateFilter, filter } = GoalsFilter({ goals });
@@ -133,15 +137,19 @@ const Goals = ({ navigation }) => {
         sortOrder={sortOrder}
         updateFilter={updateFilter}
         filter={filter}
-        sorted_goals={sorted_goals}
-        GoalItem={GoalItem}
-        navigation={navigation}
-        updateGoal={updateGoal}
-        removeGoal={removeGoal}
-        refToConfetti={refToConfetti}
-        createNewGoal={createNewGoal}
+        scrollAnimation={scrollAnimation}
       >
-        <FlatList
+        <AnimatedFlatList
+          onScroll={Animated.event(
+            [
+              {
+                nativeEvent: { contentOffset: { y: scrollAnimation } },
+              },
+            ],
+            {
+              useNativeDriver: true,
+            },
+          )}
           bounces={false}
           showsVerticalScrollIndicator={false}
           style={styles.list}
@@ -158,13 +166,6 @@ const Goals = ({ navigation }) => {
               goalsListConfetti: () => refToConfetti.current.start(),
             });
           }}
-          ListEmptyComponent={
-            <View style={styles.post}>
-              <TouchableWithoutFeedback onPress={createNewGoal}>
-                <Icon name="plus-circle" color={Theme.palette.primary} size={25} />
-              </TouchableWithoutFeedback>
-            </View>
-          }
         />
       </AnimatedHeader>
       <Confetti ref={refToConfetti} />
