@@ -20,6 +20,7 @@ import {
   GoalsFilterCadence,
 } from "../Atoms/BarChart.functions";
 import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
+import LoadingIndicator from "../Atoms/LoadingIndicator";
 
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);

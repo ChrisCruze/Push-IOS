@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import {
   View,
   StyleSheet,
   Dimensions,
   Animated,
   FlatList,
-  TouchableWithoutFeedback,
   Vibration,
   Platform,
 } from "react-native";
@@ -22,6 +21,7 @@ import AnimatedHeader from "../Molecules/AnimatedHeader";
 import _ from "lodash";
 import Confetti from "../Molecules/Confetti";
 import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
+import AnimatedLoading from "../Molecules/AnimatedLoading";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
@@ -43,7 +43,6 @@ const Goals = ({ navigation }) => {
       .then(() => navigation.navigate("Login"));
   };
   const [scrollAnimation] = React.useState(new Animated.Value(0));
-
   const { goals, refetch, loading, networkStatus } = useGoalsPull();
   const { filtered_goals, updateFilter, filter } = GoalsFilter({ goals });
   const { sorted_goals, updateSortOrder, sortOrder } = GoalsSort({ goals: filtered_goals });
@@ -66,7 +65,6 @@ const Goals = ({ navigation }) => {
         return;
       }
       let token = await Notifications.getExpoPushTokenAsync();
-      console.log(token);
       setExpoPushToken(token);
     } else {
       // alert("Must use physical device for Push Notifications");
@@ -112,7 +110,6 @@ const Goals = ({ navigation }) => {
   useEffect(() => {
     registerForPushNotificationsAsync();
     notificationSubscription = Notifications.addListener(_handleNotification);
-    console.log(notificationSubscription);
   }, []);
   const createNewGoal = () => {
     navigation.navigate("createGoal");
@@ -139,34 +136,38 @@ const Goals = ({ navigation }) => {
         filter={filter}
         scrollAnimation={scrollAnimation}
       >
-        <AnimatedFlatList
-          onScroll={Animated.event(
-            [
+        <Fragment>
+          <AnimatedLoading scrollAnimation={scrollAnimation} loading={loading} refetch={refetch} />
+          <AnimatedFlatList
+            onScroll={Animated.event(
+              [
+                {
+                  nativeEvent: { contentOffset: { y: scrollAnimation } },
+                },
+              ],
               {
-                nativeEvent: { contentOffset: { y: scrollAnimation } },
+                useNativeDriver: true,
               },
-            ],
-            {
-              useNativeDriver: true,
-            },
-          )}
-          bounces={false}
-          showsVerticalScrollIndicator={false}
-          style={styles.list}
-          data={sorted_goals}
-          keyExtractor={goal => goal.id}
-          renderItem={({ item }) => {
-            return GoalItem({
-              ...item,
-              navigation,
-              goals,
-              updateGoal,
-              removeGoal,
-              refetch,
-              goalsListConfetti: () => refToConfetti.current.start(),
-            });
-          }}
-        />
+            )}
+            refreshing={loading}
+            scrollEventThrottle={16}
+            showsVerticalScrollIndicator={false}
+            style={styles.list}
+            data={sorted_goals}
+            keyExtractor={goal => goal.id}
+            renderItem={({ item }) => {
+              return GoalItem({
+                ...item,
+                navigation,
+                goals,
+                updateGoal,
+                removeGoal,
+                refetch,
+                goalsListConfetti: () => refToConfetti.current.start(),
+              });
+            }}
+          />
+        </Fragment>
       </AnimatedHeader>
       <Confetti ref={refToConfetti} />
     </View>
