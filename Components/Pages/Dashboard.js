@@ -12,6 +12,7 @@ import BarChart from "../Atoms/BarChart";
 import { AsyncStorage } from "react-native";
 import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
 import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
+import NetworkCheckNav from "../Molecules/NetworkCheckNav";
 
 import { useGoalsPull } from "../../API";
 const Dashboard = ({ navigation }) => {
@@ -20,7 +21,9 @@ const Dashboard = ({ navigation }) => {
       .then(() => AsyncStorage.setItem("token_created_date", ""))
       .then(() => navigation.navigate("Login"));
   };
-  const { goals, refetch } = useGoalsPull();
+  const { goals, refetch, networkStatus } = useGoalsPull();
+  NetworkCheckNav({ networkStatus, navigation });
+
   const timeStamps = DataFlattenConvertGoals(goals);
   useEffect(() => {
     refetch();
