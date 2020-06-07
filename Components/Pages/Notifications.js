@@ -1,51 +1,29 @@
 import * as React from "react";
 import CreateContainer from "../Molecules/createContainer";
-import { StyleSheet } from "react-native";
 import { TextField } from "../Atoms/Fields";
 import { Dropdown } from "react-native-material-dropdown";
-
-const Notification = ({ navigation }) => {
-  // const { createGoal } = useGoalCreate();
-  // const [selectedValue, setSelectedValue] = useState("daily");
-  // const [textValue, updateSelectedText] = useState("default");
-  // const [cadenceValue, updateCadenceValue] = useState("0");
-
-  function pressNextSubmit() {
-    navigation.navigate("Goals");
-  }
-
+import {
+  FlatList,
+  Text,
+  StyleSheet,
+  View,
+  Animated,
+  SafeAreaView,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Dimensions,
+} from "react-native";
+const Notifications = ({ navigation }) => {
   return (
-    <CreateContainer
-      title="New Goal"
-      subtitle="Let's push"
-      back={() => navigation.navigate("Goals")}
-      nextLabel="Push"
-      next={pressNextSubmit}
-      onSubmitEditing={createNew}
-      first
-      {...{ navigation }}
-    >
-      <TextField
-        style={styles.textInput}
-        placeholder="Create goal"
-        keyboardType="default"
-        autoCapitalize="none"
-        returnKeyType="next"
-        onChangeText={text => updateSelectedText(text)}
-        contrast
-      />
-      <TextField
-        style={styles.textInput}
-        placeholder="Enter Cadence Goal"
-        keyboardType="default"
-        autoCapitalize="none"
-        returnKeyType="next"
-        onChangeText={text => updateCadenceValue(text)}
-        contrast
-      />
-
-      <Dropdown label="Cadence" data={data} value={selectedValue} onChangeText={setSelectedValue} />
-    </CreateContainer>
+    <SafeAreaView style={styles.container}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          navigation.navigate("Goals");
+        }}
+      >
+        <Text>Go Back </Text>
+      </TouchableWithoutFeedback>
+    </SafeAreaView>
   );
 };
 
@@ -61,4 +39,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Notification;
+export default Notifications;

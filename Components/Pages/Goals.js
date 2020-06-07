@@ -137,6 +137,7 @@ const Goals = ({ navigation }) => {
         updateFilter={updateFilter}
         filter={filter}
         scrollAnimation={scrollAnimation}
+        navigation={navigation}
       >
         <Fragment>
           <AnimatedLoading scrollAnimation={scrollAnimation} loading={loading} refetch={refetch} />

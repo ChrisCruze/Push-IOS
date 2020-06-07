@@ -10,6 +10,8 @@ import Goals from "./Components/Pages/Goals";
 import ForgotPassword from "./Components/Pages/ForgotPassword";
 import Dashboard from "./Components/Pages/Dashboard";
 import editGoal from "./Components/Pages/editGoal";
+import Notifications from "./Components/Pages/Notifications";
+
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import { Feather } from "@expo/vector-icons";
@@ -116,6 +118,7 @@ const AppNavigator = createAppContainer(
       Goal: { screen: Goal },
       createGoal: { screen: createGoal },
       editGoal: { screen: editGoal },
+      Notifications: { screen: Notifications },
     },
     StackNavigatorOptions,
   ),

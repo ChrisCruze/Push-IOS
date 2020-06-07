@@ -21,6 +21,7 @@ import {
 } from "../Atoms/BarChart.functions";
 import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
 import LoadingIndicator from "../Atoms/LoadingIndicator";
+import HeaderButtons from "./HeaderButtons";
 
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
@@ -182,6 +183,7 @@ const AnimatedHeader = ({
   updateFilter,
   filter,
   scrollAnimation,
+  navigation,
 }) => {
   const [showDetailHeader, updateShowDetailHeader] = useState(false);
   scrollAnimation.addListener(({ value }) => {
@@ -202,6 +204,7 @@ const AnimatedHeader = ({
   return (
     <View style={styles.container}>
       <AnimatedSafeAreaView style={[styles.header, { shadowOpacity: 0 }]}>
+        <HeaderButtons navigation={navigation} />
         <Animated.View
           style={[styles.innerHeader, { height: Platform.OS === "android" ? 120 : 80 }]}
         >
