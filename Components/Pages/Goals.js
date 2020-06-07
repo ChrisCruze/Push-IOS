@@ -40,7 +40,7 @@ const Goals = ({ navigation }) => {
       .then(() => navigation.navigate("Login"));
   };
 
-  const { goals, refetch } = useGoalsPull();
+  const { goals, refetch, loading, networkStatus } = useGoalsPull();
   const { filtered_goals, updateFilter, filter } = GoalsFilter({ goals });
   const { sorted_goals, updateSortOrder, sortOrder } = GoalsSort({ goals: filtered_goals });
 
@@ -133,6 +133,13 @@ const Goals = ({ navigation }) => {
         sortOrder={sortOrder}
         updateFilter={updateFilter}
         filter={filter}
+        sorted_goals={sorted_goals}
+        GoalItem={GoalItem}
+        navigation={navigation}
+        updateGoal={updateGoal}
+        removeGoal={removeGoal}
+        refToConfetti={refToConfetti}
+        createNewGoal={createNewGoal}
       >
         <FlatList
           bounces={false}

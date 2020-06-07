@@ -23,6 +23,7 @@ import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
 
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const AnimatedSubHeaderMetrics = ({ goals, updateFilter, filter }) => {
   const filtered_goals = GoalsFilterCadence({ goals, cadence: filter.cadence });
@@ -178,6 +179,7 @@ const AnimatedSubHeaderTimeInterval = ({ filter, updateFilter }) => {
     </View>
   );
 };
+
 const AnimatedHeader = ({
   title,
   sub_title,
@@ -190,6 +192,13 @@ const AnimatedHeader = ({
   sortOrder,
   updateFilter,
   filter,
+  sorted_goals,
+  GoalItem,
+  navigation,
+  updateGoal,
+  removeGoal,
+  refToConfetti,
+  createNewGoal,
 }) => {
   const [scrollAnimation] = React.useState(new Animated.Value(0));
   const [showDetailHeader, updateShowDetailHeader] = useState(false);
@@ -217,28 +226,11 @@ const AnimatedHeader = ({
           style={[styles.innerHeader, { height: Platform.OS === "android" ? 120 : 80 }]}
         >
           <View>
-            {/* <TouchableOpacity onPress={logout} style={[styles.settings,{ zIndex: 20000}]}>
-              <View>
-                <Animated.Text
-                  style={{
-                    color: "white",
-                    position: "absolute",
-                    top: Platform.OS === "android" ? 30 : 30,
-                    right: 10,
-
-                    opacity,
-                    transform: [{ translateY: translateY }],
-                  }}
-                >
-                  {logout_text}
-                </Animated.Text>
-              </View>
-            </TouchableOpacity> */}
             <AnimatedText
               type="header2"
               style={{
                 fontSize: 36,
-          
+
                 marginTop: 24,
                 color: "white",
                 width: Dimensions.get("window").width * 0.9,
@@ -248,12 +240,11 @@ const AnimatedHeader = ({
             </AnimatedText>
             <AnimatedSubHeaderTimeInterval filter={filter} updateFilter={updateFilter} />
           </View>
-          <TouchableOpacity onPress={logout} style={[styles.settings,{right: 60}]}>
-          <View>
-            <Text style={{ color: "white" }}>{logout_text}</Text>
-          </View>
-        </TouchableOpacity>
-
+          <TouchableOpacity onPress={logout} style={[styles.settings, { right: 60 }]}>
+            <View>
+              <Text style={{ color: "white" }}>{logout_text}</Text>
+            </View>
+          </TouchableOpacity>
         </Animated.View>
       </AnimatedSafeAreaView>
       {showDetailHeader ? (
@@ -261,8 +252,8 @@ const AnimatedHeader = ({
           {...{ scrollAnimation, goals, refetch, updateSortOrder, sortOrder, updateFilter, filter }}
         />
       ) : null}
-      <Animated.ScrollView
-        style={styles.scrollView}
+
+      <AnimatedFlatList
         onScroll={Animated.event(
           [
             {
@@ -273,9 +264,23 @@ const AnimatedHeader = ({
             useNativeDriver: true,
           },
         )}
-      >
-        {children}
-      </Animated.ScrollView>
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+        style={styles.list}
+        data={sorted_goals}
+        keyExtractor={goal => goal.id}
+        renderItem={({ item }) => {
+          return GoalItem({
+            ...item,
+            navigation,
+            goals,
+            updateGoal,
+            removeGoal,
+            refetch,
+            goalsListConfetti: () => refToConfetti.current.start(),
+          });
+        }}
+      />
     </View>
   );
 };
@@ -283,6 +288,9 @@ const main_background = "#F17355"; //E0E5EC //"#17355A" //"#F17355"
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  list: {
     flex: 1,
   },
   subheader: {
