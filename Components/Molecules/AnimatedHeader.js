@@ -187,8 +187,6 @@ const AnimatedHeader = ({
   scrollAnimation.addListener(({ value }) => {
     if (value < -20) {
       updateShowDetailHeader(true);
-    } else if (value > 100) {
-      updateShowDetailHeader(false);
     }
   });
   const opacity = scrollAnimation.interpolate({
@@ -229,9 +227,11 @@ const AnimatedHeader = ({
           </TouchableOpacity>
         </Animated.View>
       </AnimatedSafeAreaView>
-      <AnimatedSubHeader
-        {...{ scrollAnimation, goals, refetch, updateSortOrder, sortOrder, updateFilter, filter }}
-      />
+      {showDetailHeader ? (
+        <AnimatedSubHeader
+          {...{ scrollAnimation, goals, refetch, updateSortOrder, sortOrder, updateFilter, filter }}
+        />
+      ) : null}
       {children}
     </View>
   );
