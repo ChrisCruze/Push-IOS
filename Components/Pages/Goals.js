@@ -22,6 +22,7 @@ import _ from "lodash";
 import Confetti from "../Molecules/Confetti";
 import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
 import AnimatedLoading from "../Molecules/AnimatedLoading";
+import NetworkCheckNav from "../Molecules/NetworkCheckNav";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
@@ -44,6 +45,7 @@ const Goals = ({ navigation }) => {
   };
   const [scrollAnimation] = React.useState(new Animated.Value(0));
   const { goals, refetch, loading, networkStatus } = useGoalsPull();
+  NetworkCheckNav({ networkStatus, navigation });
   const { filtered_goals, updateFilter, filter } = GoalsFilter({ goals });
   const { sorted_goals, updateSortOrder, sortOrder } = GoalsSort({ goals: filtered_goals });
 
