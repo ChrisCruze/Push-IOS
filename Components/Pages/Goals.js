@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import {
   View,
+  Button,
   StyleSheet,
   Dimensions,
   Animated,
   FlatList,
   Vibration,
   Platform,
+  Text,
 } from "react-native";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
@@ -91,8 +93,8 @@ const Goals = ({ navigation }) => {
     const message = {
       to: expoPushToken,
       sound: "default",
-      title: "Original Title",
-      body: "And here is the body!",
+      title: "Push",
+      body: '🏴‍☠️ Arg! Walk the plank',
       data: { data: "goes here" },
       _displayInForeground: true,
     };

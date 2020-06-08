@@ -68,5 +68,8 @@ const styles = StyleSheet.create({
   list: {
     paddingHorizontal: Theme.spacing.small,
   },
+  settings: {
+    color: "#FFFFFF"
+  }
 });
 export default Header;

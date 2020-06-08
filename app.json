@@ -25,6 +25,9 @@
       "package": "com.push.xyz",
       "versionCode": 6
     },
-    "description": "Push your way to success"
+    "description": "Push your way to success",
+    "notification": {
+      "icon": "./assets/icon.png"
+    }
   }
 }

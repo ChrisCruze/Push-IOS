@@ -93,10 +93,10 @@ const SignUpNavigator = createStackNavigator(
 
 const Home = createBottomTabNavigator(
   {
-    Dashboard: { screen: Dashboard },
-    createGoal: { screen: createGoal },
-
     Goals: { screen: Goals },
+    createGoal: { screen: createGoal },
+    Dashboard: { screen: Dashboard },
+    
   },
   {
     animationEnabled: true,

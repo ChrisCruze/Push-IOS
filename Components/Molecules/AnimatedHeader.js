@@ -291,5 +291,8 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingHorizontal: 15,
   },
+  settings: {
+    color: "#ffffff",
+  }
 });
 export default AnimatedHeader;

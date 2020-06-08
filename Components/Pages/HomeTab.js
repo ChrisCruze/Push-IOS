@@ -50,9 +50,9 @@ const HomeTabButton = ({ i, current, info }) => {
 const HomeTab = ({ navigation }) => {
   const navigate = i => navigation.navigate(i);
   const tabs = [
-    { label: "Dashboard", icon: "bar-chart" },
+     { label: "Goals", icon: "list" },
     { label: "createGoal", icon: "plus" },
-    { label: "Goals", icon: "list" },
+    { label: "Dashboard", icon: "bar-chart" },
   ];
   const navState = navigation.state;
   const current = navState.index;
