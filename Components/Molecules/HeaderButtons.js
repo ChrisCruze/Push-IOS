@@ -1,135 +1,43 @@
 import React, { useState, useEffect, Fragment } from "react";
 import {
-  FlatList,
-  Text,
   StyleSheet,
   View,
-  Animated,
   SafeAreaView,
-  TouchableOpacity,
   TouchableWithoutFeedback,
-  ScrollView,
-  Dimensions,
+  Modal,
+  TouchableHighlight,
+  Text,
 } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 import Theme from "../Atoms/Theme";
-import {
-  Container,
-  Header,
-  Content,
-  List,
-  ListItem,
-  Left,
-  Right,
-  Button,
-  Body,
-  Item,
-  Input,
-  Card,
-  CardItem,
-} from "native-base";
-import Drawer from "react-native-drawer";
+import SettingsModal from "../Atoms/SettingsModal";
 
-const DrawerContainer = ({ children, drawerState, updateDrawerState, content }) => {
-  return (
-    <Drawer
-      content={content}
-      onClose={() => drawerState._root.close()}
-      ref={ref => {
-        updateDrawerState(ref);
-      }}
-    >
-      {children}
-    </Drawer>
-  );
-};
-
-const Sidebar = ({ Code, Name, Note }) => {
-  return (
-    <View style={[styles.drawerInner]}>
-      <TouchableWithoutFeedback
-        onPress={() => {
-          alert("clsoe");
-        }}
-      >
-        <Text>Close</Text>
-      </TouchableWithoutFeedback>
-      <Card style={{ flex: 0 }}>
-        <CardItem>
-          <Body>
-            <Text>{"test"}</Text>
-            <Text>{"test"}</Text>
-            <Text>{"test"}</Text>
-          </Body>
-        </CardItem>
-      </Card>
-    </View>
-  );
-};
-const ControlPanel = () => {
-  return (
-    <View style={[styles.container]}>
-      <ScrollView style={styles.container}>
-        <Text style={styles.controlText}>Control Panel</Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            alert("hi");
-          }}
-        >
-          <Text>Close Drawer</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
-  );
-};
-const HeaderButtons = ({ navigation }) => {
-  const [drawerState, updateDrawerState] = useState();
+const HeaderButtons = ({ navigation, logout }) => {
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <View style={[]}>
+      <SettingsModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        logout={logout}
+      />
       <SafeAreaView style={[styles.innerHeader]}>
         <TouchableWithoutFeedback
           onPress={() => {
-            drawerState.open();
+            setModalVisible(true);
           }}
         >
           <Icon name={"list"} size={25} {...{ color: "white" }} />
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
-            // drawerState.close();
-
             navigation.navigate("Notifications");
           }}
         >
           <Icon name={"bell"} size={25} {...{ color: "white" }} />
         </TouchableWithoutFeedback>
       </SafeAreaView>
-
-      <Drawer
-        content={<ControlPanel />}
-        tapToClose={true}
-        type="overlay"
-        styles={drawerStyles}
-        onClose={() => drawerState.close()}
-        // openDrawerOffset={200}
-        // tweenHandler={Drawer.tweenPresets.parallax}
-        ref={ref => {
-          updateDrawerState(ref);
-        }}
-      ></Drawer>
-
-      {/* 
-      <DrawerContainer
-        content={<Sidebar />}
-        drawerState={drawerState}
-        updateDrawerState={updateDrawerState}
-      >
-        <View>
-          <Text>test</Text>
-        </View>
-      </DrawerContainer> */}
     </View>
   );
 };
@@ -159,8 +67,5 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
 });
-const drawerStyles = {
-  drawer: { shadowColor: "#000000", shadowOpacity: 0.8, shadowRadius: 3 },
-  main: { paddingLeft: 3 },
-};
+
 export default HeaderButtons;

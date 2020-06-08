@@ -204,7 +204,7 @@ const AnimatedHeader = ({
   return (
     <View style={styles.container}>
       <AnimatedSafeAreaView style={[styles.header, { shadowOpacity: 0 }]}>
-        <HeaderButtons navigation={navigation} />
+        <HeaderButtons navigation={navigation} logout={logout} />
         <Animated.View
           style={[styles.innerHeader, { height: Platform.OS === "android" ? 120 : 80 }]}
         >
