@@ -24,6 +24,9 @@ import {
   StackedBarChart
 } from "react-native-chart-kit";
 
+import NetworkCheckNav from "../Molecules/NetworkCheckNav";
+
+
 import { useGoalsPull } from "../../API";
 
 
@@ -45,7 +48,9 @@ const Dashboard = ({ navigation }) => {
       .then(() => AsyncStorage.setItem("token_created_date", ""))
       .then(() => navigation.navigate("Login"));
   };
-  const { goals, refetch } = useGoalsPull();
+  const { goals, refetch, networkStatus } = useGoalsPull();
+  NetworkCheckNav({ networkStatus, navigation });
+
   const timeStamps = DataFlattenConvertGoals(goals);
   useEffect(() => {
     refetch();
