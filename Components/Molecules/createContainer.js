@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Content } from "native-base";
 import Text from "../Atoms/Text";
 import Button from "../Atoms/Button";
@@ -30,7 +30,6 @@ const CreateContainer = ({ title, subtitle, next, children, nextLabel, back }) =
   );
 };
 
-const { height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   content: {
     padding: Theme.spacing.base,
@@ -38,11 +37,10 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   innerContent: {
-    // height: height - Theme.spacing.base,
     justifyContent: "center",
   },
   innerChildren: {
-    // height:300
+    marginBottom: 50,
   },
 });
 

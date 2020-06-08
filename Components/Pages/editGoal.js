@@ -84,6 +84,7 @@ const editGoal = ({ navigation }) => {
         data={data}
         value={selectedValue}
         onChangeText={setSelectedValue}
+        pickerStyle={{ top: 420, left: 30 }}
       />
     </CreateContainer>
   );

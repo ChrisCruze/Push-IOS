@@ -4,9 +4,9 @@ import CreateContainer from "../Molecules/createContainer";
 import { StyleSheet } from "react-native";
 import { TextField } from "../Atoms/Fields";
 import { Dropdown } from "react-native-material-dropdown";
-import { useGoalsPull, useGoalCreate } from "../../API";
+import { useGoalCreate } from "../../API";
 
-const createGoal = ({ navigation, goToPassword, createNew }) => {
+const createGoal = ({ navigation, createNew }) => {
   const { createGoal } = useGoalCreate();
   const [selectedValue, setSelectedValue] = useState("Daily");
   const [textValue, updateSelectedText] = useState("");
@@ -75,6 +75,7 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
         data={data}
         value={selectedValue}
         onChangeText={setSelectedValue}
+        pickerStyle={{ top: 420, left: 30 }}
       />
     </CreateContainer>
   );
