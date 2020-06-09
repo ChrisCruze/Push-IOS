@@ -55,10 +55,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
     elevation: 8,
+    borderBottomLeftRadius: 25,
   },
   innerHeader: {
     marginHorizontal: Theme.spacing.base,
-    marginVertical: Theme.spacing.tiny,
+    marginVertical: 0,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
