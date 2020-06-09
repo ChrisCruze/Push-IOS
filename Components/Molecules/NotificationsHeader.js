@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   innerHeader: {
     marginHorizontal: Theme.spacing.base,
-    marginVertical: 0,
+    marginVertical: Platform.OS === "android" ? 10 : 0,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
