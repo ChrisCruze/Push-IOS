@@ -10,6 +10,8 @@ import {
   Dimensions,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import Constants from "expo-constants";
+
 const SettingsModal = ({ modalVisible, setModalVisible, logout }) => {
   return (
     <SafeAreaView>
@@ -56,7 +58,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "flex-start",
-    marginTop: 0,
+    marginTop: Constants.statusBarHeight,
     flexDirection: "column",
   },
   modalTitle: {

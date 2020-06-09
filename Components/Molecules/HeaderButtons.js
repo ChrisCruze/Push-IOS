@@ -11,6 +11,7 @@ import {
 import { Feather as Icon } from "@expo/vector-icons";
 import Theme from "../Atoms/Theme";
 import SettingsModal from "../Atoms/SettingsModal";
+import Constants from "expo-constants";
 
 const HeaderButtons = ({ navigation, logout }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -65,6 +66,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "stretch",
     marginBottom: 0,
+    marginTop: Platform.OS === "android" ? Constants.statusBarHeight : 0,
   },
 });
 

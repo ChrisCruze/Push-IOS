@@ -223,11 +223,11 @@ const AnimatedHeader = ({
             </AnimatedText>
             <AnimatedSubHeaderTimeInterval filter={filter} updateFilter={updateFilter} />
           </View>
-          <TouchableOpacity onPress={logout} style={[styles.settings, { right: 60 }]}>
+          {/* <TouchableOpacity onPress={logout} style={[styles.settings, { right: 60 }]}>
             <View>
               <Text style={{ color: "white" }}>{logout_text}</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </Animated.View>
       </AnimatedSafeAreaView>
       {showDetailHeader ? (

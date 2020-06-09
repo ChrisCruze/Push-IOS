@@ -97,7 +97,7 @@ const GoalButtonFront = ({
       <Neomorph
         darkShadowColor={color_shade} //"#D1CDC7" // <- set this
         lightShadowColor="#FFF" //{color_shade} ///
-        style={styles.neomorph}
+        style={[styles.neomorph]}
       >
         <View style={styles.topRow}>
           <Text style={styles.task}>{text}</Text>
@@ -211,6 +211,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.7, // <- and this or yours opacity
     shadowRadius: 7,
     borderRadius: 30,
+
     borderTopColor: "#FFF",
     borderLeftColor: "#FFF",
     borderBottomColor: "#D1CDC7",
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
     height: 95,
     alignItems: "center",
     justifyContent: "center",
-    // borderWidth: 2,
+    borderWidth: Platform.OS === "android" ? 4 : 0,
   },
   task: {
     fontWeight: "bold",
