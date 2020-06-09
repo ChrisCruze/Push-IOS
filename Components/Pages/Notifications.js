@@ -1,7 +1,5 @@
-import * as React from "react";
-import CreateContainer from "../Molecules/createContainer";
-import { TextField } from "../Atoms/Fields";
-import { Dropdown } from "react-native-material-dropdown";
+import React, { useState } from "react";
+
 import {
   FlatList,
   Text,
@@ -13,17 +11,27 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
 } from "react-native";
+import NotificationsHeader from "../Molecules/NotificationsHeader";
+import { useGoalsPull } from "../../API";
+import AnimatedLoading from "../Molecules/AnimatedLoading";
+import NetworkCheckNav from "../Molecules/NetworkCheckNav";
+import NotificationsList from "../Molecules/NotificationsList";
+
 const Notifications = ({ navigation }) => {
+  const { goals, refetch, loading, networkStatus } = useGoalsPull();
+  const [scrollAnimation] = useState(new Animated.Value(0));
+  NetworkCheckNav({ networkStatus, navigation });
+
   return (
-    <SafeAreaView style={styles.container}>
-      <TouchableWithoutFeedback
+    <View style={styles.container}>
+      <NotificationsHeader
         onPress={() => {
           navigation.navigate("Goals");
         }}
-      >
-        <Text>Go Back </Text>
-      </TouchableWithoutFeedback>
-    </SafeAreaView>
+      />
+      <AnimatedLoading scrollAnimation={scrollAnimation} loading={loading} refetch={refetch} />
+      <NotificationsList goals={goals} scrollAnimation={scrollAnimation} />
+    </View>
   );
 };
 
