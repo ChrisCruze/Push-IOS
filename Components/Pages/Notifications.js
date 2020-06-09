@@ -1,51 +1,37 @@
-import * as React from "react";
-import CreateContainer from "../Molecules/createContainer";
-import { StyleSheet } from "react-native";
-import { TextField } from "../Atoms/Fields";
-import { Dropdown } from "react-native-material-dropdown";
+import React, { useState } from "react";
 
-const Notification = ({ navigation }) => {
-  // const { createGoal } = useGoalCreate();
-  // const [selectedValue, setSelectedValue] = useState("daily");
-  // const [textValue, updateSelectedText] = useState("default");
-  // const [cadenceValue, updateCadenceValue] = useState("0");
+import {
+  FlatList,
+  Text,
+  StyleSheet,
+  View,
+  Animated,
+  SafeAreaView,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Dimensions,
+} from "react-native";
+import NotificationsHeader from "../Molecules/NotificationsHeader";
+import { useGoalsPull } from "../../API";
+import AnimatedLoading from "../Molecules/AnimatedLoading";
+import NetworkCheckNav from "../Molecules/NetworkCheckNav";
+import NotificationsList from "../Molecules/NotificationsList";
 
-  function pressNextSubmit() {
-    navigation.navigate("Goals");
-  }
+const Notifications = ({ navigation }) => {
+  const { goals, refetch, loading, networkStatus } = useGoalsPull();
+  const [scrollAnimation] = useState(new Animated.Value(0));
+  NetworkCheckNav({ networkStatus, navigation });
 
   return (
-    <CreateContainer
-      title="New Goal"
-      subtitle="Let's push"
-      back={() => navigation.navigate("Goals")}
-      nextLabel="Push"
-      next={pressNextSubmit}
-      onSubmitEditing={createNew}
-      first
-      {...{ navigation }}
-    >
-      <TextField
-        style={styles.textInput}
-        placeholder="Create goal"
-        keyboardType="default"
-        autoCapitalize="none"
-        returnKeyType="next"
-        onChangeText={text => updateSelectedText(text)}
-        contrast
+    <View style={styles.container}>
+      <NotificationsHeader
+        onPress={() => {
+          navigation.navigate("Goals");
+        }}
       />
-      <TextField
-        style={styles.textInput}
-        placeholder="Enter Cadence Goal"
-        keyboardType="default"
-        autoCapitalize="none"
-        returnKeyType="next"
-        onChangeText={text => updateCadenceValue(text)}
-        contrast
-      />
-
-      <Dropdown label="Cadence" data={data} value={selectedValue} onChangeText={setSelectedValue} />
-    </CreateContainer>
+      <AnimatedLoading scrollAnimation={scrollAnimation} loading={loading} refetch={refetch} />
+      <NotificationsList goals={goals} scrollAnimation={scrollAnimation} />
+    </View>
   );
 };
 
@@ -61,4 +47,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Notification;
+export default Notifications;

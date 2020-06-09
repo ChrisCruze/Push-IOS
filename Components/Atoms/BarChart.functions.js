@@ -179,13 +179,14 @@ export const GoalsSort = ({ goals }) => {
     return { sorted_goals, updateSortOrder, sortOrder };
   } else if (sortOrder == "asc") {
     var sorted_goals = _.sortBy(goals_copy, function(D) {
-      return D["timeStamps"].length;
+      return D["title"];
     });
     return { sorted_goals, updateSortOrder, sortOrder };
   } else {
     var sorted_goals = _.sortBy(goals_copy, function(D) {
-      return D["timeStamps"].length * -1;
+      return D["title"];
     });
+    sorted_goals.reverse();
     return { sorted_goals, updateSortOrder, sortOrder };
   }
 };
