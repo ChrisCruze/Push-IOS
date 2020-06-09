@@ -185,7 +185,7 @@ const AnimatedHeader = ({
   scrollAnimation,
   navigation,
 }) => {
-  const [showDetailHeader, updateShowDetailHeader] = useState(false);
+  const [showDetailHeader, updateShowDetailHeader] = useState(Platform.OS === "android");
   scrollAnimation.addListener(({ value }) => {
     if (value < -20) {
       updateShowDetailHeader(true);
@@ -206,7 +206,7 @@ const AnimatedHeader = ({
       <AnimatedSafeAreaView style={[styles.header, { shadowOpacity: 0 }]}>
         <HeaderButtons navigation={navigation} logout={logout} />
         <Animated.View
-          style={[styles.innerHeader, { height: Platform.OS === "android" ? 120 : 80 }]}
+          style={[styles.innerHeader, { height: Platform.OS === "android" ? 85 : 80 }]}
         >
           <View>
             <AnimatedText
@@ -214,7 +214,7 @@ const AnimatedHeader = ({
               style={{
                 fontSize: 36,
 
-                marginTop: 24,
+                marginTop: Platform.OS === "android" ? 0 : 24,
                 color: "white",
                 width: Dimensions.get("window").width * 0.9,
               }}
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: Platform.OS === "android" ? 5 : 20,
   },
   innerTimeSubHeader: {
     marginHorizontal: 20,
