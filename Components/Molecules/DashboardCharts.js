@@ -39,6 +39,7 @@ const DashboardCharts = ({ goals }) => {
       {selectedValue === "Pie Chart" ? (
         <ProgressCircle
           percent={30}
+          width={Dimensions.get("window").width}
           radius={100}
           borderWidth={20}
           color="#3399FF"
@@ -46,7 +47,7 @@ const DashboardCharts = ({ goals }) => {
           bgColor="#fff"
           alignSelf="center"
         >
-          <Text style={{ fontSize: 24 }}>{"30%"}</Text>
+          <Text style={{ fontSize: 24 }}>{"30% of tasks completed"}</Text>
         </ProgressCircle>
       ) : (
         <LineChart

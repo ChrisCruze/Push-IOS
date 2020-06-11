@@ -1,42 +1,19 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  FlatList,
-  TouchableOpacity,
-  Image,
-  Text,
-} from "react-native";
+import { View, StyleSheet, Dimensions, Animated } from "react-native";
 import Constants from "expo-constants";
 import Theme from "../Atoms/Theme";
 import TableGrid from "../Molecules/TableGrid";
-import {
-  goals_data_last_n_days_from_transformed_goals_array,
-  goals_data_last_n_days_from_transformed_goals_array_chunked,
-} from "../Atoms/BarChart.functions";
+import { goals_data_last_n_days_from_transformed_goals_array_chunked } from "../Atoms/BarChart.functions";
 import BarChart from "../Atoms/BarChart";
 import { AsyncStorage } from "react-native";
 import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
 import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
-import ProgressCircle from "react-native-progress-circle";
-import { Dropdown } from "react-native-material-dropdown";
+
 import DashboardHeader from "../Molecules/DashboardHeader";
 import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
 import DashboardCharts from "../Molecules/DashboardCharts";
-import Container from "../Atoms/Container";
-
-import {
-  LineChart,
-  // BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart,
-} from "react-native-chart-kit";
 
 import NetworkCheckNav from "../Molecules/NetworkCheckNav";
-import { Content } from "native-base";
 
 import { useGoalsPull } from "../../API";
 
@@ -51,16 +28,7 @@ const GoalsFilter = ({ goals }) => {
 };
 
 const Dashboard = ({ navigation }) => {
-  let dropdownData = [
-    {
-      value: "Bar Chart",
-    },
-    {
-      value: "Line Chart",
-    },
-  ];
-
-  const [selectedValue, setSelectedValue] = useState("");
+  const [scrollAnimation] = useState(new Animated.Value(0));
 
   const logout = () => {
     AsyncStorage.setItem("token", "")
@@ -77,10 +45,6 @@ const Dashboard = ({ navigation }) => {
   useEffect(() => {
     refetch();
   }, []);
-  const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
-    goals,
-    number_of_days: 7,
-  });
 
   const goals_count_by_day_array_chunked = goals_data_last_n_days_from_transformed_goals_array_chunked(
     {
@@ -98,9 +62,23 @@ const Dashboard = ({ navigation }) => {
         filter={filter}
         navigation={navigation}
       />
-      <DashboardCharts goals={filtered_goals} />
-      <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
-      <DashboardTimeStamps timeStamps={timeStamps} navigation={navigation} />
+      <Animated.ScrollView
+        style={styles.scrollView}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: { contentOffset: { y: scrollAnimation } },
+            },
+          ],
+          {
+            useNativeDriver: true,
+          },
+        )}
+      >
+        <DashboardCharts goals={filtered_goals} />
+        <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
+        <DashboardTimeStamps timeStamps={timeStamps} navigation={navigation} />
+      </Animated.ScrollView>
     </View>
   );
 };
@@ -112,7 +90,6 @@ const { statusBarHeight } = Constants;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Theme.palette.background,
   },
   list: {
     flex: 1,
