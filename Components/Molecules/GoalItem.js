@@ -5,12 +5,22 @@ import moment from "moment";
 import GoalListItem from "../Atoms/GoalListItem";
 import _ from "lodash";
 import { determineOverDue, filterTimeStampsForCadence } from "../Atoms/BarChart.functions.js";
+import { determineStreak } from "../Atoms/Calculations.js";
 
 const GoalOptionsPress = ({ id, navigation, goals }) => {
   const pass_dict = { id: id, goals: goals };
   navigation.navigate("Goal", pass_dict);
 };
 
+const GoalStreakDetermine = ({ goals, id, cadence }) => {
+  const timeStamps =
+    goals.find(function(D) {
+      return D["id"] == id;
+    })["timeStamps"] || [];
+  const streak_text = determineStreak({ timeStamps, cadence });
+  // console.log({ cadence, timeStamps, streak_text });
+  return ""; //streak_text;
+};
 const GoalCountGet = ({ goals, id, cadence }) => {
   const timeStamps =
     goals.find(function(D) {
@@ -51,6 +61,7 @@ const GoalItem = ({
   goalsListConfetti,
 }) => {
   const totalCount = GoalCountGet({ goals, id, cadence });
+  const streakText = GoalStreakDetermine({ goals, id, cadence });
   const lastTimeStamp = GoalLastTimeStamp({ goals, id });
   const lastTimeStampMessage = lastTimeStampMessageCreate(lastTimeStamp);
   const is_overdue = determineOverDue({ cadence, cadenceCount, goals, id });
@@ -91,6 +102,7 @@ const GoalItem = ({
       lastTimeStamp={lastTimeStamp}
       lastTimeStampMessage={lastTimeStampMessage}
       is_overdue={is_overdue}
+      streakText={streakText}
     />
   );
 };

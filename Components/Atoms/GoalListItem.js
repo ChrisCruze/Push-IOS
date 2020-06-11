@@ -59,6 +59,7 @@ const GoalButtonFront = ({
   pushGoal,
   lastTimeStampMessage,
   is_overdue,
+  streakText,
 }) => {
   const [fadeAnim] = useState(new Animated.Value(1));
   const [moveAnim] = useState(new Animated.Value(0));
@@ -115,7 +116,8 @@ const GoalButtonFront = ({
         <View style={styles.botRow}>
           <Text style={styles.duration}>{lastTimeStampMessage}</Text>
           <Text style={styles.duration}>
-            {totalCount} / {cadenceCount} ({cadence})
+            {streakText}
+            {totalCount} / {cadenceCount}({cadence})
           </Text>
         </View>
       </Neomorph>
@@ -132,6 +134,7 @@ const GoalListItem = ({
   deleteGoal,
   lastTimeStampMessage,
   is_overdue,
+  streakText,
 }) => {
   const onSwipeValueChange = swipeData => {
     const { key, value } = swipeData;
@@ -162,6 +165,7 @@ const GoalListItem = ({
             pushGoal={pushGoal}
             lastTimeStampMessage={lastTimeStampMessage}
             is_overdue={is_overdue}
+            streakText={streakText}
           />
         </SwipeRow>
       </View>

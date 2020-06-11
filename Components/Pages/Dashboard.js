@@ -12,6 +12,7 @@ import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
 import DashboardHeader from "../Molecules/DashboardHeader";
 import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
 import DashboardCharts from "../Molecules/DashboardCharts";
+import DashboardMetrics from "../Molecules/DashboardMetrics";
 
 import NetworkCheckNav from "../Molecules/NetworkCheckNav";
 
@@ -75,6 +76,7 @@ const Dashboard = ({ navigation }) => {
           },
         )}
       >
+        <DashboardMetrics goals={filtered_goals} />
         <DashboardCharts goals={filtered_goals} />
         <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
         <DashboardTimeStamps timeStamps={timeStamps} navigation={navigation} />

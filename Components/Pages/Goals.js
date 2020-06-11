@@ -94,7 +94,7 @@ const Goals = ({ navigation }) => {
       to: expoPushToken,
       sound: "default",
       title: "Push",
-      body: '🏴‍☠️ Arg! Walk the plank',
+      body: "🏴‍☠️ Arg! Walk the plank",
       data: { data: "goes here" },
       _displayInForeground: true,
     };
@@ -119,7 +119,6 @@ const Goals = ({ navigation }) => {
     navigation.navigate("createGoal");
   };
   const refToConfetti = useRef(null);
-
   return (
     <View style={styles.container}>
       <NavigationEvents
