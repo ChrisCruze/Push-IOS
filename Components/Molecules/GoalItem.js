@@ -18,8 +18,7 @@ const GoalStreakDetermine = ({ goals, id, cadence }) => {
       return D["id"] == id;
     })["timeStamps"] || [];
   const streak_text = determineStreak({ timeStamps, cadence });
-  // console.log({ cadence, timeStamps, streak_text });
-  return ""; //streak_text;
+  return streak_text + " " + cadence + " streak";
 };
 const GoalCountGet = ({ goals, id, cadence }) => {
   const timeStamps =

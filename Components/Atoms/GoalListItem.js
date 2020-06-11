@@ -117,7 +117,7 @@ const GoalButtonFront = ({
           <Text style={styles.duration}>{lastTimeStampMessage}</Text>
           <Text style={styles.duration}>
             {streakText}
-            {totalCount} / {cadenceCount}({cadence})
+            {/* {totalCount} / {cadenceCount}({cadence}) */}
           </Text>
         </View>
       </Neomorph>

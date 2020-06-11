@@ -4,8 +4,24 @@ import moment from "moment";
 const unix_to_days = timeStamp => {
   return parseInt(moment(timeStamp).unix() / 86400);
 };
+
+const difference_between_numbers = l => {
+  var empty_list = [];
+  l.forEach(function(i, num) {
+    if (num != 0) {
+      const previous = l[num - 1];
+      const current = i;
+      const difference = Math.abs(current - previous);
+      if (difference > 1) {
+        empty_list.push(num);
+      }
+    }
+  });
+  empty_list.push(l.length);
+  return empty_list;
+};
 const get_unique_days = timeStamps => {
-  const grouped_dict = _.groupBy(timeStamps, timeStamp => unix_to_days(timeStamp));
+  const grouped_dict = _.groupBy(timeStamps, timeStamp => moment(timeStamp).dayOfYear()); //unix_to_days(timeStamp));
   return Object.keys(grouped_dict);
 };
 
@@ -23,7 +39,8 @@ const getUniquesBasedOnCadence = ({ timeStamps, cadence }) => {
   const is_weekly = String(cadence).toLowerCase() == "weekly";
   const is_monthly = String(cadence).toLowerCase() == "monthly";
   if (is_daily) {
-    return get_unique_days(timeStamps);
+    const days = get_unique_days(timeStamps);
+    return days;
   } else if (is_weekly) {
     return get_unique_weeks(timeStamps);
   } else if (is_monthly) {
@@ -33,9 +50,10 @@ const getUniquesBasedOnCadence = ({ timeStamps, cadence }) => {
   }
 };
 
-const determine_consecutive_going_back = () => {};
 export const determineStreak = ({ timeStamps, cadence }) => {
   const uniques = getUniquesBasedOnCadence({ timeStamps, cadence });
-
-  return uniques;
+  uniques.reverse();
+  const diffs = difference_between_numbers(uniques);
+  const longest_streak = diffs[0];
+  return longest_streak;
 };
