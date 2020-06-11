@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Dimensions, FlatList, TouchableOpacity, Image, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  Text,
+} from "react-native";
 import Constants from "expo-constants";
 import Theme from "../Atoms/Theme";
-import Header from "../Molecules/Header";
 import TableGrid from "../Molecules/TableGrid";
 import {
   goals_data_last_n_days_from_transformed_goals_array,
@@ -12,8 +19,12 @@ import BarChart from "../Atoms/BarChart";
 import { AsyncStorage } from "react-native";
 import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
 import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
-import ProgressCircle from 'react-native-progress-circle';
+import ProgressCircle from "react-native-progress-circle";
 import { Dropdown } from "react-native-material-dropdown";
+import DashboardHeader from "../Molecules/DashboardHeader";
+import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
+import DashboardCharts from "../Molecules/DashboardCharts";
+import Container from "../Atoms/Container";
 
 import {
   LineChart,
@@ -21,17 +32,25 @@ import {
   PieChart,
   ProgressChart,
   ContributionGraph,
-  StackedBarChart
+  StackedBarChart,
 } from "react-native-chart-kit";
 
 import NetworkCheckNav from "../Molecules/NetworkCheckNav";
-
+import { Content } from "native-base";
 
 import { useGoalsPull } from "../../API";
 
+const GoalsFilter = ({ goals }) => {
+  const [filter, updateFilter] = useState({ state: "all", cadence: "all" });
+  const filtered_state_goals = GoalsFilterState({ goals, state: filter.state });
+  const filtered_cadence_goals = GoalsFilterCadence({
+    goals: filtered_state_goals,
+    cadence: filter.cadence,
+  });
+  return { filtered_goals: filtered_cadence_goals, updateFilter, filter };
+};
 
 const Dashboard = ({ navigation }) => {
-
   let dropdownData = [
     {
       value: "Bar Chart",
@@ -41,7 +60,7 @@ const Dashboard = ({ navigation }) => {
     },
   ];
 
-  const [selectedValue, setSelectedValue] = useState('');
+  const [selectedValue, setSelectedValue] = useState("");
 
   const logout = () => {
     AsyncStorage.setItem("token", "")
@@ -49,9 +68,12 @@ const Dashboard = ({ navigation }) => {
       .then(() => navigation.navigate("Login"));
   };
   const { goals, refetch, networkStatus } = useGoalsPull();
+
   NetworkCheckNav({ networkStatus, navigation });
 
-  const timeStamps = DataFlattenConvertGoals(goals);
+  const { filtered_goals, updateFilter, filter } = GoalsFilter({ goals });
+
+  const timeStamps = DataFlattenConvertGoals(filtered_goals);
   useEffect(() => {
     refetch();
   }, []);
@@ -67,58 +89,18 @@ const Dashboard = ({ navigation }) => {
       chunk_size: 7,
     },
   );
-  let data =goals_count_by_day_array.map(data => data.count)
   return (
     <View style={styles.container}>
-      <Header title={"Dashboard"} sub_title={"Today"} logout={logout} logout_text={"Logout"} />
-      {
-        selectedValue==="Bar Chart"?
-      <BarChart chartData={goals_count_by_day_array} />:
-      <LineChart
-      data={{
-        labels: goals_count_by_day_array.map(data => data.date),
-        datasets: [
-          {
-            data: goals_count_by_day_array.map(data => data.count)
-          }
-        ]
-      }}
-      width={Dimensions.get("window").width}
-      height={256}
-      verticalLabelRotation={30}
-      chartConfig={{
-        backgroundColor: "#FFFFFF",
-        decimalPlaces: 0, // optional, defaults to 2dp
-        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        style: {
-          borderRadius: 16,
-        },
-        propsForDots: {
-          r: "6",
-          strokeWidth: "2",
-          stroke: "#FFFFFF"
-        }
-      }}
-      bezier
-    ></LineChart>
-}
-
-        {/* <ProgressCircle
-            percent={30}
-            radius={100}
-            borderWidth={20}
-            color="#3399FF"
-            shadowColor="#999"
-            bgColor="#fff"
-            alignSelf="center"
-        >
-            <Text style={{ fontSize: 24 }}>{'30%'}</Text>
-        </ProgressCircle> */}
-      <Dropdown label="Chart Type" data={dropdownData} value={selectedValue} onChangeText={setSelectedValue} />
+      <DashboardHeader
+        title={"Dashboard"}
+        logout={logout}
+        updateFilter={updateFilter}
+        filter={filter}
+        navigation={navigation}
+      />
+      <DashboardCharts goals={filtered_goals} />
       <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
       <DashboardTimeStamps timeStamps={timeStamps} navigation={navigation} />
-      
     </View>
   );
 };
