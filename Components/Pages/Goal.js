@@ -13,6 +13,8 @@ import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
 import GoalTimeStamps from "../Molecules/GoalTimeStamps";
 import Theme from "../Atoms/Theme";
 import Confetti from "../Molecules/Confetti";
+import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
+import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
 
 const GoalBarChart = ({ goals_filtered }) => {
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
@@ -47,7 +49,7 @@ const Goal = ({ navigation }) => {
   useEffect(() => {
     refetch();
   }, []);
-  const goals_filtered = goals.filter(function (D) {
+  const goals_filtered = goals.filter(function(D) {
     return D["_id"] == _id;
   });
 
@@ -65,7 +67,11 @@ const Goal = ({ navigation }) => {
         refetch={refetch}
         goalDetailsConfetti={() => refToConfetti.current.start()}
       />
-      <GoalTimeStamps {...goals_filtered[0]} navigation={navigation} />
+      <DashboardTimeStamps
+        timeStamps={DataFlattenConvertGoals(goals_filtered)}
+        navigation={navigation}
+      />
+      {/* <GoalTimeStamps {...goals_filtered[0]} navigation={navigation} /> */}
       <Confetti ref={refToConfetti} />
     </View>
   );
