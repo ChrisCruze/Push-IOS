@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Vibration } from "react-native";
 
 import moment from "moment";
@@ -71,11 +71,12 @@ const GoalItem = ({
         timeStamps: timeStampsWithNew,
       },
     })
-      .then(() => {
-        refetch();
-        goalsListConfetti();
-      })
+      .then(() => refetch())
       .catch(e => console.error(e));
+
+    if (totalCount + 1 == cadenceCount) {
+      goalsListConfetti();
+    }
   };
   const deleteGoalPress = () => {
     removeGoal({ variables: { _id } });
