@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import TableGrid from "../Molecules/TableGrid";
 import GoalPageButtons from "../Molecules/GoalPageButtons";
-
 import Header from "../Molecules/Header";
 import {
   goals_data_last_n_days_from_transformed_goals_array,

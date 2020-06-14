@@ -1,9 +1,8 @@
 import React from "react";
 import { Vibration } from "react-native";
-
 import moment from "moment";
-import GoalListItem from "../Atoms/GoalListItem";
 import _ from "lodash";
+import GoalListItem from "../Atoms/GoalListItem";
 import { determineOverDue, filterTimeStampsForCadence } from "../Atoms/BarChart.functions.js";
 
 const GoalOptionsPress = ({ id, navigation, goals }) => {

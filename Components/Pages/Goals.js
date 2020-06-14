@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import {
+  AsyncStorage,
   View,
   Button,
   StyleSheet,
@@ -13,14 +14,11 @@ import {
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
-import { Feather as Icon } from "@expo/vector-icons";
 import Theme from "../Atoms/Theme";
 import GoalItem from "../Molecules/GoalItem";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
-import { AsyncStorage } from "react-native";
 import { NavigationEvents } from "react-navigation";
 import AnimatedHeader from "../Molecules/AnimatedHeader";
-import _ from "lodash";
 import Confetti from "../Molecules/Confetti";
 import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
 import AnimatedLoading from "../Molecules/AnimatedLoading";
@@ -115,9 +113,7 @@ const Goals = ({ navigation }) => {
     registerForPushNotificationsAsync();
     notificationSubscription = Notifications.addListener(_handleNotification);
   }, []);
-  const createNewGoal = () => {
-    navigation.navigate("createGoal");
-  };
+
   const refToConfetti = useRef(null);
 
   return (
