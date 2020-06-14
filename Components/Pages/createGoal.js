@@ -55,6 +55,7 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
         placeholder="Title"
         keyboardType="default"
         autoCapitalize="words"
+        maxLength={12}
         returnKeyType="next"
         onChangeText={text => updateSelectedText(text)}
         value={textValue}

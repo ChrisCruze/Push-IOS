@@ -15,7 +15,7 @@ const editGoal = ({ navigation }) => {
     refetch();
   }, []);
 
-  const goals_dict = goals.find(function (D) {
+  const goals_dict = goals.find(function(D) {
     return D["_id"] == _id;
   });
   const [selectedValue, setSelectedValue] = useState(goals_dict.cadence);
@@ -61,6 +61,7 @@ const editGoal = ({ navigation }) => {
       <TextField
         style={styles.textInput}
         placeholder="Edit goal"
+        maxLength={12}
         keyboardType="default"
         autoCapitalize="none"
         returnKeyType="next"
