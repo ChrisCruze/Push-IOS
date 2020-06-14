@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import React, { useEffect } from "react";
+import { View, StyleSheet } from "react-native";
 import TableGrid from "../Molecules/TableGrid";
 import GoalPageButtons from "../Molecules/GoalPageButtons";
 
@@ -9,10 +9,9 @@ import {
   goals_data_last_n_days_from_transformed_goals_array_chunked,
 } from "../Atoms/BarChart.functions";
 import BarChart from "../Atoms/BarChart";
-import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
+import { useGoalsPull } from "../../API";
 import GoalTimeStamps from "../Molecules/GoalTimeStamps";
 import Theme from "../Atoms/Theme";
-import Confetti from "../Molecules/Confetti";
 
 const GoalBarChart = ({ goals_filtered }) => {
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
@@ -51,22 +50,13 @@ const Goal = ({ navigation }) => {
     return D["_id"] == _id;
   });
 
-  const refToConfetti = useRef(null);
-
   return (
     <View style={styles.container}>
       <GoalHeader goals_filtered={goals_filtered} back={back} />
       <GoalBarChart goals_filtered={goals_filtered} />
       <GoalTableGrid goals_filtered={goals_filtered} />
-      <GoalPageButtons
-        {...goals_filtered[0]}
-        _id={_id}
-        navigation={navigation}
-        refetch={refetch}
-        goalDetailsConfetti={() => refToConfetti.current.start()}
-      />
+      <GoalPageButtons {...goals_filtered[0]} _id={_id} navigation={navigation} refetch={refetch} />
       <GoalTimeStamps {...goals_filtered[0]} navigation={navigation} />
-      <Confetti ref={refToConfetti} />
     </View>
   );
 };
