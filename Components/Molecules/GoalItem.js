@@ -13,7 +13,7 @@ const GoalOptionsPress = ({ id, navigation, goals }) => {
 
 const GoalCountGet = ({ goals, id, cadence }) => {
   const timeStamps =
-    goals.find(function(D) {
+    goals.find(function (D) {
       return D["id"] == id;
     })["timeStamps"] || [];
   const filteredTimeStamps = filterTimeStampsForCadence({ timeStamps, cadence });
@@ -23,10 +23,10 @@ const GoalCountGet = ({ goals, id, cadence }) => {
 
 const GoalLastTimeStamp = ({ goals, id }) => {
   const goals_filtered =
-    goals.find(function(D) {
+    goals.find(function (D) {
       return D["id"] == id;
     })["timeStamps"] || [];
-  const lastTimeStamp = _.max(goals_filtered, function(timeStamp) {
+  const lastTimeStamp = _.max(goals_filtered, function (timeStamp) {
     return moment(timeStamp).unix();
   });
   return lastTimeStamp;
@@ -60,6 +60,7 @@ const GoalItem = ({
   };
 
   const pushGoalPress = () => {
+    Vibration.vibrate();
     const timeStampsWithNew = timeStamps.concat(moment().format());
     updateGoal({
       variables: {
@@ -69,10 +70,12 @@ const GoalItem = ({
         cadenceCount,
         timeStamps: timeStampsWithNew,
       },
-    });
-    Vibration.vibrate();
-    refetch();
-    goalsListConfetti();
+    })
+      .then(() => {
+        refetch();
+        goalsListConfetti();
+      })
+      .catch(e => console.error(e));
   };
   const deleteGoalPress = () => {
     removeGoal({ variables: { _id } });
