@@ -7,6 +7,7 @@ import BarChart from "../Atoms/BarChart";
 
 import ProgressCircle from "react-native-progress-circle";
 import { Dropdown } from "react-native-material-dropdown";
+import { determinePercentageDone } from "../Atoms/BarChart.functions";
 
 import {
   LineChart,
@@ -28,17 +29,17 @@ const DashboardCharts = ({ goals }) => {
   ];
 
   const [selectedValue, setSelectedValue] = useState("");
-
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
     goals,
     number_of_days: 7,
   });
 
+  const percentage_complete = determinePercentageDone(goals);
   return (
     <Fragment>
       {selectedValue === "Pie Chart" ? (
         <ProgressCircle
-          percent={30}
+          percent={percentage_complete}
           width={Dimensions.get("window").width}
           radius={100}
           borderWidth={20}
@@ -47,7 +48,7 @@ const DashboardCharts = ({ goals }) => {
           bgColor="#fff"
           alignSelf="center"
         >
-          <Text style={{ fontSize: 24 }}>{"30% of tasks completed"}</Text>
+          <Text style={{ fontSize: 24 }}>{percentage_complete + "% of tasks completed"}</Text>
         </ProgressCircle>
       ) : (
         <LineChart

@@ -8,14 +8,11 @@ import BarChart from "../Atoms/BarChart";
 import { AsyncStorage } from "react-native";
 import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
 import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
-
 import DashboardHeader from "../Molecules/DashboardHeader";
 import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
 import DashboardCharts from "../Molecules/DashboardCharts";
 import DashboardMetrics from "../Molecules/DashboardMetrics";
-
 import NetworkCheckNav from "../Molecules/NetworkCheckNav";
-
 import { useGoalsPull } from "../../API";
 
 const GoalsFilter = ({ goals }) => {
@@ -37,10 +34,9 @@ const Dashboard = ({ navigation }) => {
       .then(() => navigation.navigate("Login"));
   };
   const { goals, refetch, networkStatus } = useGoalsPull();
+  const { filtered_goals, updateFilter, filter } = GoalsFilter({ goals });
 
   NetworkCheckNav({ networkStatus, navigation });
-
-  const { filtered_goals, updateFilter, filter } = GoalsFilter({ goals });
 
   const timeStamps = DataFlattenConvertGoals(filtered_goals);
   useEffect(() => {
@@ -76,8 +72,8 @@ const Dashboard = ({ navigation }) => {
           },
         )}
       >
-        <DashboardMetrics goals={filtered_goals} />
         <DashboardCharts goals={filtered_goals} />
+        <DashboardMetrics goals={filtered_goals} timeStamps={timeStamps} />
         <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
         <DashboardTimeStamps timeStamps={timeStamps} navigation={navigation} />
       </Animated.ScrollView>

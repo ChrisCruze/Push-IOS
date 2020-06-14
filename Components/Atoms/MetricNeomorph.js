@@ -3,10 +3,11 @@ import { StyleSheet, Text, View, Button, Dimensions, TouchableWithoutFeedback } 
 import { Neomorph } from "react-native-neomorph-shadows";
 import Theme from "./Theme";
 
-const MetricNeomorph = ({ text }) => {
+const MetricNeomorph = ({ text, number }) => {
   return (
     <Neomorph darkShadowColor="#D1CDC7" lightShadowColor="#FFF" style={styles.neomorph}>
       <View style={styles.wrapper}>
+        <Text style={styles.number}>{number}</Text>
         <Text style={styles.text}>{text}</Text>
       </View>
     </Neomorph>
@@ -30,10 +31,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   wrapper: {},
-  text: {
+  number: {
     fontWeight: "bold",
     flex: 1,
-    fontSize: 28,
+    fontSize: 24,
+  },
+  text: {
+    flex: 1,
+    fontSize: 12,
   },
 });
 export default MetricNeomorph;
