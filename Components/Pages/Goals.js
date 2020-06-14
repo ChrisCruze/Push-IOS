@@ -25,6 +25,8 @@ import Confetti from "../Molecules/Confetti";
 import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
 import AnimatedLoading from "../Molecules/AnimatedLoading";
 import NetworkCheckNav from "../Molecules/NetworkCheckNav";
+// import TimePicker from "../Atoms/TimePicker";
+import DatePicker from "react-native-date-picker";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
@@ -40,6 +42,8 @@ const GoalsFilter = ({ goals }) => {
 };
 
 const Goals = ({ navigation }) => {
+  const [date, setDate] = useState(new Date());
+
   const logout = () => {
     AsyncStorage.setItem("token", "")
       .then(() => AsyncStorage.setItem("token_created_date", ""))
@@ -94,7 +98,7 @@ const Goals = ({ navigation }) => {
       to: expoPushToken,
       sound: "default",
       title: "Push",
-      body: '🏴‍☠️ Arg! Walk the plank',
+      body: "🏴‍☠️ Arg! Walk the plank",
       data: { data: "goes here" },
       _displayInForeground: true,
     };
@@ -142,6 +146,7 @@ const Goals = ({ navigation }) => {
         navigation={navigation}
       >
         <Fragment>
+          {/* <DatePicker date={date} onDateChange={setDate} /> */}
           <AnimatedLoading scrollAnimation={scrollAnimation} loading={loading} refetch={refetch} />
           <AnimatedFlatList
             onScroll={Animated.event(

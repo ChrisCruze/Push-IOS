@@ -39,8 +39,21 @@ const DashboardTimeStamp = ({
       },
     });
     refetch();
-    // const pass_dict = { id: _id };
-    // navigation.navigate("Goal", pass_dict);
+  };
+  const updateTimeStamp = () => {
+    const timeStampsUpdated = timeStampsWithRemoved({ timeStamps, timeStamp });
+    const newTimeStmap = moment(timeStamp).format("M/DD(ddd) h:mma");
+    const timeStampsUpdatedEdited = [...timeStampsUpdated, newTimeStmap];
+    updateGoal({
+      variables: {
+        _id,
+        title,
+        cadence,
+        cadenceCount,
+        timeStamps: timeStampsUpdated,
+      },
+    });
+    refetch();
   };
   return (
     <View style={styles.container}>
