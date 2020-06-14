@@ -81,7 +81,6 @@ const GoalItem = ({
       },
     });
     Vibration.vibrate();
-    refetch();
     goalsListConfetti();
   };
   const deleteGoalPress = () => {
