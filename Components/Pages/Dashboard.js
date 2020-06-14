@@ -14,6 +14,7 @@ import DashboardCharts from "../Molecules/DashboardCharts";
 import DashboardMetrics from "../Molecules/DashboardMetrics";
 import NetworkCheckNav from "../Molecules/NetworkCheckNav";
 import { useGoalsPull } from "../../API";
+import { NavigationEvents } from "react-navigation";
 
 const GoalsFilter = ({ goals }) => {
   const [filter, updateFilter] = useState({ state: "all", cadence: "all" });
@@ -52,6 +53,11 @@ const Dashboard = ({ navigation }) => {
   );
   return (
     <View style={styles.container}>
+      <NavigationEvents
+        onWillFocus={() => {
+          refetch();
+        }}
+      />
       <DashboardHeader
         title={"Dashboard"}
         logout={logout}
