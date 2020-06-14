@@ -25,8 +25,6 @@ import Confetti from "../Molecules/Confetti";
 import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
 import AnimatedLoading from "../Molecules/AnimatedLoading";
 import NetworkCheckNav from "../Molecules/NetworkCheckNav";
-// import TimePicker from "../Atoms/TimePicker";
-import DatePicker from "react-native-date-picker";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
@@ -146,7 +144,6 @@ const Goals = ({ navigation }) => {
         navigation={navigation}
       >
         <Fragment>
-          {/* <DatePicker date={date} onDateChange={setDate} /> */}
           <AnimatedLoading scrollAnimation={scrollAnimation} loading={loading} refetch={refetch} />
           <AnimatedFlatList
             onScroll={Animated.event(
