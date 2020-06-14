@@ -62,7 +62,7 @@ const Login = ({ navigation }) => {
         onDismiss={_onDismissSnackBar}
         style={styles.snackbar}
         action={{
-          label: "Okay",
+          label: "OK",
           onPress: () => {
             // Do something
           },

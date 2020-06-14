@@ -21,7 +21,7 @@ const SignUpEmail = ({ navigation }) => {
         onDismiss={_onDismissSnackBar}
         style={styles.snackbar}
         action={{
-          label: "Okay",
+          label: "OK",
           onPress: () => {},
         }}
       >
