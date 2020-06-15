@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Vibration } from "react-native";
-
 import moment from "moment";
-import GoalListItem from "../Atoms/GoalListItem";
 import _ from "lodash";
+import GoalListItem from "../Atoms/GoalListItem";
 import { determineOverDue, filterTimeStampsForCadence } from "../Atoms/BarChart.functions.js";
 
 const GoalOptionsPress = ({ id, navigation, goals }) => {
@@ -13,7 +12,7 @@ const GoalOptionsPress = ({ id, navigation, goals }) => {
 
 const GoalCountGet = ({ goals, id, cadence }) => {
   const timeStamps =
-    goals.find(function(D) {
+    goals.find(function (D) {
       return D["id"] == id;
     })["timeStamps"] || [];
   const filteredTimeStamps = filterTimeStampsForCadence({ timeStamps, cadence });
@@ -23,10 +22,10 @@ const GoalCountGet = ({ goals, id, cadence }) => {
 
 const GoalLastTimeStamp = ({ goals, id }) => {
   const goals_filtered =
-    goals.find(function(D) {
+    goals.find(function (D) {
       return D["id"] == id;
     })["timeStamps"] || [];
-  const lastTimeStamp = _.max(goals_filtered, function(timeStamp) {
+  const lastTimeStamp = _.max(goals_filtered, function (timeStamp) {
     return moment(timeStamp).unix();
   });
   return lastTimeStamp;
@@ -60,6 +59,7 @@ const GoalItem = ({
   };
 
   const pushGoalPress = () => {
+    Vibration.vibrate();
     const timeStampsWithNew = timeStamps.concat(moment().format());
     updateGoal({
       variables: {
@@ -69,10 +69,13 @@ const GoalItem = ({
         cadenceCount,
         timeStamps: timeStampsWithNew,
       },
-    });
-    Vibration.vibrate();
-    refetch();
-    goalsListConfetti();
+    })
+      .then(() => refetch())
+      .catch(e => console.error(e));
+
+    if (totalCount + 1 == cadenceCount) {
+      goalsListConfetti();
+    }
   };
   const deleteGoalPress = () => {
     removeGoal({ variables: { _id } });

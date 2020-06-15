@@ -82,7 +82,7 @@ const ForgotPassword = ({ navigation }) => {
           setSnackMessage("");
         }}
         action={{
-          label: "Okay",
+          label: "OK",
           onPress: () => {},
         }}
       >
