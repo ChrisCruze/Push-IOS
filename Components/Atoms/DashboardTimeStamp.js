@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
 import _ from "lodash";
 import moment from "moment";
 import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
-
 const timeStampsWithRemoved = ({ timeStamps, timeStamp }) => {
   const timeStampsCopy = [...timeStamps];
   const prevIndex = timeStampsCopy.findIndex(item => item === timeStamp);
@@ -24,7 +23,11 @@ const DashboardTimeStamp = ({
   timeStampArray,
   updateGoal,
   refetch,
+  setModalVisible,
   navigation,
+  updateTimeStampConfig,
+  setDate,
+  date,
 }) => {
   const time_stamp_formatted = moment(timeStamp).format("M/DD(ddd) h:mma");
   const deleteTimeStamp = () => {
@@ -39,8 +42,11 @@ const DashboardTimeStamp = ({
       },
     });
     refetch();
-    // const pass_dict = { id: _id };
-    // navigation.navigate("Goal", pass_dict);
+  };
+  const updateTimeStamp = () => {
+    setModalVisible(true);
+    updateTimeStampConfig({ timeStamps, timeStamp, _id, title, cadence, cadenceCount });
+    setDate(moment(timeStamp).toDate());
   };
   return (
     <View style={styles.container}>
@@ -48,6 +54,9 @@ const DashboardTimeStamp = ({
       <Text>{time_stamp_formatted}</Text>
       <TouchableWithoutFeedback onPress={deleteTimeStamp}>
         <Icon name="trash" size={25} {...{ color: "black" }} />
+      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={updateTimeStamp}>
+        <Icon name="edit" size={25} {...{ color: "black" }} />
       </TouchableWithoutFeedback>
     </View>
   );
