@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Dimensions, FlatList, TouchableOpacity, Image, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  Text,
+} from "react-native";
 import Constants from "expo-constants";
 import Theme from "../Atoms/Theme";
 import Header from "../Molecules/Header";
@@ -12,7 +20,7 @@ import BarChart from "../Atoms/BarChart";
 import { AsyncStorage } from "react-native";
 import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
 import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
-import ProgressCircle from 'react-native-progress-circle';
+import ProgressCircle from "react-native-progress-circle";
 import { Dropdown } from "react-native-material-dropdown";
 
 import {
@@ -21,17 +29,14 @@ import {
   PieChart,
   ProgressChart,
   ContributionGraph,
-  StackedBarChart
+  StackedBarChart,
 } from "react-native-chart-kit";
 
 import NetworkCheckNav from "../Molecules/NetworkCheckNav";
 
-
 import { useGoalsPull } from "../../API";
 
-
 const Dashboard = ({ navigation }) => {
-
   let dropdownData = [
     {
       value: "Bar Chart",
@@ -41,7 +46,7 @@ const Dashboard = ({ navigation }) => {
     },
   ];
 
-  const [selectedValue, setSelectedValue] = useState('');
+  const [selectedValue, setSelectedValue] = useState("");
 
   const logout = () => {
     AsyncStorage.setItem("token", "")
@@ -67,44 +72,44 @@ const Dashboard = ({ navigation }) => {
       chunk_size: 7,
     },
   );
-  let data =goals_count_by_day_array.map(data => data.count)
+  let data = goals_count_by_day_array.map(data => data.count);
   return (
     <View style={styles.container}>
       <Header title={"Dashboard"} sub_title={"Today"} logout={logout} logout_text={"Logout"} />
-      {
-        selectedValue==="Bar Chart"?
-      <BarChart chartData={goals_count_by_day_array} />:
-      <LineChart
-      data={{
-        labels: goals_count_by_day_array.map(data => data.date),
-        datasets: [
-          {
-            data: goals_count_by_day_array.map(data => data.count)
-          }
-        ]
-      }}
-      width={Dimensions.get("window").width}
-      height={256}
-      verticalLabelRotation={30}
-      chartConfig={{
-        backgroundColor: "#FFFFFF",
-        decimalPlaces: 0, // optional, defaults to 2dp
-        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        style: {
-          borderRadius: 16,
-        },
-        propsForDots: {
-          r: "6",
-          strokeWidth: "2",
-          stroke: "#FFFFFF"
-        }
-      }}
-      bezier
-    ></LineChart>
-}
+      {selectedValue === "Bar Chart" ? (
+        <BarChart chartData={goals_count_by_day_array} />
+      ) : (
+        <LineChart
+          data={{
+            labels: goals_count_by_day_array.map(data => data.date),
+            datasets: [
+              {
+                data: goals_count_by_day_array.map(data => data.count),
+              },
+            ],
+          }}
+          width={Dimensions.get("window").width}
+          height={256}
+          verticalLabelRotation={30}
+          chartConfig={{
+            backgroundColor: "#FFFFFF",
+            decimalPlaces: 0, // optional, defaults to 2dp
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            style: {
+              borderRadius: 16,
+            },
+            propsForDots: {
+              r: "6",
+              strokeWidth: "2",
+              stroke: "#FFFFFF",
+            },
+          }}
+          bezier
+        ></LineChart>
+      )}
 
-        {/* <ProgressCircle
+      {/* <ProgressCircle
             percent={30}
             radius={100}
             borderWidth={20}
@@ -115,10 +120,14 @@ const Dashboard = ({ navigation }) => {
         >
             <Text style={{ fontSize: 24 }}>{'30%'}</Text>
         </ProgressCircle> */}
-      <Dropdown label="Chart Type" data={dropdownData} value={selectedValue} onChangeText={setSelectedValue} />
+      <Dropdown
+        label="Chart Type"
+        data={dropdownData}
+        value={selectedValue}
+        onChangeText={setSelectedValue}
+      />
       <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
       <DashboardTimeStamps timeStamps={timeStamps} navigation={navigation} />
-      
     </View>
   );
 };

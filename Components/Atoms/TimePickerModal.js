@@ -53,16 +53,25 @@ const TimePicker = ({ modalVisible, setModalVisible, date, setDate, saveTimeStam
                 /> */}
               </View>
             </View>
-
-            <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-                saveTimeStamp();
-              }}
-            >
-              <Text style={styles.textStyle}>Submit</Text>
-            </TouchableHighlight>
+            <View style={styles.modal_buttons}>
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  saveTimeStamp();
+                }}
+              >
+                <Text style={styles.textStyle}>Submit</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: "grey" }}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <Text style={styles.textStyle}>Cancel</Text>
+              </TouchableHighlight>
+            </View>
           </View>
         </View>
       </Modal>
@@ -80,7 +89,7 @@ const styles = StyleSheet.create({
   picker: {
     width: Dimensions.get("window").width,
   },
-  // pickers: { flexDirection: "row", justifyContent: "center" },
+  modal_buttons: { flexDirection: "row", justifyContent: "center" },
   modalView: {
     margin: 20,
     backgroundColor: "white",

@@ -15,7 +15,7 @@ const editGoal = ({ navigation }) => {
     refetch();
   }, []);
 
-  const goals_dict = goals.find(function (D) {
+  const goals_dict = goals.find(function(D) {
     return D["_id"] == _id;
   });
   const [warning, updateWarning] = useState(false);
@@ -72,6 +72,7 @@ const editGoal = ({ navigation }) => {
           keyboardType="default"
           autoCapitalize="none"
           returnKeyType="next"
+          maxLength={20}
           value={textValue}
           onChangeText={text => updateSelectedText(text)}
           contrast
