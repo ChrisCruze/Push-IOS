@@ -51,6 +51,22 @@ const calculatePercentage = (totalCount, cadence) => {
   return percentageFormatted + "%";
 };
 
+const GoalTitleTextFontSizeDetermine = (textLength, text) => {
+  if (textLength > 12) {
+    const extraCharacters = Math.abs(textLength - 12);
+    const fontSizeDetermined = 28 - extraCharacters;
+    return fontSizeDetermined;
+  } else {
+    return 28;
+  }
+};
+
+const GoalTitleText = ({ text }) => {
+  const textLength = text.length;
+
+  const fontSizeCalculated = GoalTitleTextFontSizeDetermine(textLength, text);
+  return <Text style={[styles.task, { fontSize: fontSizeCalculated }]}>{text}</Text>;
+};
 const GoalButtonFront = ({
   text,
   totalCount,
@@ -100,7 +116,7 @@ const GoalButtonFront = ({
         style={[styles.neomorph]}
       >
         <View style={styles.topRow}>
-          <Text style={styles.task}>{text}</Text>
+          <GoalTitleText text={text} />
           <View style={[styles.dash, { borderColor: color }]}>
             <Animated.Text
               style={[

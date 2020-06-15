@@ -92,7 +92,7 @@ const Goals = ({ navigation }) => {
       to: expoPushToken,
       sound: "default",
       title: "Push",
-      body: '🏴‍☠️ Arg! Walk the plank',
+      body: "🏴‍☠️ Arg! Walk the plank",
       data: { data: "goes here" },
       _displayInForeground: true,
     };
