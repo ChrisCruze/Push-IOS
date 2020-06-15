@@ -217,3 +217,15 @@ export const GoalsFilterCadence = ({ goals, cadence }) => {
     return filtered_goals;
   }
 };
+
+export const determinePercentageDone = array => {
+  const number_of_goals = array.length;
+  const completed_count = array.filter(function(D) {
+    return !determineOverDue({ ...D, goals: array });
+  }).length;
+  const remaining_count = array.filter(function(D) {
+    return determineOverDue({ ...D, goals: array });
+  }).length;
+  const complete_percentage = ((completed_count / number_of_goals) * 100).toFixed(0);
+  return complete_percentage;
+};

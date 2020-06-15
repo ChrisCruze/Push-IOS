@@ -60,6 +60,7 @@ const createGoal = ({ navigation, createNew }) => {
           style={styles.textInput}
           placeholder="Title"
           keyboardType="default"
+          maxLength={20}
           autoCapitalize="words"
           returnKeyType="next"
           onChangeText={text => updateSelectedText(text)}
