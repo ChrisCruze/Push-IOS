@@ -16,7 +16,7 @@ import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
 import Theme from "../Atoms/Theme";
 import GoalItem from "../Molecules/GoalItem";
-import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
+import { useGoalsPull, useGoalUpdate, useGoalDelete, useGoalState } from "../../API";
 import { NavigationEvents } from "react-navigation";
 import AnimatedHeader from "../Molecules/AnimatedHeader";
 import Confetti from "../Molecules/Confetti";
@@ -44,12 +44,14 @@ const Goals = ({ navigation }) => {
       .then(() => navigation.navigate("Login"));
   };
   const [scrollAnimation] = React.useState(new Animated.Value(0));
-  const { goals, refetch, loading, networkStatus } = useGoalsPull();
+  // const { goals, refetch, loading, networkStatus } = useGoalsPull();
+  const { goals, refetch, loading, networkStatus, updateGoal } = useGoalState();
+
   NetworkCheckNav({ networkStatus, navigation });
   const { filtered_goals, updateFilter, filter } = GoalsFilter({ goals });
   const { sorted_goals, updateSortOrder, sortOrder } = GoalsSort({ goals: filtered_goals });
 
-  const { updateGoal } = useGoalUpdate();
+  // const { updateGoal } = useGoalUpdate();
   const { removeGoal } = useGoalDelete();
   const [notification, setNotification] = useState({});
   const [expoPushToken, setExpoPushToken] = useState("");

@@ -4,6 +4,7 @@ import { URI } from "react-native-dotenv";
 import { setContext } from "apollo-link-context";
 import _ from "lodash";
 import { AsyncStorage } from "react-native";
+import React, { useState, useEffect } from "react";
 
 export function APIClient() {
   const httpLink = new HttpLink({
@@ -61,9 +62,9 @@ export const useGoalsPull = () => {
       }
     }
   `;
-  const { loading, error, data, refetch, networkStatus } = useQuery(GoalsQuery);
+  const { loading, error, data, refetch, networkStatus, called } = useQuery(GoalsQuery);
   const goals = goals_from_data({ loading, error, data });
-  return { loading, error, data, goals, refetch, networkStatus };
+  return { loading, error, data, goals, refetch, networkStatus, called };
 };
 
 export const useGoalCreate = () => {
@@ -116,4 +117,59 @@ export const useGoalDelete = () => {
   `;
   const [deleteGoal, { data }] = useMutation(DELETE_GOAL);
   return { removeGoal: deleteGoal, data };
+};
+
+const updateGoalsFromUpdate = ({ goals, _id, title, cadence, cadenceCount, timeStamps }) => {
+  const id_order_original = _.map(goals, "_id");
+  const copied_goals = [...goals];
+  const goals_filtered = copied_goals.filter(D => {
+    return D["_id"] != _id;
+  });
+  const updated_goals = [
+    ...goals_filtered,
+    { _id, id: _id, title, cadence, cadenceCount, timeStamps },
+  ];
+  const id_grouped_dict = _.groupBy(updated_goals, "_id");
+  const updated_goals_sorted = _.map(id_order_original, id => {
+    return id_grouped_dict[id][0];
+  });
+  return updated_goals_sorted;
+};
+export const useGoalState = () => {
+  const { goals, refetch, loading, networkStatus, called } = useGoalsPull();
+  const [goalsLocal, updateGoalsLocal] = useState(goals);
+  const [refetchState, updateRefetchState] = useState(false);
+
+  const { updateGoal } = useGoalUpdate();
+  useEffect(() => {
+    updateGoalsLocal(goals);
+  }, [loading, networkStatus, called, refetchState]);
+
+  const refetchLocal = () => {
+    updateRefetchState(!refetchState);
+    refetch();
+  };
+
+  const updateGoalState = ({ variables: { _id, title, cadence, cadenceCount, timeStamps } }) => {
+    const updatedGoals = updateGoalsFromUpdate({
+      goals,
+      _id,
+      title,
+      cadence,
+      cadenceCount,
+      timeStamps,
+    });
+    updateGoalsLocal(updatedGoals);
+    return updateGoal({
+      variables: { _id, title, cadence, cadenceCount, timeStamps },
+    });
+  };
+
+  return {
+    goals: goalsLocal,
+    refetch: refetchLocal,
+    loading,
+    networkStatus,
+    updateGoal: updateGoalState,
+  };
 };
