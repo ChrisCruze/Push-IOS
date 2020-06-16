@@ -79,9 +79,9 @@ const GoalItem = ({
         cadenceCount,
         timeStamps: timeStampsWithNew,
       },
-    })
-      .then(() => refetch())
-      .catch(e => console.error(e));
+    });
+    // .then(() => refetch())
+    // .catch(e => console.error(e));
 
     if (totalCount + 1 == cadenceCount) {
       goalsListConfetti();
