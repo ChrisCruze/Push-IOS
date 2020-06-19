@@ -1,27 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
-  TouchableOpacity,
-  TouchableHighlight,
   TouchableWithoutFeedback,
   View,
   Dimensions,
   Animated,
 } from "react-native";
 import { Neomorph } from "react-native-neomorph-shadows";
-import { SwipeListView, SwipeRow } from "react-native-swipe-list-view";
-import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
-import AwesomeButton from "react-native-really-awesome-button";
-import AwesomeButtonRick from "react-native-really-awesome-button/src/themes/rick";
-import AwesomeButtonProgress from "react-native-really-awesome-button";
+import { SwipeRow } from "react-native-swipe-list-view";
+import { Feather as Icon, FontAwesome } from "@expo/vector-icons";
 
 const GoalButtonBackDelete = ({ deleteGoal }) => {
   return (
     <TouchableWithoutFeedback onPress={deleteGoal}>
       <Icon name="trash" size={45} {...{ color: "black" }} />
-
-      {/* <Text style={[styles.buttonText]}>Delete</Text> */}
     </TouchableWithoutFeedback>
   );
 };
@@ -29,7 +22,6 @@ const GoalButtonBackDashboard = ({ navigateToGoal }) => {
   return (
     <TouchableWithoutFeedback onPress={navigateToGoal}>
       <FontAwesome name="dashboard" size={45} {...{ color: "black" }} />
-      {/* <Text style={[styles.buttonText]}>Dashboard</Text> */}
     </TouchableWithoutFeedback>
   );
 };
@@ -38,7 +30,6 @@ const GoalButtonBack = ({ deleteGoal, navigateToGoal }) => {
   return (
     <View style={[styles.standaloneRowBack]}>
       <GoalButtonBackDashboard navigateToGoal={navigateToGoal} />
-
       <GoalButtonBackDelete deleteGoal={deleteGoal} />
     </View>
   );
@@ -51,7 +42,7 @@ const calculatePercentage = (totalCount, cadence) => {
   return percentageFormatted + "%";
 };
 
-const GoalTitleTextFontSizeDetermine = (textLength, text) => {
+const GoalTitleTextFontSizeDetermine = textLength => {
   if (textLength > 12) {
     const extraCharacters = Math.abs(textLength - 12);
     const fontSizeDetermined = 28 - extraCharacters;
@@ -79,10 +70,8 @@ const GoalButtonFront = ({
   const [fadeAnim] = useState(new Animated.Value(1));
   const [moveAnim] = useState(new Animated.Value(0));
 
-  // const fadeAnim = new Animated.Value(0)
   const color = "#17355A"; //"#2DAAFF"; //is_overdue ? "red" : "green";
   const color_shade = is_overdue ? "#C94818" : "#193162";
-  const main_background = "#FFF9FD";
 
   const pushGoalAnimate = () => {
     Animated.parallel([
@@ -110,11 +99,7 @@ const GoalButtonFront = ({
 
   return (
     <TouchableWithoutFeedback onPress={pushGoalAnimate}>
-      <Neomorph
-        darkShadowColor={color_shade} //"#D1CDC7" // <- set this
-        lightShadowColor="#FFF" //{color_shade} ///
-        style={[styles.neomorph]}
-      >
+      <Neomorph darkShadowColor={color_shade} lightShadowColor="#FFF" style={[styles.neomorph]}>
         <View style={styles.topRow}>
           <GoalTitleText text={text} />
           <View style={[styles.dash, { borderColor: color }]}>
@@ -150,7 +135,7 @@ const GoalListItem = ({
   is_overdue,
 }) => {
   const onSwipeValueChange = swipeData => {
-    const { key, value } = swipeData;
+    const { value } = swipeData;
     if (value > Dimensions.get("window").width) {
       Animated.timing(new Animated.Value(0), {
         toValue: 0,
@@ -165,7 +150,6 @@ const GoalListItem = ({
     <View style={styles.container}>
       <View style={styles.standalone}>
         <SwipeRow
-          // disableRightSwipe
           rightOpenValue={Dimensions.get("window").width}
           onSwipeValueChange={onSwipeValueChange}
         >
@@ -227,7 +211,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.7, // <- and this or yours opacity
     shadowRadius: 7,
     borderRadius: 30,
-
     borderTopColor: "#FFF",
     borderLeftColor: "#FFF",
     borderBottomColor: "#D1CDC7",
@@ -278,10 +261,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     alignSelf: "stretch",
-  },
-
-  dash: {
-    // borderBottomWidth: 3,
   },
   buttonText: {
     alignSelf: "center",
