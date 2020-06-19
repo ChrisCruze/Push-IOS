@@ -18,6 +18,7 @@ const GoalButtonBackDelete = ({ deleteGoal }) => {
     </TouchableWithoutFeedback>
   );
 };
+
 const GoalButtonBackDashboard = ({ navigateToGoal }) => {
   return (
     <TouchableWithoutFeedback onPress={navigateToGoal}>
@@ -37,7 +38,6 @@ const GoalButtonBack = ({ deleteGoal, navigateToGoal }) => {
 
 const calculatePercentage = (totalCount, cadence) => {
   const percentage = totalCount / cadence;
-
   const percentageFormatted = (percentage * 100).toFixed(0);
   return percentageFormatted + "%";
 };
@@ -54,10 +54,10 @@ const GoalTitleTextFontSizeDetermine = textLength => {
 
 const GoalTitleText = ({ text }) => {
   const textLength = text.length;
-
   const fontSizeCalculated = GoalTitleTextFontSizeDetermine(textLength, text);
   return <Text style={[styles.task, { fontSize: fontSizeCalculated }]}>{text}</Text>;
 };
+
 const GoalButtonFront = ({
   text,
   totalCount,
@@ -123,6 +123,7 @@ const GoalButtonFront = ({
     </TouchableWithoutFeedback>
   );
 };
+
 const GoalListItem = ({
   text,
   navigateToGoal,
@@ -134,24 +135,28 @@ const GoalListItem = ({
   lastTimeStampMessage,
   is_overdue,
 }) => {
-  const onSwipeValueChange = swipeData => {
-    const { value } = swipeData;
-    if (value > Dimensions.get("window").width) {
-      Animated.timing(new Animated.Value(0), {
-        toValue: 0,
-        duration: 200,
-      }).start(() => {
-        navigateToGoal();
-      });
-    }
-  };
+  // const onSwipeValueChange = swipeData => {
+  //   const { value } = swipeData;
+  //   if (value > Dimensions.get("window").width) {
+  //     Animated.timing(new Animated.Value(0), {
+  //       toValue: 0,
+  //       duration: 200,
+  //     }).start(() => {
+  //       navigateToGoal();
+  //     });
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
       <View style={styles.standalone}>
         <SwipeRow
-          rightOpenValue={Dimensions.get("window").width}
-          onSwipeValueChange={onSwipeValueChange}
+          leftActionValue={80} // the exposed length when swiped
+          rightActionValue={-80}
+          leftActivationValue={60} // how far the swipe needs to be to open
+          rightActivationValue={-60}
+          directionalDistanceChangeThreshold={1} // swipe sensitivity
+          closeOnRowPress={true}
         >
           <GoalButtonBack deleteGoal={deleteGoal} navigateToGoal={navigateToGoal} />
           <GoalButtonFront
@@ -210,17 +215,18 @@ const styles = StyleSheet.create({
   neomorph: {
     shadowOpacity: 0.7, // <- and this or yours opacity
     shadowRadius: 7,
-    borderRadius: 30,
-    borderTopColor: "#FFF",
-    borderLeftColor: "#FFF",
-    borderBottomColor: "#D1CDC7",
-    borderRightColor: "#D1CDC7",
+    borderRadius: 15,
+    borderWidth: 1,
+    borderTopColor: "#000000",
+    borderLeftColor: "#000000",
+    borderBottomColor: "#000000",
+    borderRightColor: "#000000",
     backgroundColor: "#FFF9FD", //"#0070c0", //89CFF0"#ECF0F3",
     width: width * 0.8,
     height: 95,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: Platform.OS === "android" ? 4 : 0,
+    // borderWidth: Platform.OS === "android" ? 4 : 0,
   },
   task: {
     fontWeight: "bold",
@@ -246,7 +252,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     flexDirection: "row",
     flex: 2,
-
     alignSelf: "stretch",
     textAlign: "left",
   },
