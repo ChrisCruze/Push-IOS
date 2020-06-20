@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,17 +12,22 @@ import { Neomorph } from "react-native-neomorph-shadows";
 import { SwipeRow } from "react-native-swipe-list-view";
 import { Feather as Icon } from "@expo/vector-icons";
 
-const GoalButtonBackDashboard = ({ pushGoal }) => {
+const GoalButtonBackPushAction = ({ pushGoal, closeRow }) => {
   return (
     <View style={styles.backButtonLeft}>
-      <TouchableWithoutFeedback onPress={pushGoal}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          pushGoal();
+          closeRow();
+        }}
+      >
         <Icon name="check" size={30} color={"white"} />
       </TouchableWithoutFeedback>
     </View>
   );
 };
 
-const GoalButtonBackDelete = ({ goalName, deleteGoal, navigateToGoal }) => {
+const GoalButtonBackDeleteAndEdit = ({ goalName, deleteGoal, navigateToGoal, closeRow }) => {
   const deleteWithConfirmation = () => {
     Alert.alert(
       "Are you sure you want to delete?",
@@ -31,7 +36,7 @@ const GoalButtonBackDelete = ({ goalName, deleteGoal, navigateToGoal }) => {
         {
           text: "Cancel",
           style: "cancel",
-          onPress: () => console.log("Goal Delete Cancelled"),
+          onPress: () => closeRow(),
         },
         {
           text: "Delete",
@@ -62,11 +67,12 @@ const GoalButtonBackDelete = ({ goalName, deleteGoal, navigateToGoal }) => {
   );
 };
 
-const GoalButtonBack = ({ goalName, deleteGoal, navigateToGoal, pushGoal }) => {
+const GoalButtonBack = ({ closeRow, goalName, deleteGoal, navigateToGoal, pushGoal }) => {
   return (
     <View style={[styles.standaloneRowBack]}>
-      <GoalButtonBackDashboard pushGoal={pushGoal} />
-      <GoalButtonBackDelete
+      <GoalButtonBackPushAction pushGoal={pushGoal} closeRow={closeRow} />
+      <GoalButtonBackDeleteAndEdit
+        closeRow={closeRow}
         goalName={goalName}
         deleteGoal={deleteGoal}
         navigateToGoal={navigateToGoal}
@@ -173,38 +179,43 @@ const GoalListItem = ({
   deleteGoal,
   lastTimeStampMessage,
   is_overdue,
-}) => (
-  <View style={styles.container}>
-    <View style={styles.standalone}>
-      <SwipeRow
-        leftActionValue={80} // the exposed length when swiped
-        rightActionValue={-80}
-        leftActivationValue={60} // how far the swipe needs to be to open
-        rightActivationValue={-60}
-        directionalDistanceChangeThreshold={1} // swipe sensitivity
-        closeOnRowPress={true}
-        stopLeftSwipe={110} // limits back button expose length
-        stopRightSwipe={-110}
-      >
-        <GoalButtonBack
-          deleteGoal={deleteGoal}
-          navigateToGoal={navigateToGoal}
-          pushGoal={pushGoal}
-          goalName={text}
-        />
-        <GoalButtonFront
-          text={text}
-          totalCount={totalCount}
-          cadence={cadence}
-          cadenceCount={cadenceCount}
-          pushGoal={pushGoal}
-          lastTimeStampMessage={lastTimeStampMessage}
-          is_overdue={is_overdue}
-        />
-      </SwipeRow>
+}) => {
+  const refToSwipeRow = useRef();
+  return (
+    <View style={styles.container}>
+      <View style={styles.standalone}>
+        <SwipeRow
+          leftActionValue={80} // the exposed length when swiped
+          rightActionValue={-80}
+          leftActivationValue={60} // how far the swipe needs to be to open
+          rightActivationValue={-60}
+          directionalDistanceChangeThreshold={1} // swipe sensitivity
+          closeOnRowPress={true}
+          stopLeftSwipe={110} // limits back button expose length
+          stopRightSwipe={-110}
+          ref={refToSwipeRow}
+        >
+          <GoalButtonBack
+            deleteGoal={deleteGoal}
+            navigateToGoal={navigateToGoal}
+            pushGoal={pushGoal}
+            goalName={text}
+            closeRow={() => refToSwipeRow.current.closeRow()}
+          />
+          <GoalButtonFront
+            text={text}
+            totalCount={totalCount}
+            cadence={cadence}
+            cadenceCount={cadenceCount}
+            pushGoal={pushGoal}
+            lastTimeStampMessage={lastTimeStampMessage}
+            is_overdue={is_overdue}
+          />
+        </SwipeRow>
+      </View>
     </View>
-  </View>
-);
+  );
+};
 
 export default GoalListItem;
 
