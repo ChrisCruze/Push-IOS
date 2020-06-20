@@ -9,21 +9,56 @@ import {
 } from "react-native";
 import { Neomorph } from "react-native-neomorph-shadows";
 import { SwipeRow } from "react-native-swipe-list-view";
-import { Feather as Icon, FontAwesome } from "@expo/vector-icons";
-
-const GoalButtonBackDelete = ({ deleteGoal }) => {
-  return (
-    <TouchableWithoutFeedback onPress={deleteGoal}>
-      <Icon name="trash" size={45} {...{ color: "black" }} />
-    </TouchableWithoutFeedback>
-  );
-};
+import { Feather as Icon } from "@expo/vector-icons";
 
 const GoalButtonBackDashboard = ({ navigateToGoal }) => {
   return (
-    <TouchableWithoutFeedback onPress={navigateToGoal}>
-      <FontAwesome name="dashboard" size={45} {...{ color: "black" }} />
-    </TouchableWithoutFeedback>
+    <View
+      style={{
+        ...styles.backButton,
+        backgroundColor: "#005AFF",
+        flex: 1,
+        borderRadius: 18,
+        flexDirection: "row",
+        paddingLeft: 25,
+        justifyContent: "flex-start",
+      }}
+    >
+      <TouchableWithoutFeedback onPress={navigateToGoal}>
+        <Icon name="check" size={30} color={"white"} />
+      </TouchableWithoutFeedback>
+    </View>
+  );
+};
+
+const GoalButtonBackDelete = ({ deleteGoal }) => {
+  return (
+    <View
+      style={{
+        ...styles.backButton,
+        backgroundColor: "#000000",
+        flex: 1,
+        borderRadius: 18,
+        flexDirection: "column",
+        justifyContent: "space-evenly",
+        alignItems: "flex-end",
+      }}
+    >
+      <TouchableWithoutFeedback onPress={deleteGoal}>
+        <Icon name="edit-2" size={25} color={"white"} style={{ marginRight: 26 }} />
+      </TouchableWithoutFeedback>
+      <View
+        style={{
+          borderBottomColor: "white",
+          borderBottomWidth: 2,
+          width: 40,
+          marginRight: 20,
+        }}
+      />
+      <TouchableWithoutFeedback onPress={deleteGoal}>
+        <Icon name="trash" size={25} color={"white"} style={{ marginRight: 26 }} />
+      </TouchableWithoutFeedback>
+    </View>
   );
 };
 
@@ -99,7 +134,7 @@ const GoalButtonFront = ({
 
   return (
     <TouchableWithoutFeedback onPress={pushGoalAnimate}>
-      <Neomorph darkShadowColor={color_shade} lightShadowColor="#FFF" style={[styles.neomorph]}>
+      <Neomorph darkShadowColor={color_shade} lightShadowColor="#FFF" style={styles.neomorph}>
         <View style={styles.topRow}>
           <GoalTitleText text={text} />
           <View style={[styles.dash, { borderColor: color }]}>
@@ -195,12 +230,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   standaloneRowBack: {
-    backgroundColor: main_background,
-    flex: 1,
+    display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 15,
-    borderRadius: 20,
+    // padding: 15,
+    height: 95,
+    // borderWidth: 1,
+    // borderColor: "#005AFF",
   },
   textFont: {
     fontSize: 30,
@@ -214,19 +250,15 @@ const styles = StyleSheet.create({
 
   neomorph: {
     shadowOpacity: 0.7, // <- and this or yours opacity
-    shadowRadius: 7,
-    borderRadius: 15,
-    borderWidth: 1,
-    borderTopColor: "#000000",
-    borderLeftColor: "#000000",
-    borderBottomColor: "#000000",
-    borderRightColor: "#000000",
+    shadowRadius: 4,
+    borderRadius: 18,
+    borderColor: "#000000",
     backgroundColor: "#FFF9FD", //"#0070c0", //89CFF0"#ECF0F3",
     width: width * 0.8,
     height: 95,
     alignItems: "center",
     justifyContent: "center",
-    // borderWidth: Platform.OS === "android" ? 4 : 0,
+    borderWidth: Platform.OS === "android" ? 4 : 2,
   },
   task: {
     fontWeight: "bold",
@@ -271,5 +303,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontSize: 32,
     fontWeight: "bold",
+  },
+  backButton: {
+    justifyContent: "center",
+    display: "flex",
+    alignItems: "center",
   },
 });
