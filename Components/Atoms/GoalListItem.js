@@ -56,7 +56,7 @@ const GoalButtonBackDelete = ({ deleteGoal }) => {
         }}
       />
       <TouchableWithoutFeedback onPress={deleteGoal}>
-        <Icon name="trash" size={25} color={"white"} style={{ marginRight: 26 }} />
+        <Icon name="trash-2" size={25} color={"white"} style={{ marginRight: 26 }} />
       </TouchableWithoutFeedback>
     </View>
   );
@@ -192,6 +192,8 @@ const GoalListItem = ({
           rightActivationValue={-60}
           directionalDistanceChangeThreshold={1} // swipe sensitivity
           closeOnRowPress={true}
+          stopLeftSwipe={110} // limits back button expose length
+          stopRightSwipe={-110}
         >
           <GoalButtonBack deleteGoal={deleteGoal} navigateToGoal={navigateToGoal} />
           <GoalButtonFront
