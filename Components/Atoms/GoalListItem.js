@@ -14,17 +14,7 @@ import { Feather as Icon } from "@expo/vector-icons";
 
 const GoalButtonBackDashboard = ({ pushGoal }) => {
   return (
-    <View
-      style={{
-        ...styles.backButton,
-        backgroundColor: "#005AFF",
-        flex: 1,
-        borderRadius: 18,
-        flexDirection: "row",
-        paddingLeft: 25,
-        justifyContent: "flex-start",
-      }}
-    >
+    <View style={styles.backButtonLeft}>
       <TouchableWithoutFeedback onPress={pushGoal}>
         <Icon name="check" size={30} color={"white"} />
       </TouchableWithoutFeedback>
@@ -51,18 +41,9 @@ const GoalButtonBackDelete = ({ goalName, deleteGoal, navigateToGoal }) => {
       { cancelable: false },
     );
   };
+
   return (
-    <View
-      style={{
-        ...styles.backButton,
-        backgroundColor: "#000000",
-        flex: 1,
-        borderRadius: 18,
-        flexDirection: "column",
-        justifyContent: "space-evenly",
-        alignItems: "flex-end",
-      }}
-    >
+    <View style={styles.backButtonRight}>
       <TouchableWithoutFeedback onPress={navigateToGoal}>
         <Icon name="edit-2" size={25} color={"white"} style={{ marginRight: 26 }} />
       </TouchableWithoutFeedback>
@@ -192,52 +173,39 @@ const GoalListItem = ({
   deleteGoal,
   lastTimeStampMessage,
   is_overdue,
-}) => {
-  // const onSwipeValueChange = swipeData => {
-  //   const { value } = swipeData;
-  //   if (value > Dimensions.get("window").width) {
-  //     Animated.timing(new Animated.Value(0), {
-  //       toValue: 0,
-  //       duration: 200,
-  //     }).start(() => {
-  //       navigateToGoal();
-  //     });
-  //   }
-  // };
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.standalone}>
-        <SwipeRow
-          leftActionValue={80} // the exposed length when swiped
-          rightActionValue={-80}
-          leftActivationValue={60} // how far the swipe needs to be to open
-          rightActivationValue={-60}
-          directionalDistanceChangeThreshold={1} // swipe sensitivity
-          closeOnRowPress={true}
-          stopLeftSwipe={110} // limits back button expose length
-          stopRightSwipe={-110}
-        >
-          <GoalButtonBack
-            deleteGoal={deleteGoal}
-            navigateToGoal={navigateToGoal}
-            pushGoal={pushGoal}
-            goalName={text}
-          />
-          <GoalButtonFront
-            text={text}
-            totalCount={totalCount}
-            cadence={cadence}
-            cadenceCount={cadenceCount}
-            pushGoal={pushGoal}
-            lastTimeStampMessage={lastTimeStampMessage}
-            is_overdue={is_overdue}
-          />
-        </SwipeRow>
-      </View>
+}) => (
+  <View style={styles.container}>
+    <View style={styles.standalone}>
+      <SwipeRow
+        leftActionValue={80} // the exposed length when swiped
+        rightActionValue={-80}
+        leftActivationValue={60} // how far the swipe needs to be to open
+        rightActivationValue={-60}
+        directionalDistanceChangeThreshold={1} // swipe sensitivity
+        closeOnRowPress={true}
+        stopLeftSwipe={110} // limits back button expose length
+        stopRightSwipe={-110}
+      >
+        <GoalButtonBack
+          deleteGoal={deleteGoal}
+          navigateToGoal={navigateToGoal}
+          pushGoal={pushGoal}
+          goalName={text}
+        />
+        <GoalButtonFront
+          text={text}
+          totalCount={totalCount}
+          cadence={cadence}
+          cadenceCount={cadenceCount}
+          pushGoal={pushGoal}
+          lastTimeStampMessage={lastTimeStampMessage}
+          is_overdue={is_overdue}
+        />
+      </SwipeRow>
     </View>
-  );
-};
+  </View>
+);
+
 export default GoalListItem;
 
 const { width } = Dimensions.get("window");
@@ -263,10 +231,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    // padding: 15,
     height: 95,
-    // borderWidth: 1,
-    // borderColor: "#005AFF",
   },
   textFont: {
     fontSize: 30,
@@ -277,7 +242,6 @@ const styles = StyleSheet.create({
   spacer: {
     height: 50,
   },
-
   neomorph: {
     shadowOpacity: 0.7, // <- and this or yours opacity
     shadowRadius: 4,
@@ -334,9 +298,24 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "bold",
   },
-  backButton: {
-    justifyContent: "center",
+  backButtonLeft: {
     display: "flex",
     alignItems: "center",
+    backgroundColor: "#005AFF",
+    flex: 1,
+    borderRadius: 18,
+    flexDirection: "row",
+    paddingLeft: 25,
+    justifyContent: "flex-start",
+  },
+  backButtonRight: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    display: "flex",
+    alignItems: "flex-end",
+    paddingLeft: 25,
+    backgroundColor: "#000000",
+    borderRadius: 18,
   },
 });
