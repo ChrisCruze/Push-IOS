@@ -6,12 +6,13 @@ import {
   View,
   Dimensions,
   Animated,
+  Alert,
 } from "react-native";
 import { Neomorph } from "react-native-neomorph-shadows";
 import { SwipeRow } from "react-native-swipe-list-view";
 import { Feather as Icon } from "@expo/vector-icons";
 
-const GoalButtonBackDashboard = ({ navigateToGoal }) => {
+const GoalButtonBackDashboard = ({ pushGoal }) => {
   return (
     <View
       style={{
@@ -24,14 +25,32 @@ const GoalButtonBackDashboard = ({ navigateToGoal }) => {
         justifyContent: "flex-start",
       }}
     >
-      <TouchableWithoutFeedback onPress={navigateToGoal}>
+      <TouchableWithoutFeedback onPress={pushGoal}>
         <Icon name="check" size={30} color={"white"} />
       </TouchableWithoutFeedback>
     </View>
   );
 };
 
-const GoalButtonBackDelete = ({ deleteGoal }) => {
+const GoalButtonBackDelete = ({ goalName, deleteGoal, navigateToGoal }) => {
+  const deleteWithConfirmation = () => {
+    Alert.alert(
+      "Are you sure you want to delete?",
+      goalName,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+          onPress: () => console.log("Goal Delete Cancelled"),
+        },
+        {
+          text: "Delete",
+          onPress: () => deleteGoal(),
+        },
+      ],
+      { cancelable: false },
+    );
+  };
   return (
     <View
       style={{
@@ -44,7 +63,7 @@ const GoalButtonBackDelete = ({ deleteGoal }) => {
         alignItems: "flex-end",
       }}
     >
-      <TouchableWithoutFeedback onPress={deleteGoal}>
+      <TouchableWithoutFeedback onPress={navigateToGoal}>
         <Icon name="edit-2" size={25} color={"white"} style={{ marginRight: 26 }} />
       </TouchableWithoutFeedback>
       <View
@@ -55,18 +74,22 @@ const GoalButtonBackDelete = ({ deleteGoal }) => {
           marginRight: 20,
         }}
       />
-      <TouchableWithoutFeedback onPress={deleteGoal}>
+      <TouchableWithoutFeedback onPress={deleteWithConfirmation}>
         <Icon name="trash-2" size={25} color={"white"} style={{ marginRight: 26 }} />
       </TouchableWithoutFeedback>
     </View>
   );
 };
 
-const GoalButtonBack = ({ deleteGoal, navigateToGoal }) => {
+const GoalButtonBack = ({ goalName, deleteGoal, navigateToGoal, pushGoal }) => {
   return (
     <View style={[styles.standaloneRowBack]}>
-      <GoalButtonBackDashboard navigateToGoal={navigateToGoal} />
-      <GoalButtonBackDelete deleteGoal={deleteGoal} />
+      <GoalButtonBackDashboard pushGoal={pushGoal} />
+      <GoalButtonBackDelete
+        goalName={goalName}
+        deleteGoal={deleteGoal}
+        navigateToGoal={navigateToGoal}
+      />
     </View>
   );
 };
@@ -195,7 +218,12 @@ const GoalListItem = ({
           stopLeftSwipe={110} // limits back button expose length
           stopRightSwipe={-110}
         >
-          <GoalButtonBack deleteGoal={deleteGoal} navigateToGoal={navigateToGoal} />
+          <GoalButtonBack
+            deleteGoal={deleteGoal}
+            navigateToGoal={navigateToGoal}
+            pushGoal={pushGoal}
+            goalName={text}
+          />
           <GoalButtonFront
             text={text}
             totalCount={totalCount}
