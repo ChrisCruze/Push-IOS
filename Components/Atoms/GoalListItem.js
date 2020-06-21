@@ -194,6 +194,7 @@ const GoalListItem = ({
     });
   };
   const [rowOpen, setRowOpen] = useState(false);
+
   return (
     <View style={styles.container}>
       <View style={styles.standalone}>
@@ -203,7 +204,6 @@ const GoalListItem = ({
           leftActivationValue={60} // how far the swipe needs to be to open
           rightActivationValue={-60}
           directionalDistanceChangeThreshold={1} // swipe sensitivity
-          // closeOnRowPress={true}
           stopLeftSwipe={110} // limits back button expose length
           stopRightSwipe={-110}
           ref={refToSwipeRow}
@@ -274,11 +274,11 @@ const styles = StyleSheet.create({
     height: 50,
   },
   neomorph: {
-    shadowOpacity: 0.7, // <- and this or yours opacity
+    shadowOpacity: 0.7,
     shadowRadius: 4,
     borderRadius: 18,
     borderColor: "#000000",
-    backgroundColor: "#FFF9FD", //"#0070c0", //89CFF0"#ECF0F3",
+    backgroundColor: "#FFF9FD",
     width: width * 0.8,
     height: 95,
     alignItems: "center",
