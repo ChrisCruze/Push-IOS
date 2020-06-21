@@ -176,7 +176,7 @@ const GoalListItem = ({
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 0,
-        duration: 100,
+        duration: 500,
       }),
       Animated.timing(moveAnim, {
         toValue: 20,
