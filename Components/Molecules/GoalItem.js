@@ -57,7 +57,9 @@ const GoalItem = ({
   const navigateToGoal = () => {
     GoalOptionsPress({ id, navigation, goals });
   };
-
+  const navigateToEditGoal = () => {
+    navigation.navigate("editGoal", { _id: _id });
+  };
   const pushGoalPress = () => {
     Vibration.vibrate();
     const timeStampsWithNew = timeStamps.concat(moment().format());
@@ -85,6 +87,7 @@ const GoalItem = ({
   return (
     <GoalListItem
       navigateToGoal={navigateToGoal}
+      navigateToEditGoal={navigateToEditGoal}
       pushGoal={pushGoalPress}
       deleteGoal={deleteGoalPress}
       text={title}

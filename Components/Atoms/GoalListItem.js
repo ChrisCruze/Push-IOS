@@ -28,7 +28,7 @@ const GoalButtonBackPushAction = ({ pushGoal, closeRow, pushGoalAnimate }) => {
   );
 };
 
-const GoalButtonBackDeleteAndEdit = ({ goalName, deleteGoal, navigateToGoal, closeRow }) => {
+const GoalButtonBackDeleteAndEdit = ({ goalName, deleteGoal, navigateToEditGoal, closeRow }) => {
   const deleteWithConfirmation = () => {
     Alert.alert(
       "Are you sure you want to delete?",
@@ -50,7 +50,7 @@ const GoalButtonBackDeleteAndEdit = ({ goalName, deleteGoal, navigateToGoal, clo
 
   return (
     <View style={styles.backButtonRight}>
-      <TouchableWithoutFeedback onPress={navigateToGoal}>
+      <TouchableWithoutFeedback onPress={navigateToEditGoal}>
         <Icon name="edit-2" size={25} color={"white"} style={{ marginRight: 26 }} />
       </TouchableWithoutFeedback>
       <View
@@ -72,7 +72,7 @@ const GoalButtonBack = ({
   closeRow,
   goalName,
   deleteGoal,
-  navigateToGoal,
+  navigateToEditGoal,
   pushGoal,
   pushGoalAnimate,
 }) => {
@@ -87,7 +87,7 @@ const GoalButtonBack = ({
         closeRow={closeRow}
         goalName={goalName}
         deleteGoal={deleteGoal}
-        navigateToGoal={navigateToGoal}
+        navigateToEditGoal={navigateToEditGoal}
       />
     </View>
   );
@@ -124,39 +124,42 @@ const GoalButtonFront = ({
   is_overdue,
   moveAnim,
   fadeAnim,
+  navigateToGoal,
 }) => {
   const color = "#17355A";
   const color_shade = is_overdue ? "#C94818" : "#193162";
-  // console.log("inside GoalButtonFront", { fadeAnim, moveAnim });
 
   return (
-    <Neomorph darkShadowColor={color_shade} lightShadowColor="#FFF" style={styles.neomorph}>
-      <View style={styles.topRow}>
-        <GoalTitleText text={text} />
-        <View style={[styles.dash, { borderColor: color }]}>
-          <Animated.Text
-            style={[
-              styles.frequency,
-              { textDecorationColor: color, color: color, opacity: fadeAnim, bottom: moveAnim },
-            ]}
-          >
-            {calculatePercentage(totalCount, cadenceCount)}
-          </Animated.Text>
+    <TouchableWithoutFeedback onPress={navigateToGoal}>
+      <Neomorph darkShadowColor={color_shade} lightShadowColor="#FFF" style={styles.neomorph}>
+        <View style={styles.topRow}>
+          <GoalTitleText text={text} />
+          <View style={[styles.dash, { borderColor: color }]}>
+            <Animated.Text
+              style={[
+                styles.frequency,
+                { textDecorationColor: color, color: color, opacity: fadeAnim, bottom: moveAnim },
+              ]}
+            >
+              {calculatePercentage(totalCount, cadenceCount)}
+            </Animated.Text>
+          </View>
         </View>
-      </View>
-      <View style={styles.botRow}>
-        <Text style={styles.duration}>{lastTimeStampMessage}</Text>
-        <Text style={styles.duration}>
-          {totalCount} / {cadenceCount} ({cadence})
-        </Text>
-      </View>
-    </Neomorph>
+        <View style={styles.botRow}>
+          <Text style={styles.duration}>{lastTimeStampMessage}</Text>
+          <Text style={styles.duration}>
+            {totalCount} / {cadenceCount} ({cadence})
+          </Text>
+        </View>
+      </Neomorph>
+    </TouchableWithoutFeedback>
   );
 };
 
 const GoalListItem = ({
   text,
   navigateToGoal,
+  navigateToEditGoal,
   pushGoal,
   totalCount,
   cadence,
@@ -208,11 +211,11 @@ const GoalListItem = ({
         >
           <GoalButtonBack
             deleteGoal={deleteGoal}
-            navigateToGoal={navigateToGoal}
             pushGoal={pushGoal}
             goalName={text}
             closeRow={() => refToSwipeRow.current.closeRow()}
             pushGoalAnimate={pushGoalAnimate}
+            navigateToEditGoal={navigateToEditGoal}
           />
           <GoalButtonFront
             text={text}
@@ -221,6 +224,7 @@ const GoalListItem = ({
             cadenceCount={cadenceCount}
             lastTimeStampMessage={lastTimeStampMessage}
             is_overdue={is_overdue}
+            navigateToGoal={navigateToGoal}
             moveAnim={moveAnim}
             fadeAnim={fadeAnim}
           />
