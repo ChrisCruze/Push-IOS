@@ -1,57 +1,105 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import {
   StyleSheet,
   Text,
-  TouchableOpacity,
-  TouchableHighlight,
   TouchableWithoutFeedback,
   View,
   Dimensions,
   Animated,
+  Alert,
 } from "react-native";
 import { Neomorph } from "react-native-neomorph-shadows";
-import { SwipeListView, SwipeRow } from "react-native-swipe-list-view";
-import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
-import AwesomeButton from "react-native-really-awesome-button";
-import AwesomeButtonRick from "react-native-really-awesome-button/src/themes/rick";
-import AwesomeButtonProgress from "react-native-really-awesome-button";
+import { SwipeRow } from "react-native-swipe-list-view";
+import { Feather as Icon } from "@expo/vector-icons";
 
-const GoalButtonBackDelete = ({ deleteGoal }) => {
+const GoalButtonBackPushAction = ({ pushGoal, closeRow, pushGoalAnimate }) => {
   return (
-    <TouchableWithoutFeedback onPress={deleteGoal}>
-      <Icon name="trash" size={45} {...{ color: "black" }} />
-
-      {/* <Text style={[styles.buttonText]}>Delete</Text> */}
-    </TouchableWithoutFeedback>
-  );
-};
-const GoalButtonBackDashboard = ({ navigateToGoal }) => {
-  return (
-    <TouchableWithoutFeedback onPress={navigateToGoal}>
-      <FontAwesome name="dashboard" size={45} {...{ color: "black" }} />
-      {/* <Text style={[styles.buttonText]}>Dashboard</Text> */}
-    </TouchableWithoutFeedback>
+    <View style={styles.backButtonLeft}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          pushGoal();
+          closeRow();
+          pushGoalAnimate();
+        }}
+      >
+        <Icon name="check" size={30} color={"white"} />
+      </TouchableWithoutFeedback>
+    </View>
   );
 };
 
-const GoalButtonBack = ({ deleteGoal, navigateToGoal }) => {
+const GoalButtonBackDeleteAndEdit = ({ goalName, deleteGoal, navigateToEditGoal, closeRow }) => {
+  const deleteWithConfirmation = () => {
+    Alert.alert(
+      "Are you sure you want to delete?",
+      goalName,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+          onPress: () => closeRow(),
+        },
+        {
+          text: "Delete",
+          onPress: () => deleteGoal(),
+        },
+      ],
+      { cancelable: false },
+    );
+  };
+
+  return (
+    <View style={styles.backButtonRight}>
+      <TouchableWithoutFeedback onPress={navigateToEditGoal}>
+        <Icon name="edit-2" size={25} color={"white"} style={{ marginRight: 26 }} />
+      </TouchableWithoutFeedback>
+      <View
+        style={{
+          borderBottomColor: "white",
+          borderBottomWidth: 2,
+          width: 40,
+          marginRight: 20,
+        }}
+      />
+      <TouchableWithoutFeedback onPress={deleteWithConfirmation}>
+        <Icon name="trash-2" size={25} color={"white"} style={{ marginRight: 26 }} />
+      </TouchableWithoutFeedback>
+    </View>
+  );
+};
+
+const GoalButtonBack = ({
+  closeRow,
+  goalName,
+  deleteGoal,
+  navigateToEditGoal,
+  pushGoal,
+  pushGoalAnimate,
+}) => {
   return (
     <View style={[styles.standaloneRowBack]}>
-      <GoalButtonBackDashboard navigateToGoal={navigateToGoal} />
-
-      <GoalButtonBackDelete deleteGoal={deleteGoal} />
+      <GoalButtonBackPushAction
+        pushGoal={pushGoal}
+        closeRow={closeRow}
+        pushGoalAnimate={pushGoalAnimate}
+      />
+      <GoalButtonBackDeleteAndEdit
+        closeRow={closeRow}
+        goalName={goalName}
+        deleteGoal={deleteGoal}
+        navigateToEditGoal={navigateToEditGoal}
+      />
     </View>
   );
 };
 
 const calculatePercentage = (totalCount, cadence) => {
   const percentage = totalCount / cadence;
-
   const percentageFormatted = (percentage * 100).toFixed(0);
   return percentageFormatted + "%";
 };
 
-const GoalTitleTextFontSizeDetermine = (textLength, text) => {
+const GoalTitleTextFontSizeDetermine = textLength => {
   if (textLength > 12) {
     const extraCharacters = Math.abs(textLength - 12);
     const fontSizeDetermined = 28 - extraCharacters;
@@ -63,58 +111,26 @@ const GoalTitleTextFontSizeDetermine = (textLength, text) => {
 
 const GoalTitleText = ({ text }) => {
   const textLength = text.length;
-
   const fontSizeCalculated = GoalTitleTextFontSizeDetermine(textLength, text);
   return <Text style={[styles.task, { fontSize: fontSizeCalculated }]}>{text}</Text>;
 };
+
 const GoalButtonFront = ({
   text,
   totalCount,
   cadenceCount,
   cadence,
-  pushGoal,
   lastTimeStampMessage,
-  is_overdue,
+  moveAnim,
+  fadeAnim,
+  navigateToGoal,
+  rowOpen,
+  closeRow,
 }) => {
-  const [fadeAnim] = useState(new Animated.Value(1));
-  const [moveAnim] = useState(new Animated.Value(0));
-
-  // const fadeAnim = new Animated.Value(0)
-  const color = "#17355A"; //"#2DAAFF"; //is_overdue ? "red" : "green";
-  const color_shade = is_overdue ? "#C94818" : "#193162";
-  const main_background = "#FFF9FD";
-
-  const pushGoalAnimate = () => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 100,
-      }),
-      Animated.timing(moveAnim, {
-        toValue: 20,
-        duration: 100,
-      }),
-    ]).start(() => {
-      Animated.timing(moveAnim, {
-        toValue: 0,
-        duration: 0,
-      }).start(() => {
-        pushGoal();
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 1500,
-        }).start();
-      });
-    });
-  };
-
+  const color = "#17355A";
   return (
-    <TouchableWithoutFeedback onPress={pushGoalAnimate}>
-      <Neomorph
-        darkShadowColor={color_shade} //"#D1CDC7" // <- set this
-        lightShadowColor="#FFF" //{color_shade} ///
-        style={[styles.neomorph]}
-      >
+    <TouchableWithoutFeedback onPress={rowOpen ? closeRow : navigateToGoal}>
+      <Neomorph lightShadowColor="#FFF" style={styles.neomorph}>
         <View style={styles.topRow}>
           <GoalTitleText text={text} />
           <View style={[styles.dash, { borderColor: color }]}>
@@ -138,9 +154,11 @@ const GoalButtonFront = ({
     </TouchableWithoutFeedback>
   );
 };
+
 const GoalListItem = ({
   text,
   navigateToGoal,
+  navigateToEditGoal,
   pushGoal,
   totalCount,
   cadence,
@@ -149,41 +167,76 @@ const GoalListItem = ({
   lastTimeStampMessage,
   is_overdue,
 }) => {
-  const onSwipeValueChange = swipeData => {
-    const { key, value } = swipeData;
-    if (value > Dimensions.get("window").width) {
-      Animated.timing(new Animated.Value(0), {
+  const refToSwipeRow = useRef();
+  const [fadeAnim] = useState(new Animated.Value(1));
+  const [moveAnim] = useState(new Animated.Value(0));
+
+  const pushGoalAnimate = () => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
         toValue: 0,
-        duration: 200,
+        duration: 500,
+      }),
+      Animated.timing(moveAnim, {
+        toValue: 20,
+        duration: 100,
+      }),
+    ]).start(() => {
+      Animated.timing(moveAnim, {
+        toValue: 0,
+        duration: 0,
       }).start(() => {
-        navigateToGoal();
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 1500,
+        }).start();
       });
-    }
+    });
   };
+  const [rowOpen, setRowOpen] = useState(false);
 
   return (
     <View style={styles.container}>
       <View style={styles.standalone}>
         <SwipeRow
-          // disableRightSwipe
-          rightOpenValue={Dimensions.get("window").width}
-          onSwipeValueChange={onSwipeValueChange}
+          leftActionValue={80} // the exposed length when swiped
+          rightActionValue={-80}
+          leftActivationValue={60} // how far the swipe needs to be to open
+          rightActivationValue={-60}
+          directionalDistanceChangeThreshold={1} // swipe sensitivity
+          stopLeftSwipe={110} // limits back button expose length
+          stopRightSwipe={-110}
+          ref={refToSwipeRow}
+          onRowOpen={() => setRowOpen(true)}
+          onRowClose={() => setRowOpen(false)}
         >
-          <GoalButtonBack deleteGoal={deleteGoal} navigateToGoal={navigateToGoal} />
+          <GoalButtonBack
+            deleteGoal={deleteGoal}
+            pushGoal={pushGoal}
+            goalName={text}
+            closeRow={() => refToSwipeRow.current.closeRow()}
+            pushGoalAnimate={pushGoalAnimate}
+            navigateToEditGoal={navigateToEditGoal}
+          />
           <GoalButtonFront
             text={text}
             totalCount={totalCount}
             cadence={cadence}
             cadenceCount={cadenceCount}
-            pushGoal={pushGoal}
             lastTimeStampMessage={lastTimeStampMessage}
             is_overdue={is_overdue}
+            navigateToGoal={navigateToGoal}
+            moveAnim={moveAnim}
+            fadeAnim={fadeAnim}
+            closeRow={() => refToSwipeRow.current.closeRow()}
+            rowOpen={rowOpen}
           />
         </SwipeRow>
       </View>
     </View>
   );
 };
+
 export default GoalListItem;
 
 const { width } = Dimensions.get("window");
@@ -206,12 +259,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   standaloneRowBack: {
-    backgroundColor: main_background,
-    flex: 1,
+    display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 15,
-    borderRadius: 20,
+    height: 95,
   },
   textFont: {
     fontSize: 30,
@@ -222,22 +273,17 @@ const styles = StyleSheet.create({
   spacer: {
     height: 50,
   },
-
   neomorph: {
-    shadowOpacity: 0.7, // <- and this or yours opacity
-    shadowRadius: 7,
-    borderRadius: 30,
-
-    borderTopColor: "#FFF",
-    borderLeftColor: "#FFF",
-    borderBottomColor: "#D1CDC7",
-    borderRightColor: "#D1CDC7",
-    backgroundColor: "#FFF9FD", //"#0070c0", //89CFF0"#ECF0F3",
+    shadowOpacity: 0.7,
+    shadowRadius: 4,
+    borderRadius: 18,
+    borderColor: "#000000",
+    backgroundColor: "#FFF9FD",
     width: width * 0.8,
     height: 95,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: Platform.OS === "android" ? 4 : 0,
+    borderWidth: Platform.OS === "android" ? 4 : 2,
   },
   task: {
     fontWeight: "bold",
@@ -263,7 +309,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     flexDirection: "row",
     flex: 2,
-
     alignSelf: "stretch",
     textAlign: "left",
   },
@@ -279,13 +324,29 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignSelf: "stretch",
   },
-
-  dash: {
-    // borderBottomWidth: 3,
-  },
   buttonText: {
     alignSelf: "center",
     fontSize: 32,
     fontWeight: "bold",
+  },
+  backButtonLeft: {
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "#005AFF",
+    flex: 1,
+    borderRadius: 18,
+    flexDirection: "row",
+    paddingLeft: 25,
+    justifyContent: "flex-start",
+  },
+  backButtonRight: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    display: "flex",
+    alignItems: "flex-end",
+    paddingLeft: 25,
+    backgroundColor: "#000000",
+    borderRadius: 18,
   },
 });
