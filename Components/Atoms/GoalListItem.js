@@ -117,6 +117,7 @@ const GoalTitleText = ({ text, color }) => {
 
 const GoalButtonFrontBase = ({
   text,
+  subTitle,
   totalCount,
   cadenceCount,
   cadence,
@@ -149,9 +150,7 @@ const GoalButtonFrontBase = ({
         </View>
         <View style={[styles.botRow, { opacity }]}>
           <Text style={[styles.duration, { color }]}>{lastTimeStampMessage}</Text>
-          <Text style={[styles.duration, { color }]}>
-            {totalCount} / {cadenceCount} ({cadence})
-          </Text>
+          <Text style={[styles.duration, { color }]}>{subTitle}</Text>
         </View>
       </Neomorph>
     </TouchableWithoutFeedback>
@@ -159,6 +158,7 @@ const GoalButtonFrontBase = ({
 };
 const GoalButtonFront = ({
   text,
+  subTitle,
   totalCount,
   cadenceCount,
   cadence,
@@ -179,6 +179,7 @@ const GoalButtonFront = ({
     <GoalButtonFrontBase
       {...{
         text,
+        subTitle,
         totalCount,
         cadenceCount,
         cadence,
@@ -208,6 +209,7 @@ const GoalListItem = ({
   deleteGoal,
   lastTimeStampMessage,
   is_overdue,
+  subTitle,
 }) => {
   const refToSwipeRow = useRef();
   const [fadeAnim] = useState(new Animated.Value(1));
@@ -272,6 +274,7 @@ const GoalListItem = ({
             fadeAnim={fadeAnim}
             closeRow={() => refToSwipeRow.current.closeRow()}
             rowOpen={rowOpen}
+            subTitle={subTitle}
           />
         </SwipeRow>
       </View>
