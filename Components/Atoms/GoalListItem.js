@@ -109,10 +109,23 @@ const GoalTitleTextFontSizeDetermine = textLength => {
   }
 };
 
-const GoalTitleText = ({ text, color }) => {
+const GoalTitleText = ({ text, color, textDecorationLine }) => {
   const textLength = text.length;
   const fontSizeCalculated = GoalTitleTextFontSizeDetermine(textLength, text);
-  return <Text style={[styles.task, { fontSize: fontSizeCalculated, color }]}>{text}</Text>;
+  return (
+    <Text
+      style={[
+        styles.task,
+        {
+          fontSize: fontSizeCalculated,
+          color,
+          textDecorationLine,
+        },
+      ]}
+    >
+      {text}
+    </Text>
+  );
 };
 
 const GoalButtonFrontBase = ({
@@ -131,12 +144,13 @@ const GoalButtonFrontBase = ({
   color,
   borderColor,
   opacity,
+  textDecorationLine,
 }) => {
   return (
     <TouchableWithoutFeedback onPress={rowOpen ? closeRow : navigateToGoal}>
       <Neomorph lightShadowColor="#FFF" style={[styles.neomorph, { backgroundColor, borderColor }]}>
         <View style={[styles.topRow, { opacity }]}>
-          <GoalTitleText text={text} color={color} />
+          <GoalTitleText text={text} color={color} textDecorationLine={textDecorationLine} />
           <View style={[styles.dash, { borderColor: color }]}>
             <Animated.Text
               style={[
@@ -171,10 +185,10 @@ const GoalButtonFront = ({
   is_overdue,
 }) => {
   const backgroundColor = is_overdue ? "#FFF9FD" : "#D3D5DA";
-  const color = is_overdue ? "#17355A" : "gray";
+  const color = is_overdue ? "#17355A" : "black";
   const borderColor = is_overdue ? "#000000" : "#D3D5DA";
   const opacity = is_overdue ? 1 : 0.7;
-
+  const textDecorationLine = is_overdue ? "" : "line-through";
   return (
     <GoalButtonFrontBase
       {...{
@@ -193,6 +207,7 @@ const GoalButtonFront = ({
         color,
         borderColor,
         opacity,
+        textDecorationLine,
       }}
     />
   );
