@@ -162,12 +162,23 @@ export const filterTimeStampsForCadence = ({ timeStamps, cadence }) => {
   return filteredTimeStamps;
 };
 
-export const determineOverDue = ({ cadence, cadenceCount, goals, id }) => {
-  const timeStamps = getGoalTimeStamps({ goals, id });
+const determineOverDueFromTimeStamps = ({ cadence, cadenceCount, timeStamps }) => {
   const filteredTimeStamps = filterTimeStampsForCadence({ timeStamps, cadence });
   const cadenceInt = cadenceCount == 0 ? 1 : cadenceCount;
   const is_overdue = cadenceInt > filteredTimeStamps.length;
   return is_overdue;
+};
+
+export const determineOverDue = ({ cadence, cadenceCount, goals, id }) => {
+  const timeStamps = getGoalTimeStamps({ goals, id });
+  return determineOverDueFromTimeStamps({ cadence, cadenceCount, timeStamps });
+};
+
+const sortByOverDue = goals => {
+  const sortedGoals = _.sortBy(goals, goal =>
+    determineOverDueFromTimeStamps({ ...goal }) ? 0 : 1,
+  );
+  return sortedGoals;
 };
 
 export const GoalsSort = ({ goals }) => {
@@ -175,7 +186,7 @@ export const GoalsSort = ({ goals }) => {
   const goals_copy = [...goals];
 
   if (sortOrder == "none") {
-    var sorted_goals = goals_copy;
+    var sorted_goals = sortByOverDue(goals_copy);
     return { sorted_goals, updateSortOrder, sortOrder };
   } else if (sortOrder == "asc") {
     var sorted_goals = _.sortBy(goals_copy, function(D) {
