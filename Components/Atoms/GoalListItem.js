@@ -12,13 +12,14 @@ import { Neomorph } from "react-native-neomorph-shadows";
 import { SwipeRow } from "react-native-swipe-list-view";
 import { Feather as Icon } from "@expo/vector-icons";
 
-const GoalButtonBackPushAction = ({ pushGoal, closeRow }) => {
+const GoalButtonBackPushAction = ({ pushGoal, closeRow, pushGoalAnimate }) => {
   return (
     <View style={styles.backButtonLeft}>
       <TouchableWithoutFeedback
         onPress={() => {
           pushGoal();
           closeRow();
+          pushGoalAnimate();
         }}
       >
         <Icon name="check" size={30} color={"white"} />
@@ -67,10 +68,21 @@ const GoalButtonBackDeleteAndEdit = ({ goalName, deleteGoal, navigateToGoal, clo
   );
 };
 
-const GoalButtonBack = ({ closeRow, goalName, deleteGoal, navigateToGoal, pushGoal }) => {
+const GoalButtonBack = ({
+  closeRow,
+  goalName,
+  deleteGoal,
+  navigateToGoal,
+  pushGoal,
+  pushGoalAnimate,
+}) => {
   return (
     <View style={[styles.standaloneRowBack]}>
-      <GoalButtonBackPushAction pushGoal={pushGoal} closeRow={closeRow} />
+      <GoalButtonBackPushAction
+        pushGoal={pushGoal}
+        closeRow={closeRow}
+        pushGoalAnimate={pushGoalAnimate}
+      />
       <GoalButtonBackDeleteAndEdit
         closeRow={closeRow}
         goalName={goalName}
@@ -108,15 +120,54 @@ const GoalButtonFront = ({
   totalCount,
   cadenceCount,
   cadence,
+  lastTimeStampMessage,
+  is_overdue,
+  moveAnim,
+  fadeAnim,
+}) => {
+  const color = "#17355A";
+  const color_shade = is_overdue ? "#C94818" : "#193162";
+  // console.log("inside GoalButtonFront", { fadeAnim, moveAnim });
+
+  return (
+    <Neomorph darkShadowColor={color_shade} lightShadowColor="#FFF" style={styles.neomorph}>
+      <View style={styles.topRow}>
+        <GoalTitleText text={text} />
+        <View style={[styles.dash, { borderColor: color }]}>
+          <Animated.Text
+            style={[
+              styles.frequency,
+              { textDecorationColor: color, color: color, opacity: fadeAnim, bottom: moveAnim },
+            ]}
+          >
+            {calculatePercentage(totalCount, cadenceCount)}
+          </Animated.Text>
+        </View>
+      </View>
+      <View style={styles.botRow}>
+        <Text style={styles.duration}>{lastTimeStampMessage}</Text>
+        <Text style={styles.duration}>
+          {totalCount} / {cadenceCount} ({cadence})
+        </Text>
+      </View>
+    </Neomorph>
+  );
+};
+
+const GoalListItem = ({
+  text,
+  navigateToGoal,
   pushGoal,
+  totalCount,
+  cadence,
+  cadenceCount,
+  deleteGoal,
   lastTimeStampMessage,
   is_overdue,
 }) => {
+  const refToSwipeRow = useRef();
   const [fadeAnim] = useState(new Animated.Value(1));
   const [moveAnim] = useState(new Animated.Value(0));
-
-  const color = "#17355A"; //"#2DAAFF"; //is_overdue ? "red" : "green";
-  const color_shade = is_overdue ? "#C94818" : "#193162";
 
   const pushGoalAnimate = () => {
     Animated.parallel([
@@ -133,7 +184,6 @@ const GoalButtonFront = ({
         toValue: 0,
         duration: 0,
       }).start(() => {
-        pushGoal();
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 1500,
@@ -142,45 +192,6 @@ const GoalButtonFront = ({
     });
   };
 
-  return (
-    <TouchableWithoutFeedback onPress={pushGoalAnimate}>
-      <Neomorph darkShadowColor={color_shade} lightShadowColor="#FFF" style={styles.neomorph}>
-        <View style={styles.topRow}>
-          <GoalTitleText text={text} />
-          <View style={[styles.dash, { borderColor: color }]}>
-            <Animated.Text
-              style={[
-                styles.frequency,
-                { textDecorationColor: color, color: color, opacity: fadeAnim, bottom: moveAnim },
-              ]}
-            >
-              {calculatePercentage(totalCount, cadenceCount)}
-            </Animated.Text>
-          </View>
-        </View>
-        <View style={styles.botRow}>
-          <Text style={styles.duration}>{lastTimeStampMessage}</Text>
-          <Text style={styles.duration}>
-            {totalCount} / {cadenceCount} ({cadence})
-          </Text>
-        </View>
-      </Neomorph>
-    </TouchableWithoutFeedback>
-  );
-};
-
-const GoalListItem = ({
-  text,
-  navigateToGoal,
-  pushGoal,
-  totalCount,
-  cadence,
-  cadenceCount,
-  deleteGoal,
-  lastTimeStampMessage,
-  is_overdue,
-}) => {
-  const refToSwipeRow = useRef();
   return (
     <View style={styles.container}>
       <View style={styles.standalone}>
@@ -201,15 +212,17 @@ const GoalListItem = ({
             pushGoal={pushGoal}
             goalName={text}
             closeRow={() => refToSwipeRow.current.closeRow()}
+            pushGoalAnimate={pushGoalAnimate}
           />
           <GoalButtonFront
             text={text}
             totalCount={totalCount}
             cadence={cadence}
             cadenceCount={cadenceCount}
-            pushGoal={pushGoal}
             lastTimeStampMessage={lastTimeStampMessage}
             is_overdue={is_overdue}
+            moveAnim={moveAnim}
+            fadeAnim={fadeAnim}
           />
         </SwipeRow>
       </View>
