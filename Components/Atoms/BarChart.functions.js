@@ -152,8 +152,7 @@ const determineStartEndDateRange = cadence => {
   }
 };
 
-export const filterTimeStampsForCadence = ({ timeStamps, cadence }) => {
-  const { start, end } = determineStartEndDateRange(cadence);
+export const filterTimeStampsForCadenceFromStartEnd = ({ timeStamps, start, end }) => {
   const filteredTimeStamps = timeStamps.filter(function(timeStamp) {
     const is_after_start = moment(timeStamp).isAfter(start);
     const is_before_end = moment(timeStamp).isBefore(end);
@@ -161,11 +160,27 @@ export const filterTimeStampsForCadence = ({ timeStamps, cadence }) => {
   });
   return filteredTimeStamps;
 };
+export const filterTimeStampsForCadence = ({ timeStamps, cadence }) => {
+  const { start, end } = determineStartEndDateRange(cadence);
+  const filteredTimeStamps = filterTimeStampsForCadenceFromStartEnd({ timeStamps, start, end });
+  return filteredTimeStamps;
+};
 
+const percentageTimeFrameComplete = ({ start, end }) => {
+  const minutes_difference_from_start = moment().diff(start, "minutes");
+  const minutes_total = end.diff(start, "minutes");
+  const percentage_complete = minutes_difference_from_start / minutes_total;
+  return percentage_complete;
+};
+
+//if goal is 7 times a week, and its monday, and you only completed once, it will show overdue, since you should have been at 2 by Monday
 const determineOverDueFromTimeStamps = ({ cadence, cadenceCount, timeStamps }) => {
-  const filteredTimeStamps = filterTimeStampsForCadence({ timeStamps, cadence });
+  const { start, end } = determineStartEndDateRange(cadence);
+  const filteredTimeStamps = filterTimeStampsForCadenceFromStartEnd({ timeStamps, start, end });
+  const percentageTimePassed = percentageTimeFrameComplete({ start, end });
   const cadenceInt = cadenceCount == 0 ? 1 : cadenceCount;
-  const is_overdue = cadenceInt > filteredTimeStamps.length;
+  const goalCountTresholdForCadence = percentageTimePassed * cadenceInt;
+  const is_overdue = goalCountTresholdForCadence > filteredTimeStamps.length;
   return is_overdue;
 };
 
