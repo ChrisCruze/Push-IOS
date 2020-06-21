@@ -121,17 +121,16 @@ const GoalButtonFront = ({
   cadenceCount,
   cadence,
   lastTimeStampMessage,
-  is_overdue,
   moveAnim,
   fadeAnim,
   navigateToGoal,
+  rowOpen,
+  closeRow,
 }) => {
   const color = "#17355A";
-  const color_shade = is_overdue ? "#C94818" : "#193162";
-
   return (
-    <TouchableWithoutFeedback onPress={navigateToGoal}>
-      <Neomorph darkShadowColor={color_shade} lightShadowColor="#FFF" style={styles.neomorph}>
+    <TouchableWithoutFeedback onPress={rowOpen ? closeRow : navigateToGoal}>
+      <Neomorph lightShadowColor="#FFF" style={styles.neomorph}>
         <View style={styles.topRow}>
           <GoalTitleText text={text} />
           <View style={[styles.dash, { borderColor: color }]}>
@@ -194,7 +193,7 @@ const GoalListItem = ({
       });
     });
   };
-
+  const [rowOpen, setRowOpen] = useState(false);
   return (
     <View style={styles.container}>
       <View style={styles.standalone}>
@@ -204,10 +203,12 @@ const GoalListItem = ({
           leftActivationValue={60} // how far the swipe needs to be to open
           rightActivationValue={-60}
           directionalDistanceChangeThreshold={1} // swipe sensitivity
-          closeOnRowPress={true}
+          // closeOnRowPress={true}
           stopLeftSwipe={110} // limits back button expose length
           stopRightSwipe={-110}
           ref={refToSwipeRow}
+          onRowOpen={() => setRowOpen(true)}
+          onRowClose={() => setRowOpen(false)}
         >
           <GoalButtonBack
             deleteGoal={deleteGoal}
@@ -227,6 +228,8 @@ const GoalListItem = ({
             navigateToGoal={navigateToGoal}
             moveAnim={moveAnim}
             fadeAnim={fadeAnim}
+            closeRow={() => refToSwipeRow.current.closeRow()}
+            rowOpen={rowOpen}
           />
         </SwipeRow>
       </View>
