@@ -109,13 +109,13 @@ const GoalTitleTextFontSizeDetermine = textLength => {
   }
 };
 
-const GoalTitleText = ({ text }) => {
+const GoalTitleText = ({ text, color }) => {
   const textLength = text.length;
   const fontSizeCalculated = GoalTitleTextFontSizeDetermine(textLength, text);
-  return <Text style={[styles.task, { fontSize: fontSizeCalculated }]}>{text}</Text>;
+  return <Text style={[styles.task, { fontSize: fontSizeCalculated, color }]}>{text}</Text>;
 };
 
-const GoalButtonFront = ({
+const GoalButtonFrontBase = ({
   text,
   totalCount,
   cadenceCount,
@@ -126,13 +126,16 @@ const GoalButtonFront = ({
   navigateToGoal,
   rowOpen,
   closeRow,
+  backgroundColor,
+  color,
+  borderColor,
+  opacity,
 }) => {
-  const color = "#17355A";
   return (
     <TouchableWithoutFeedback onPress={rowOpen ? closeRow : navigateToGoal}>
-      <Neomorph lightShadowColor="#FFF" style={styles.neomorph}>
-        <View style={styles.topRow}>
-          <GoalTitleText text={text} />
+      <Neomorph lightShadowColor="#FFF" style={[styles.neomorph, { backgroundColor, borderColor }]}>
+        <View style={[styles.topRow, { opacity }]}>
+          <GoalTitleText text={text} color={color} />
           <View style={[styles.dash, { borderColor: color }]}>
             <Animated.Text
               style={[
@@ -144,14 +147,53 @@ const GoalButtonFront = ({
             </Animated.Text>
           </View>
         </View>
-        <View style={styles.botRow}>
-          <Text style={styles.duration}>{lastTimeStampMessage}</Text>
-          <Text style={styles.duration}>
+        <View style={[styles.botRow, { opacity }]}>
+          <Text style={[styles.duration, { color }]}>{lastTimeStampMessage}</Text>
+          <Text style={[styles.duration, { color }]}>
             {totalCount} / {cadenceCount} ({cadence})
           </Text>
         </View>
       </Neomorph>
     </TouchableWithoutFeedback>
+  );
+};
+const GoalButtonFront = ({
+  text,
+  totalCount,
+  cadenceCount,
+  cadence,
+  lastTimeStampMessage,
+  moveAnim,
+  fadeAnim,
+  navigateToGoal,
+  rowOpen,
+  closeRow,
+  is_overdue,
+}) => {
+  const backgroundColor = is_overdue ? "#FFF9FD" : "#D3D5DA";
+  const color = is_overdue ? "#17355A" : "gray";
+  const borderColor = is_overdue ? "#000000" : "#D3D5DA";
+  const opacity = is_overdue ? 1 : 0.7;
+
+  return (
+    <GoalButtonFrontBase
+      {...{
+        text,
+        totalCount,
+        cadenceCount,
+        cadence,
+        lastTimeStampMessage,
+        moveAnim,
+        fadeAnim,
+        navigateToGoal,
+        rowOpen,
+        closeRow,
+        backgroundColor,
+        color,
+        borderColor,
+        opacity,
+      }}
+    />
   );
 };
 
