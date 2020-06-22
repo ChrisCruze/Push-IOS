@@ -146,9 +146,21 @@ const GoalButtonFrontBase = ({
   opacity,
   textDecorationLine,
 }) => {
+  const neomorph = {
+    shadowOpacity: 0.7,
+    shadowRadius: 4,
+    borderRadius: 18,
+    borderColor: borderColor,
+    backgroundColor: backgroundColor,
+    width: width * 0.8,
+    height: 95,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: Platform.OS === "android" ? 4 : 2,
+  };
   return (
     <TouchableWithoutFeedback onPress={rowOpen ? closeRow : navigateToGoal}>
-      <Neomorph lightShadowColor="#FFF" style={[styles.neomorph, { backgroundColor, borderColor }]}>
+      <Neomorph lightShadowColor="#FFF" style={neomorph}>
         <View style={[styles.topRow, { opacity }]}>
           <GoalTitleText text={text} color={color} textDecorationLine={textDecorationLine} />
           <View style={[styles.dash, { borderColor: color }]}>
@@ -188,7 +200,7 @@ const GoalButtonFront = ({
   const color = is_overdue ? "#17355A" : "black";
   const borderColor = is_overdue ? "#000000" : "#D3D5DA";
   const opacity = is_overdue ? 1 : 0.7;
-  const textDecorationLine = is_overdue ? "" : "line-through";
+  const textDecorationLine = is_overdue ? "none" : "line-through";
   return (
     <GoalButtonFrontBase
       {...{
