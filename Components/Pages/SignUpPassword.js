@@ -46,7 +46,7 @@ const SignUpPassword = ({ navigation }) => {
         .then(() => {
           navigation.navigate("Goals");
         })
-        .catch(function(error) {
+        .catch(function (error) {
           updateLoading(false);
           setMessage(error.message);
           setVisible(1);
@@ -61,7 +61,7 @@ const SignUpPassword = ({ navigation }) => {
         onDismiss={_onDismissSnackBar}
         style={styles.snackbar}
         action={{
-          label: "Okay",
+          label: "OK",
           onPress: () => {
             // Do something
           },

@@ -1,35 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import {
+  AsyncStorage,
   View,
+  Button,
   StyleSheet,
   Dimensions,
+  Animated,
   FlatList,
-  TouchableOpacity,
-  Image,
-  TouchableWithoutFeedback,
   Vibration,
   Platform,
+  Text,
 } from "react-native";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
-import { Feather as Icon } from "@expo/vector-icons";
 import Theme from "../Atoms/Theme";
-import Text from "../Atoms/Text";
-import Images from "../Atoms/Images";
-import FirstPost from "../Atoms/FirstPost";
 import GoalItem from "../Molecules/GoalItem";
-import Header from "../Molecules/Header";
-import moment from "moment";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
-import { AsyncStorage } from "react-native";
 import { NavigationEvents } from "react-navigation";
 import AnimatedHeader from "../Molecules/AnimatedHeader";
 import Confetti from "../Molecules/Confetti";
 import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
 import AnimatedLoading from "../Molecules/AnimatedLoading";
 import NetworkCheckNav from "../Molecules/NetworkCheckNav";
+
 import { NOTIFICATION_URI } from "react-native-dotenv";
+
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
@@ -50,13 +46,18 @@ const Goals = ({ navigation }) => {
       .then(() => AsyncStorage.setItem("token_created_date", ""))
       .then(() => navigation.navigate("Login"));
   };
+  const [scrollAnimation] = React.useState(new Animated.Value(0));
+  const { goals, refetch, loading, networkStatus } = useGoalsPull();
+  NetworkCheckNav({ networkStatus, navigation });
+  const { filtered_goals, updateFilter, filter } = GoalsFilter({ goals });
+  const { sorted_goals, updateSortOrder, sortOrder } = GoalsSort({ goals: filtered_goals });
 
-  const { goals, refetch } = useGoalsPull();
   const { updateGoal } = useGoalUpdate();
   const { removeGoal } = useGoalDelete();
   const [notification, setNotification] = useState({});
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notificationsEnabled, setnotificationsEnabled] = useState(false);
+
 
   const registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
@@ -67,15 +68,15 @@ const Goals = ({ navigation }) => {
         finalStatus = status;
       }
       if (finalStatus !== "granted") {
-        alert("Failed to get push token for push notification!");
+        // alert("Failed to get push token for push notification!");
+
         return;
       }
       let token = await Notifications.getExpoPushTokenAsync();
-      console.log(token);
       setExpoPushToken(token);
       await attachToken();
     } else {
-      alert("Must use physical device for Push Notifications");
+      // alert("Must use physical device for Push Notifications");
     }
 
     if (Platform.OS === "android") {
@@ -90,9 +91,9 @@ const Goals = ({ navigation }) => {
 
   const _handleNotification = notification => {
     Vibration.vibrate();
-    console.log(notification);
     setNotification({ notification: notification });
   };
+
 
   const attachToken = async () => {
     if (!notificationsEnabled) {
@@ -108,47 +109,75 @@ const Goals = ({ navigation }) => {
         });
       }
     }
+
   };
 
   let notificationSubscription;
 
   useEffect(() => {
-    refetch();
     registerForPushNotificationsAsync();
     notificationSubscription = Notifications.addListener(_handleNotification);
-    console.log(notificationSubscription);
   }, []);
-  const createNewGoal = () => {
-    navigation.navigate("createGoal");
-  };
+
+
+  const refToConfetti = useRef(null);
+
 
   return (
     <View style={styles.container}>
-      <Header title={"Goals"} sub_title={"List"} logout={logout} logout_text={"Logout"} />
-      <FlatList
-        bounces={false}
-        showsVerticalScrollIndicator={false}
-        style={styles.list}
-        data={goals}
-        keyExtractor={goal => goal.id}
-        renderItem={({ item }) => {
-          return GoalItem({
-            ...item,
-            navigation,
-            goals,
-            updateGoal,
-            removeGoal,
-            refetch,
-          });
+      <NavigationEvents
+        onWillFocus={() => {
+          refetch();
         }}
-        ListEmptyComponent={
-          <View style={styles.post}>
-            <TouchableWithoutFeedback onPress={createNewGoal}>
-              <Icon name="plus-circle" color={Theme.palette.primary} size={25} />
-            </TouchableWithoutFeedback>
-          </View>
-        }
       />
+      <AnimatedHeader
+        title={"Goals"}
+        sub_title={"List"}
+        logout={logout}
+        logout_text={"Logout"}
+        goals={goals}
+        refetch={refetch}
+        updateSortOrder={updateSortOrder}
+        sortOrder={sortOrder}
+        updateFilter={updateFilter}
+        filter={filter}
+        scrollAnimation={scrollAnimation}
+        navigation={navigation}
+      >
+        <Fragment>
+          <AnimatedLoading scrollAnimation={scrollAnimation} loading={loading} refetch={refetch} />
+          <AnimatedFlatList
+            onScroll={Animated.event(
+              [
+                {
+                  nativeEvent: { contentOffset: { y: scrollAnimation } },
+                },
+              ],
+              {
+                useNativeDriver: true,
+              },
+            )}
+            refreshing={loading}
+            scrollEventThrottle={16}
+            showsVerticalScrollIndicator={false}
+            style={styles.list}
+            data={sorted_goals}
+            keyExtractor={goal => goal.id}
+            renderItem={({ item }) => {
+              return GoalItem({
+                ...item,
+                navigation,
+                goals,
+                updateGoal,
+                removeGoal,
+                refetch,
+                goalsListConfetti: () => refToConfetti.current.start(),
+              });
+            }}
+          />
+        </Fragment>
+      </AnimatedHeader>
+      <Confetti ref={refToConfetti} />
     </View>
   );
 };

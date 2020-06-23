@@ -4,12 +4,8 @@
     "slug": "push-pirates",
     "privacy": "public",
     "sdkVersion": "36.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
-    "version": "1.0.3",
+    "platforms": ["ios", "android", "web"],
+    "version": "1.0.9",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -20,17 +16,18 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.push.xyz"
     },
     "android": {
       "package": "com.push.xyz",
-      "versionCode": 1
+      "versionCode": 7
     },
-    "description": "Push your way to success"
+    "description": "Push your way to success",
+    "notification": {
+      "icon": "./assets/icon.png"
+    }
   }
 }

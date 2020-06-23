@@ -1,16 +1,17 @@
 import React from "react";
 import Welcome from "./Components/Pages/Welcome";
 import Login from "./Components/Pages/Login";
-import SignUpName from "./Components/Pages/SignUpName";
 import SignUpEmail from "./Components/Pages/SignUpEmail";
 import SignUpPassword from "./Components/Pages/SignUpPassword";
 import createGoal from "./Components/Pages/createGoal";
 import HomeTab from "./Components/Pages/HomeTab";
 import Goal from "./Components/Pages/Goal";
 import Goals from "./Components/Pages/Goals";
+import ForgotPassword from "./Components/Pages/ForgotPassword";
 import Dashboard from "./Components/Pages/Dashboard";
 import editGoal from "./Components/Pages/editGoal";
-// import Notification from "./Components/Pages/Notifications";
+import Notifications from "./Components/Pages/Notifications";
+
 
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
@@ -20,7 +21,6 @@ import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import { ApolloProvider } from "@apollo/react-hooks";
-
 import { APIClient } from "./API";
 
 const SFProTextMedium = require("./assets/fonts/SF-Pro-Text-Medium.otf");
@@ -57,7 +57,6 @@ class App extends React.Component {
   }
   async loadStaticResources() {
     try {
-      // const images = Images.downloadAsync();
       const images = [require("./assets/images/logo.jpg")];
       const cacheImages = images.map(image => {
         return Asset.fromModule(image).downloadAsync();
@@ -69,12 +68,11 @@ class App extends React.Component {
         "SFProText-Semibold": SFProTextSemibold,
         "SFProText-Regular": SFProTextRegular,
         "SFProText-Light": SFProTextLight,
-        Roboto_medium: Roboto_medium,
-        Roboto: Roboto,
+        "Roboto_medium": Roboto_medium,
+        "Roboto": Roboto,
       });
       const icons = Font.loadAsync(Feather.font);
       await Promise.all([...cacheImages, fonts, icons]);
-      // await Promise.all([fonts, icons]);
     } catch (error) {
       console.error(error);
     }
@@ -90,7 +88,6 @@ const StackNavigatorOptions = {
 
 const SignUpNavigator = createStackNavigator(
   {
-    SignUp: { screen: SignUpName },
     SignUpEmail: { screen: SignUpEmail },
     SignUpPassword: { screen: SignUpPassword },
   },
@@ -99,11 +96,10 @@ const SignUpNavigator = createStackNavigator(
 
 const Home = createBottomTabNavigator(
   {
-    Dashboard: { screen: Dashboard },
-    createGoal: { screen: createGoal },
-    // Notification: {screen: Notification},
-
     Goals: { screen: Goals },
+    createGoal: { screen: createGoal },
+    Dashboard: { screen: Dashboard },
+    
   },
   {
     animationEnabled: true,
@@ -118,16 +114,15 @@ const AppNavigator = createAppContainer(
       Welcome: { screen: Welcome },
       Login: { screen: Login },
       SignUp: { screen: SignUpNavigator },
-      // Walkthrough: { screen: Walkthrough },
+      ForgotPassword: { screen: ForgotPassword },
       Home: { screen: Home },
       Goal: { screen: Goal },
       createGoal: { screen: createGoal },
       editGoal: { screen: editGoal },
+      Notifications: { screen: Notifications },
     },
     StackNavigatorOptions,
   ),
 );
-
-export { AppNavigator };
 
 export default App;

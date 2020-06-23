@@ -1,37 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Dimensions, FlatList, TouchableOpacity, Image } from "react-native";
+import { View, StyleSheet, Dimensions, Animated } from "react-native";
 import Constants from "expo-constants";
-import { Feather as Icon } from "@expo/vector-icons";
 import Theme from "../Atoms/Theme";
-import Text from "../Atoms/Text";
-import Images from "../Atoms/Images";
-import GoalItem from "../Molecules/GoalItem";
-import BarChartSummary from "../Molecules/BarChartSummary";
-import Header from "../Molecules/Header";
 import TableGrid from "../Molecules/TableGrid";
-import {
-  goals_data_last_n_days_from_transformed_goals_array,
-  goals_data_last_n_days_from_transformed_goals_array_chunked,
-} from "../Atoms/BarChart.functions";
+import { goals_data_last_n_days_from_transformed_goals_array_chunked } from "../Atoms/BarChart.functions";
 import BarChart from "../Atoms/BarChart";
 import { AsyncStorage } from "react-native";
-
+import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
+import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
+import DashboardHeader from "../Molecules/DashboardHeader";
+import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
+import DashboardCharts from "../Molecules/DashboardCharts";
+import DashboardMetrics from "../Molecules/DashboardMetrics";
+import NetworkCheckNav from "../Molecules/NetworkCheckNav";
 import { useGoalsPull } from "../../API";
+import { NavigationEvents } from "react-navigation";
+
+const GoalsFilter = ({ goals }) => {
+  const [filter, updateFilter] = useState({ state: "all", cadence: "all" });
+  const filtered_state_goals = GoalsFilterState({ goals, state: filter.state });
+  const filtered_cadence_goals = GoalsFilterCadence({
+    goals: filtered_state_goals,
+    cadence: filter.cadence,
+  });
+  return { filtered_goals: filtered_cadence_goals, updateFilter, filter };
+};
+
 const Dashboard = ({ navigation }) => {
+  const [scrollAnimation] = useState(new Animated.Value(0));
+
   const logout = () => {
     AsyncStorage.setItem("token", "")
       .then(() => AsyncStorage.setItem("token_created_date", ""))
       .then(() => navigation.navigate("Login"));
   };
-  const { goals, refetch } = useGoalsPull();
+  const { goals, refetch, networkStatus } = useGoalsPull();
+  const { filtered_goals, updateFilter, filter } = GoalsFilter({ goals });
 
+  NetworkCheckNav({ networkStatus, navigation });
+
+  const timeStamps = DataFlattenConvertGoals(filtered_goals);
   useEffect(() => {
     refetch();
   }, []);
-  const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
-    goals,
-    number_of_days: 7,
-  });
 
   const goals_count_by_day_array_chunked = goals_data_last_n_days_from_transformed_goals_array_chunked(
     {
@@ -42,9 +53,36 @@ const Dashboard = ({ navigation }) => {
   );
   return (
     <View style={styles.container}>
-      <Header title={"Dashboard"} sub_title={"Today"} logout={logout} />
-      <BarChart chartData={goals_count_by_day_array} />
-      <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
+      <NavigationEvents
+        onWillFocus={() => {
+          refetch();
+        }}
+      />
+      <DashboardHeader
+        title={"Dashboard"}
+        logout={logout}
+        updateFilter={updateFilter}
+        filter={filter}
+        navigation={navigation}
+      />
+      <Animated.ScrollView
+        style={styles.scrollView}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: { contentOffset: { y: scrollAnimation } },
+            },
+          ],
+          {
+            useNativeDriver: true,
+          },
+        )}
+      >
+        <DashboardCharts goals={filtered_goals} />
+        <DashboardMetrics goals={filtered_goals} timeStamps={timeStamps} />
+        <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
+        <DashboardTimeStamps timeStamps={timeStamps} navigation={navigation} />
+      </Animated.ScrollView>
     </View>
   );
 };
@@ -52,6 +90,7 @@ const Dashboard = ({ navigation }) => {
 const avatarSize = 100;
 const { width } = Dimensions.get("window");
 const { statusBarHeight } = Constants;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

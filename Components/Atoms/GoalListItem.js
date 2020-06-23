@@ -1,208 +1,243 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   StyleSheet,
   Text,
-  TouchableOpacity,
-  TouchableHighlight,
   TouchableWithoutFeedback,
   View,
   Dimensions,
   Animated,
+  Alert,
 } from "react-native";
 import { Neomorph } from "react-native-neomorph-shadows";
-import { SwipeListView, SwipeRow } from "react-native-swipe-list-view";
-import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
-import AwesomeButton from "react-native-really-awesome-button";
-import AwesomeButtonRick from "react-native-really-awesome-button/src/themes/rick";
-import AwesomeButtonProgress from "react-native-really-awesome-button";
-import TextTicker from 'react-native-text-ticker';
+import { SwipeRow } from "react-native-swipe-list-view";
+import { Feather as Icon } from "@expo/vector-icons";
 
-const GoalButtonBackDelete = ({ deleteGoal }) => {
+
+const GoalButtonBackPushAction = ({ pushGoal, closeRow, pushGoalAnimate }) => {
   return (
-    <TouchableWithoutFeedback onPress={deleteGoal}>
-      <Icon name="trash" size={45} {...{ color: "black" }} />
-
-      {/* <Text style={[styles.buttonText]}>Delete</Text> */}
-    </TouchableWithoutFeedback>
-  );
-};
-const GoalButtonBackDashboard = ({ navigateToGoal }) => {
-  return (
-    <TouchableWithoutFeedback onPress={navigateToGoal}>
-      <FontAwesome name="dashboard" size={45} {...{ color: "black" }} />
-      {/* <Text style={[styles.buttonText]}>Dashboard</Text> */}
-    </TouchableWithoutFeedback>
-  );
-};
-
-const GoalButtonBack = ({ deleteGoal, navigateToGoal }) => {
-  return (
-    <View style={[styles.standaloneRowBack]}>
-      <GoalButtonBackDashboard navigateToGoal={navigateToGoal} />
-
-      <GoalButtonBackDelete deleteGoal={deleteGoal} />
+    <View style={styles.backButtonLeft}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          pushGoal();
+          closeRow();
+          pushGoalAnimate();
+        }}
+      >
+        <Icon name="check" size={30} color={"white"} />
+      </TouchableWithoutFeedback>
     </View>
   );
 };
 
-const GoalButtonFrontOLD = ({ text, totalCount, pushGoal, lastTimeStampMessage, is_overdue }) => {
-  const color = "#17355A"; //"#2DAAFF"; //is_overdue ? "red" : "green";
-  const color_shade = is_overdue ? "#C94818" : "#193162";
+const GoalButtonBackDeleteAndEdit = ({ goalName, deleteGoal, navigateToEditGoal, closeRow }) => {
+  const deleteWithConfirmation = () => {
+    Alert.alert(
+      "Are you sure you want to delete?",
+      goalName,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+          onPress: () => closeRow(),
+        },
+        {
+          text: "Delete",
+          onPress: () => deleteGoal(),
+        },
+      ],
+      { cancelable: false },
+    );
+  };
 
   return (
-    <TouchableWithoutFeedback onPress={pushGoal}>
-      <Neomorph
-        darkShadowColor={color_shade} //"#D1CDC7" // <- set this
-        lightShadowColor="#FFF" //{color_shade} ///
-        style={styles.neomorph}
-      >
+    <View style={styles.backButtonRight}>
+      <TouchableWithoutFeedback onPress={navigateToEditGoal}>
+        <Icon name="edit-2" size={25} color={"white"} style={{ marginRight: 26 }} />
+      </TouchableWithoutFeedback>
+      <View
+        style={{
+          borderBottomColor: "white",
+          borderBottomWidth: 2,
+          width: 40,
+          marginRight: 20,
+        }}
+      />
+      <TouchableWithoutFeedback onPress={deleteWithConfirmation}>
+        <Icon name="trash-2" size={25} color={"white"} style={{ marginRight: 26 }} />
+      </TouchableWithoutFeedback>
+    </View>
+  );
+};
+
+const GoalButtonBack = ({
+  closeRow,
+  goalName,
+  deleteGoal,
+  navigateToEditGoal,
+  pushGoal,
+  pushGoalAnimate,
+}) => {
+  return (
+    <View style={[styles.standaloneRowBack]}>
+      <GoalButtonBackPushAction
+        pushGoal={pushGoal}
+        closeRow={closeRow}
+        pushGoalAnimate={pushGoalAnimate}
+      />
+      <GoalButtonBackDeleteAndEdit
+        closeRow={closeRow}
+        goalName={goalName}
+        deleteGoal={deleteGoal}
+        navigateToEditGoal={navigateToEditGoal}
+      />
+    </View>
+  );
+};
+
+const calculatePercentage = (totalCount, cadence) => {
+  const percentage = totalCount / cadence;
+  const percentageFormatted = (percentage * 100).toFixed(0);
+  return percentageFormatted + "%";
+};
+
+const GoalTitleTextFontSizeDetermine = textLength => {
+  if (textLength > 12) {
+    const extraCharacters = Math.abs(textLength - 12);
+    const fontSizeDetermined = 28 - extraCharacters;
+    return fontSizeDetermined;
+  } else {
+    return 28;
+  }
+};
+
+const GoalTitleText = ({ text }) => {
+  const textLength = text.length;
+  const fontSizeCalculated = GoalTitleTextFontSizeDetermine(textLength, text);
+  return <Text style={[styles.task, { fontSize: fontSizeCalculated }]}>{text}</Text>;
+};
+
+const GoalButtonFront = ({
+  text,
+  totalCount,
+  cadenceCount,
+  cadence,
+  lastTimeStampMessage,
+  moveAnim,
+  fadeAnim,
+  navigateToGoal,
+  rowOpen,
+  closeRow,
+}) => {
+  const color = "#17355A";
+  return (
+    <TouchableWithoutFeedback onPress={rowOpen ? closeRow : navigateToGoal}>
+      <Neomorph lightShadowColor="#FFF" style={styles.neomorph}>
         <View style={styles.topRow}>
-          <Text style={styles.task}>{text}</Text>
+          <GoalTitleText text={text} />
           <View style={[styles.dash, { borderColor: color }]}>
-            <Text style={[styles.frequency, { textDecorationColor: color, color: color }]}>
-              {totalCount}
-            </Text>
+            <Animated.Text
+              style={[
+                styles.frequency,
+                { textDecorationColor: color, color: color, opacity: fadeAnim, bottom: moveAnim },
+              ]}
+            >
+              {calculatePercentage(totalCount, cadenceCount)}
+            </Animated.Text>
           </View>
         </View>
         <View style={styles.botRow}>
-          <Text style={styles.duration}>Last Updated: {lastTimeStampMessage}</Text>
+          <Text style={styles.duration}>{lastTimeStampMessage}</Text>
+          <Text style={styles.duration}>
+            {totalCount} / {cadenceCount} ({cadence})
+          </Text>
         </View>
       </Neomorph>
     </TouchableWithoutFeedback>
   );
 };
-const GoalButtonFront = ({ text, totalCount, cadence, pushGoal, lastTimeStampMessage, is_overdue }) => {
-  const color = "#17355A"; //"#2DAAFF"; //is_overdue ? "red" : "green";
-  const color_shade = is_overdue ? "#C94818" : "#193162";
-  const main_background = "#FFF9FD";
-  return (
-    <TouchableWithoutFeedback onPress={pushGoal}>
-      <AwesomeButtonProgress
-        progress
-        height={115}
-        activityColor={main_background}
-        backgroundColor={main_background}
-        backgroundShadow={main_background}
-        backgroundDarker={main_background}
-        backgroundPlaceholder={main_background}
-        backgroundActive={main_background} //"#C0C0C0"}
-        backgroundProgress={main_background}
-        activeOpacity={70}
-        borderColor={main_background}
-        progressLoadingTime={10000}
-        width={Dimensions.get("window").width * 85}
-        raiseLevel={0}
-        action={(element, next) => doSomethingThenCall(next)}
-        onPress={next => {
-          pushGoal();
-          next();
-        }}
-      >
-        <Neomorph
-          darkShadowColor={color_shade} //"#D1CDC7" // <- set this
-          lightShadowColor="#FFF" //{color_shade} ///
-          style={styles.neomorph}
-        >
-          <View style={styles.topRow}>
-            {text.length > 10?(
-               <TextTicker
-               style={styles.task}
-               loop
-               scrollSpeed={400}
-               repeatSpacer={40}
-               marqueeDelay={30}
-               shouldAnimateTreshold={40}
-               bounce={false}
-             >
-             {text} 
-             </TextTicker>
-            ) :
-            <Text style={styles.task}>
-              {text} 
-            </Text>
-            }
-            <View style={[styles.dash, { borderColor: color }]}>
-              <Text style={[styles.frequency, { textDecorationColor: color, color: color }]}>
-                {totalCount}/{cadence}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.botRow}>
-            <Text style={styles.duration}>Last Updated: {lastTimeStampMessage}</Text>
-          </View>
-        </Neomorph>
-      </AwesomeButtonProgress>
-    </TouchableWithoutFeedback>
 
-    // <AwesomeButton progress width={Dimensions.get("window") * 0.8} height={95}>
-    //   {/* <Image source="require('send-icon.png)" /> */}
-    //   {/* <Text>Send it</Text> */}
-
-    //   <Neomorph
-    //     darkShadowColor={color_shade} //"#D1CDC7" // <- set this
-    //     lightShadowColor="#FFF" //{color_shade} ///
-    //     style={styles.neomorph}
-    //   >
-    //     <View style={styles.topRow}>
-    //       <Text style={styles.task}>{text}</Text>
-    //       <View style={[styles.dash, { borderColor: color }]}>
-    //         <Text style={[styles.frequency, { textDecorationColor: color, color: color }]}>
-    //           {totalCount}
-    //         </Text>
-    //       </View>
-    //     </View>
-    //     <View style={styles.botRow}>
-    //       <Text style={styles.duration}>Last Updated: {lastTimeStampMessage}</Text>
-    //     </View>
-    //   </Neomorph>
-
-    // </AwesomeButton>
-  );
-};
 const GoalListItem = ({
   text,
   navigateToGoal,
+  navigateToEditGoal,
   pushGoal,
   totalCount,
   cadence,
+  cadenceCount,
   deleteGoal,
   lastTimeStampMessage,
   is_overdue,
 }) => {
-  const onSwipeValueChange = swipeData => {
-    const { key, value } = swipeData;
-    if (value > Dimensions.get("window").width) {
-      Animated.timing(new Animated.Value(0), {
+  const refToSwipeRow = useRef();
+  const [fadeAnim] = useState(new Animated.Value(1));
+  const [moveAnim] = useState(new Animated.Value(0));
+
+  const pushGoalAnimate = () => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
         toValue: 0,
-        duration: 200,
+        duration: 500,
+      }),
+      Animated.timing(moveAnim, {
+        toValue: 20,
+        duration: 100,
+      }),
+    ]).start(() => {
+      Animated.timing(moveAnim, {
+        toValue: 0,
+        duration: 0,
       }).start(() => {
-        navigateToGoal();
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 1500,
+        }).start();
       });
-    }
+    });
   };
+  const [rowOpen, setRowOpen] = useState(false);
 
   return (
     <View style={styles.container}>
       <View style={styles.standalone}>
         <SwipeRow
-          // disableRightSwipe
-          rightOpenValue={Dimensions.get("window").width}
-          onSwipeValueChange={onSwipeValueChange}
+          leftActionValue={80} // the exposed length when swiped
+          rightActionValue={-80}
+          leftActivationValue={60} // how far the swipe needs to be to open
+          rightActivationValue={-60}
+          directionalDistanceChangeThreshold={1} // swipe sensitivity
+          stopLeftSwipe={110} // limits back button expose length
+          stopRightSwipe={-110}
+          ref={refToSwipeRow}
+          onRowOpen={() => setRowOpen(true)}
+          onRowClose={() => setRowOpen(false)}
         >
-          <GoalButtonBack deleteGoal={deleteGoal} navigateToGoal={navigateToGoal} />
+          <GoalButtonBack
+            deleteGoal={deleteGoal}
+            pushGoal={pushGoal}
+            goalName={text}
+            closeRow={() => refToSwipeRow.current.closeRow()}
+            pushGoalAnimate={pushGoalAnimate}
+            navigateToEditGoal={navigateToEditGoal}
+          />
           <GoalButtonFront
             text={text}
             totalCount={totalCount}
             cadence={cadence}
-            pushGoal={pushGoal}
+            cadenceCount={cadenceCount}
             lastTimeStampMessage={lastTimeStampMessage}
             is_overdue={is_overdue}
+            navigateToGoal={navigateToGoal}
+            moveAnim={moveAnim}
+            fadeAnim={fadeAnim}
+            closeRow={() => refToSwipeRow.current.closeRow()}
+            rowOpen={rowOpen}
           />
         </SwipeRow>
       </View>
     </View>
   );
 };
+
 export default GoalListItem;
 
 const { width } = Dimensions.get("window");
@@ -225,12 +260,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   standaloneRowBack: {
-    backgroundColor: main_background,
-    flex: 1,
+    display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 15,
-    borderRadius: 20,
+    height: 95,
   },
   textFont: {
     fontSize: 30,
@@ -241,21 +274,17 @@ const styles = StyleSheet.create({
   spacer: {
     height: 50,
   },
-
   neomorph: {
-    shadowOpacity: 0.7, // <- and this or yours opacity
-    shadowRadius: 7,
-    borderRadius: 30,
-    borderTopColor: "#FFF",
-    borderLeftColor: "#FFF",
-    borderBottomColor: "#D1CDC7",
-    borderRightColor: "#D1CDC7",
-    backgroundColor: "#FFF9FD", //"#0070c0", //89CFF0"#ECF0F3",
+    shadowOpacity: 0.7,
+    shadowRadius: 4,
+    borderRadius: 18,
+    borderColor: "#000000",
+    backgroundColor: "#FFF9FD",
     width: width * 0.8,
     height: 95,
     alignItems: "center",
     justifyContent: "center",
-    // borderWidth: 2,
+    borderWidth: Platform.OS === "android" ? 4 : 2,
   },
   task: {
     fontWeight: "bold",
@@ -287,19 +316,38 @@ const styles = StyleSheet.create({
   botRow: {
     marginTop: 10,
     marginLeft: 20,
+    marginRight: 15,
     fontSize: 14,
     fontWeight: "bold",
     flex: 2,
+    justifyContent: "space-between",
+    alignItems: "center",
     flexDirection: "row",
     alignSelf: "stretch",
-    textAlign: "left",
-  },
-  dash: {
-    borderBottomWidth: 3,
   },
   buttonText: {
     alignSelf: "center",
     fontSize: 32,
     fontWeight: "bold",
+  },
+  backButtonLeft: {
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "#005AFF",
+    flex: 1,
+    borderRadius: 18,
+    flexDirection: "row",
+    paddingLeft: 25,
+    justifyContent: "flex-start",
+  },
+  backButtonRight: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    display: "flex",
+    alignItems: "flex-end",
+    paddingLeft: 25,
+    backgroundColor: "#000000",
+    borderRadius: 18,
   },
 });

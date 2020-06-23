@@ -15,6 +15,7 @@ const SignUpContainer = ({
   back,
   snackbar,
   loading,
+  navigation,
 }) => {
   if (loading) {
     return (
@@ -32,8 +33,17 @@ const SignUpContainer = ({
               {title}
             </Text>
             <View>{children}</View>
-            <Button label={nextLabel || "Next"} onPress={next} full primary />
+            <Button label={nextLabel || "Next"} onPress={next} full white style={{backgroundColor:Theme.palette.buttonTheme, borderRadius:32}} />
             <Button label="Back" onPress={back} full />
+            {navigation.state.routeName === "Login" && (
+              <Button
+                label="Forgot Password?"
+                onPress={() => navigation.navigate("ForgotPassword")}
+                full
+                style={{ marginTop: 50 }}
+                textStyle={{ textDecorationLine: "underline" }}
+              />
+            )}
           </View>
         </Content>
         {snackbar}

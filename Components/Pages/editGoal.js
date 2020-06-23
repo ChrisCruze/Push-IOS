@@ -1,20 +1,9 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
-import CreateContainer from "../Molecules/createContainer";
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  Linking,
-  FlatList,
-  TouchableOpacity,
-  Image,
-  TextInput,
-} from "react-native";
-
-import Constants from "expo-constants";
-import { TextField } from "../Atoms/Fields";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Dimensions } from "react-native";
+import { Snackbar } from "react-native-paper";
 import { Dropdown } from "react-native-material-dropdown";
+import CreateContainer from "../Molecules/createContainer";
+import { TextField } from "../Atoms/Fields";
 import { useGoalUpdate, useGoalsPull } from "../../API";
 
 const editGoal = ({ navigation }) => {
@@ -29,9 +18,10 @@ const editGoal = ({ navigation }) => {
   const goals_dict = goals.find(function(D) {
     return D["_id"] == _id;
   });
+  const [warning, updateWarning] = useState(false);
   const [selectedValue, setSelectedValue] = useState(goals_dict.cadence);
   const [textValue, updateSelectedText] = useState(goals_dict.title);
-  const [cadenceValue, updateCadenceValue] = useState(goals_dict.cadenceCount);
+  const [cadenceValue, updateCadenceValue] = useState(String(goals_dict.cadenceCount));
   const timeStamps = goals_dict.timeStamps;
 
   let data = [
@@ -47,6 +37,11 @@ const editGoal = ({ navigation }) => {
   ];
 
   function pressNextSubmit() {
+    if (textValue === "" || cadenceValue === "") {
+      updateWarning(true);
+      return;
+    }
+
     updateGoal({
       variables: {
         _id,
@@ -56,56 +51,85 @@ const editGoal = ({ navigation }) => {
         timeStamps: timeStamps,
       },
     });
+
     navigation.navigate("Goals");
   }
 
   return (
-    <CreateContainer
-      title="Edit Goal"
-      subtitle="Let's push"
-      back={() => navigation.navigate("Goals")}
-      nextLabel="Push"
-      next={pressNextSubmit}
-      // onSubmitEditing={createNew}
-      first
-      {...{ navigation }}
-    >
-      <TextField
-        style={styles.textInput}
-        placeholder="Edit goal"
-        keyboardType="textInput"
-        autoCapitalize="none"
-        returnKeyType="next"
-        value={textValue}
-        onChangeText={text => updateSelectedText(text)}
-        contrast
-      />
-      <TextField
-        style={styles.textInput}
-        placeholder="Enter Cadence Goal"
-        keyboardType="textInput"
-        autoCapitalize="none"
-        returnKeyType="next"
-        value={String(cadenceValue)}
-        onChangeText={text => updateCadenceValue(text)}
-        contrast
-      />
+    <React.Fragment>
+      <CreateContainer
+        title="Edit Goal"
+        subtitle="Let's push"
+        back={() => navigation.navigate("Goals")}
+        nextLabel="Update"
+        next={pressNextSubmit}
+        first
+        {...{ navigation }}
+      >
+        <TextField
+          style={styles.textInput}
+          placeholder="Title"
+          keyboardType="default"
+          autoCapitalize="none"
+          returnKeyType="next"
+          maxLength={20}
+          value={textValue}
+          onChangeText={text => updateSelectedText(text)}
+          contrast
+        />
+        <TextField
+          style={styles.textInput}
+          placeholder="Frequency Count"
+          keyboardType="numeric"
+          autoCapitalize="none"
+          returnKeyType="next"
+          value={String(cadenceValue)}
+          onChangeText={text => updateCadenceValue(text)}
+          contrast
+        />
 
-      <Dropdown label="Cadence" data={data} value={selectedValue} onChangeText={setSelectedValue} />
-    </CreateContainer>
+        <Dropdown
+          label="Frequency"
+          data={data}
+          value={selectedValue}
+          onChangeText={setSelectedValue}
+          pickerStyle={{ top: 420, left: 30 }}
+        />
+      </CreateContainer>
+      <Snackbar
+        visible={warning}
+        onDismiss={() => updateWarning(false)}
+        style={styles.snackbar}
+        action={{
+          label: "OK",
+          onPress: () => updateWarning(false),
+        }}
+      >
+        All fields must be filled in
+      </Snackbar>
+    </React.Fragment>
   );
 };
 
+const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   textInput: {
+    borderBottomWidth: 2,
+    height: 30,
     marginTop: 25,
     marginBottom: 30,
     borderBottomColor: '#0f0f0f',
     borderBottomWidth: 1,
     height: 50
+  },
+  snackbar: {
+    position: "absolute",
+    bottom: 25,
+    left: width * 0.1,
+    width: width * 0.8,
   },
 });
 

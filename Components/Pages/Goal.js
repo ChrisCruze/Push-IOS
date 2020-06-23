@@ -1,24 +1,18 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  Linking,
-  FlatList,
-  TouchableOpacity,
-  Image,
-} from "react-native";
-import Constants from "expo-constants";
+import React, { useEffect } from "react";
+import { View, StyleSheet } from "react-native";
 import TableGrid from "../Molecules/TableGrid";
 import GoalPageButtons from "../Molecules/GoalPageButtons";
-
 import Header from "../Molecules/Header";
 import {
   goals_data_last_n_days_from_transformed_goals_array,
   goals_data_last_n_days_from_transformed_goals_array_chunked,
 } from "../Atoms/BarChart.functions";
 import BarChart from "../Atoms/BarChart";
-import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
+import { useGoalsPull } from "../../API";
+import GoalTimeStamps from "../Molecules/GoalTimeStamps";
+import Theme from "../Atoms/Theme";
+import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
+import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
 
 const GoalBarChart = ({ goals_filtered }) => {
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
@@ -41,12 +35,9 @@ const GoalTableGrid = ({ goals_filtered }) => {
 
 const GoalHeader = ({ goals_filtered, back }) => {
   const goals_dict = goals_filtered[0];
-  return <Header
-        title={goals_dict.title || "-"}
-        sub_title={String(goals_dict.totalCount) || "0"}
-        logout={back}
-        logout_text={"Back"}
-      />
+  return (
+    <Header title={goals_dict.title || "-"} sub_title={" "} logout={back} logout_text={"Back"} />
+  );
 };
 
 const Goal = ({ navigation }) => {
@@ -65,7 +56,12 @@ const Goal = ({ navigation }) => {
       <GoalHeader goals_filtered={goals_filtered} back={back} />
       <GoalBarChart goals_filtered={goals_filtered} />
       <GoalTableGrid goals_filtered={goals_filtered} />
-      <GoalPageButtons _id={_id} navigation={navigation} />
+      <GoalPageButtons {...goals_filtered[0]} _id={_id} navigation={navigation} refetch={refetch} />
+      {/* <GoalTimeStamps {...goals_filtered[0]} navigation={navigation} /> */}
+      <DashboardTimeStamps
+        timeStamps={DataFlattenConvertGoals(goals_filtered)}
+        navigation={navigation}
+      />
     </View>
   );
 };
@@ -73,7 +69,7 @@ const Goal = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ECF0F3",
+    backgroundColor: Theme.palette.background,
   },
 });
 

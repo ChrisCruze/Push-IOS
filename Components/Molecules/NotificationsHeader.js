@@ -16,32 +16,30 @@ import Theme from "../Atoms/Theme";
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
-
-const Header = ({ title, sub_title, logout, logout_text }) => {
+import { Ionicons } from "@expo/vector-icons";
+const NotificationsHeader = ({ onPress }) => {
   return (
     <AnimatedSafeAreaView style={[styles.header, { shadowOpacity: 0 }]}>
       <Animated.View style={[styles.innerHeader, { height: Platform.OS === "android" ? 70 : 80 }]}>
+        <TouchableOpacity onPress={onPress} style={styles.settings}>
+          <View>
+            <Ionicons name="md-arrow-round-back" size={24} color="white" />
+          </View>
+        </TouchableOpacity>
         <View>
-          <AnimatedText
-            type="large"
-            style={{ position: "absolute", top: 0, opacity: 1, transform: [{ translateY: 0 }] }}
-          >
-            {sub_title || ""}
-          </AnimatedText>
-          <AnimatedText type="header2" style={{ fontSize: 36, marginTop: 24, color: "white" }}>
-            {title || "title"}
+          <AnimatedText type="header2" style={{ fontSize: 30, marginTop: 0, color: "white" }}>
+            Notifications
           </AnimatedText>
         </View>
-        <TouchableOpacity onPress={logout} style={styles.settings}>
+        <TouchableOpacity onPress={onPress} style={styles.settings}>
           <View>
-            <Text style={{ color: "white" }}>{logout_text}</Text>
+            <Text style={{ color: "black" }}>Clear</Text>
           </View>
         </TouchableOpacity>
       </Animated.View>
     </AnimatedSafeAreaView>
   );
 };
-const main_background = "#F17355"; //E0E5EC //"#17355A" //"#F17355"
 
 const styles = StyleSheet.create({
   container: {
@@ -57,10 +55,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
     elevation: 8,
+    borderBottomLeftRadius: 25,
   },
   innerHeader: {
     marginHorizontal: Theme.spacing.base,
-    marginVertical: Theme.spacing.tiny,
+    marginVertical: Platform.OS === "android" ? 10 : 0,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -68,8 +67,5 @@ const styles = StyleSheet.create({
   list: {
     paddingHorizontal: Theme.spacing.small,
   },
-  settings: {
-    color: "#FFFFFF"
-  }
 });
-export default Header;
+export default NotificationsHeader;

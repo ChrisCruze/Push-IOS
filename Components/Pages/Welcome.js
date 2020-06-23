@@ -1,50 +1,44 @@
 import * as React from "react";
-import { StyleSheet, Dimensions, Linking, TouchableOpacity } from "react-native";
-// import { Text, Button, Container, Logo, Theme, AnimatedView } from "../components";
+import { StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import Theme from "../Atoms/Theme";
 import Text from "../Atoms/Text";
 import Button from "../Atoms/Button";
-
 import Container from "../Atoms/Container";
 import { AnimatedView } from "../Atoms/Animations";
 import Logo from "../Molecules/Logo";
-import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, gql } from "apollo-boost";
-
-import { APIClient, useAPI } from "../../API";
 import { AsyncStorage } from "react-native";
-import moment from "moment"
+import moment from "moment";
 
-function determine_number_of_hours_since_created(token_created_date){
-  const token_created_date_moment = moment(token_created_date)
-  const now = moment()
+function determine_number_of_hours_since_created(token_created_date) {
+  const token_created_date_moment = moment(token_created_date);
+  const now = moment();
   const diff = now.diff(token_created_date_moment);
   const diffDuration = moment.duration(diff);
-  const difference_hours = diffDuration.hours()
-  const difference_minutes = diffDuration.minutes()
-  return difference_hours
+  const difference_hours = diffDuration.hours();
+  const difference_minutes = diffDuration.minutes();
+  return difference_hours;
 }
 
-function determine_is_not_expired(token_created_date){
-  const has_token = token_created_date != '' && token_created_date != null 
-  const hours = determine_number_of_hours_since_created(token_created_date)
-  const within_expiration = hours < 1
-  return has_token && within_expiration
+function determine_is_not_expired(token_created_date) {
+  const has_token = token_created_date != "" && token_created_date != null;
+  const hours = determine_number_of_hours_since_created(token_created_date);
+  const within_expiration = hours < 2160;
+  return has_token && within_expiration;
 }
 
-const AuthCheckNavigate = ({navigation}) =>{
+const AuthCheckNavigate = ({ navigation }) => {
   AsyncStorage.getItem("token_created_date").then(token_created_date => {
-    const already_logged_in = determine_is_not_expired(token_created_date)
-    if (already_logged_in){
-        navigation.navigate("Goals")
-      }
-  })
-}
-
+    const already_logged_in = determine_is_not_expired(token_created_date);
+    if (already_logged_in) {
+      navigation.navigate("Goals");
+    }
+  });
+};
 
 const Welcome = ({ navigation }) => {
   const login = () => navigation.navigate("Login");
   const signUp = () => navigation.navigate("SignUp");
-  AuthCheckNavigate({navigation})
+  AuthCheckNavigate({ navigation });
   return (
     <Container gutter={2} style={styles.root}>
       <Logo />
@@ -54,7 +48,7 @@ const Welcome = ({ navigation }) => {
         </Text>
       </AnimatedView>
       <AnimatedView style={styles.container} delay={600} duration={300}>
-        <Button label="Login" onPress={login} full primary />
+        <Button label="Login" onPress={login} full white style={{backgroundColor:Theme.palette.buttonTheme,borderRadius:32}} />
         <Button label="Sign Up" onPress={signUp} full />
       </AnimatedView>
       <TouchableOpacity style={styles.framer} onPress={Welcome.framer}>

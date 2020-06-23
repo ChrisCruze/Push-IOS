@@ -1,27 +1,17 @@
-import * as React from "react";
-import { useState } from "react";
-import CreateContainer from "../Molecules/createContainer";
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  Linking,
-  FlatList,
-  TouchableOpacity,
-  Image,
-  TextInput,
-} from "react-native";
-
-import Constants from "expo-constants";
-import { TextField } from "../Atoms/Fields";
+import React, { useState } from "react";
+import { StyleSheet, Dimensions } from "react-native";
+import { Snackbar } from "react-native-paper";
 import { Dropdown } from "react-native-material-dropdown";
-import { useGoalsPull, useGoalCreate } from "../../API";
+import CreateContainer from "../Molecules/createContainer";
+import { TextField } from "../Atoms/Fields";
+import { useGoalCreate } from "../../API";
 
-const createGoal = ({ navigation, goToPassword, createNew }) => {
+const createGoal = ({ navigation, createNew }) => {
   const { createGoal } = useGoalCreate();
-  const [selectedValue, setSelectedValue] = useState("daily");
-  const [textValue, updateSelectedText] = useState("default");
-  const [cadenceValue, updateCadenceValue] = useState("0");
+  const [selectedValue, setSelectedValue] = useState("Daily");
+  const [textValue, updateSelectedText] = useState("");
+  const [cadenceValue, updateCadenceValue] = useState("");
+  const [warning, updateWarning] = useState(false);
 
   let data = [
     {
@@ -35,74 +25,100 @@ const createGoal = ({ navigation, goToPassword, createNew }) => {
     },
   ];
 
-  function capitalizeEachWord(sentence){
-    var words = sentence.toLowerCase().split(' ');
-    for(var i = 0; i < words.length; i++){
-            words[i] = words[i].charAt(0).toUpperCase() + words[i].substring(1);  
-        }
-        return words.join(' '); 
-    }
-  
-
   function pressNextSubmit() {
-    let newText =capitalizeEachWord(textValue);
-    console.log(newText);
-    updateSelectedText(newText);
-    console.log(textValue);
+    if (textValue === "" || cadenceValue === "") {
+      updateWarning(true);
+      return;
+    }
     const goal_dict = {
-      title: newText,
+      title: textValue,
       cadence: selectedValue,
       cadenceCount: parseInt(cadenceValue) || 0,
     };
-    createGoal({ variables: goal_dict }); //{ title: "haha", cadence: "weekly", cadenceCount: 3 }
+    createGoal({ variables: goal_dict });
+
+    updateSelectedText("");
+    updateCadenceValue("");
+    setSelectedValue("Daily");
+
     navigation.navigate("Goals");
   }
 
   return (
-    <CreateContainer
-      title="New Goal"
-      subtitle="Let's push"
-      back={() => navigation.navigate("Goals")}
-      nextLabel="Push"
-      next={pressNextSubmit}
-      onSubmitEditing={createNew}
-      first
-      {...{ navigation }}
-    >
-      <TextField
-        style={styles.textInput}
-        placeholder="Create goal"
-        keyboardType="textInput"
-        autoCapitalize="none"
-        returnKeyType="next"
-        onChangeText={text => updateSelectedText(text)}
-        contrast
-      />
-      <TextField
-        style={styles.textInput}
-        placeholder="Enter Cadence Goal"
-        keyboardType="textInput"
-        autoCapitalize="none"
-        returnKeyType="next"
-        onChangeText={text => updateCadenceValue(text)}
-        contrast
-      />
-
-      <Dropdown label="Cadence" data={data} value={selectedValue} onChangeText={setSelectedValue} />
-    </CreateContainer>
+    <React.Fragment>
+      <CreateContainer
+        title="New Goal"
+        subtitle="Let's push"
+        back={() => navigation.navigate("Goals")}
+        nextLabel="Create"
+        next={pressNextSubmit}
+        onSubmitEditing={createNew}
+        first
+        {...{ navigation }}
+      >
+        <TextField
+          style={styles.textInput}
+          placeholder="Title"
+          keyboardType="default"
+          maxLength={20}
+          autoCapitalize="words"
+          returnKeyType="next"
+          onChangeText={text => updateSelectedText(text)}
+          value={textValue}
+          contrast
+        />
+        <TextField
+          style={styles.textInput}
+          placeholder="Frequency Count"
+          keyboardType="numeric"
+          autoCapitalize="none"
+          returnKeyType="next"
+          onChangeText={text => updateCadenceValue(text)}
+          value={cadenceValue}
+          contrast
+        />
+        <Dropdown
+          label="Frequency"
+          data={data}
+          value={selectedValue}
+          onChangeText={setSelectedValue}
+          pickerStyle={{ top: 420, left: 30 }}
+        />
+      </CreateContainer>
+      <Snackbar
+        visible={warning}
+        onDismiss={() => updateWarning(false)}
+        style={styles.snackbar}
+        action={{
+          label: "OK",
+          onPress: () => updateWarning(false),
+        }}
+      >
+        All fields must be filled in
+      </Snackbar>
+    </React.Fragment>
   );
 };
+const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   textInput: {
-    borderBottomColor: '#0f0f0f',
-    borderBottomWidth: 1,
+
+    borderColor: "black",
+    borderBottomWidth: 2,
+    height: 30,
     marginTop: 25,
     marginBottom: 30,
     height: 40,
+  },
+  snackbar: {
+    position: "absolute",
+    bottom: 25,
+    left: width * 0.1,
+    width: width * 0.8,
   },
 });
 
