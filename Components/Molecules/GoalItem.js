@@ -41,7 +41,7 @@ const GoalSubTitleTextBasic = ({ totalCount, cadenceCount, cadence }) => {
 };
 
 const GoalSubTitleTextStreak = ({ streakCount, totalCount, cadenceCount, cadence }) => {
-  const cadenceText = cadence == "daily" ? "Day" : cadence == "weekly" ? "Wk" : "Mo";
+  const cadenceText = cadence == "Daily" ? "Day" : cadence == "Weekly" ? "Wk" : "Mo";
   return `${streakCount} ${cadenceText} Streak | ${totalCount}/${cadenceCount}`;
 };
 const GoalSubTitleText = ({ totalCount, cadenceCount, cadence, timeStamps, is_overdue }) => {
