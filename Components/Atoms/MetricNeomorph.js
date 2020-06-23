@@ -17,13 +17,7 @@ const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   neomorph: {
-    shadowOpacity: 0.7,
-    shadowRadius: 7,
-    borderRadius: 30,
-    borderTopColor: "#FFF",
-    borderLeftColor: "#FFF",
-    borderBottomColor: "#D1CDC7",
-    borderRightColor: "#D1CDC7",
+    borderColor: "#000000",
     backgroundColor: Theme.palette.background, //"#ECF0F3",
     width: width * 0.3,
     height: 50,
