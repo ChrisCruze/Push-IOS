@@ -1,18 +1,9 @@
 import React, { useState, Fragment } from "react";
-import {
-  StyleSheet,
-  View,
-  Button,
-  Dimensions,
-  FlatList,
-  Animated,
-  TouchableHighlight,
-} from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import _ from "lodash";
 import moment from "moment";
 import GoalTimeStamp from "../Atoms/GoalTimeStamp";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
-import { Container, Header, Content, List, ListItem, Text } from "native-base";
 
 const timeStampsSort = ({ timeStamps }) => {
   const sorted_time_stamps = _.sortBy(timeStamps, function(i) {
@@ -32,26 +23,6 @@ const GoalTimeStamps = ({ _id, title, cadence, cadenceCount, timeStamps, navigat
 
   return (
     <View style={styles.container}>
-      {/* <List>
-        {timeStampArray.map((item, key) => (
-          <ListItem key={key}>
-            <GoalTimeStamp
-              {...item}
-              {...{
-                _id,
-                title,
-                cadence,
-                cadenceCount,
-                timeStamps,
-                timeStampArray,
-                updateGoal,
-                refetch,
-                navigation,
-              }}
-            />
-          </ListItem>
-        ))}
-      </List> */}
       <FlatList
         data={timeStampArray}
         keyExtractor={timeStampDict => timeStampDict.key}

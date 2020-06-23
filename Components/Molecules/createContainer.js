@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Content } from "native-base";
 import Text from "../Atoms/Text";
 import Button from "../Atoms/Button";
@@ -16,7 +16,13 @@ const CreateContainer = ({ title, subtitle, next, children, nextLabel, back }) =
             {title}
           </Text>
           <View style={styles.innerChildren}>{children}</View>
-          <Button label={nextLabel || "Next"} onPress={next} full primary />
+          <Button
+            label={nextLabel || "Next"}
+            onPress={next}
+            full
+            white
+            style={{ backgroundColor: Theme.palette.buttonTheme, borderRadius: 32 }}
+          />
           <Button label="Back" onPress={back} full />
         </View>
       </Content>
@@ -24,19 +30,18 @@ const CreateContainer = ({ title, subtitle, next, children, nextLabel, back }) =
   );
 };
 
-const { height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   content: {
     padding: Theme.spacing.base,
-    marginBottom:50
+    marginBottom: 25,
+    marginTop: 50,
   },
   innerContent: {
-    height: height - Theme.spacing.base * 4,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   innerChildren: {
-    height:300
-  }
+    marginBottom: 50,
+  },
 });
 
 export default CreateContainer;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import _ from "lodash";
 import moment from "moment";
 
@@ -103,7 +103,11 @@ export const goals_data_last_n_days_from_transformed_goals_array = ({ goals, num
 
 const background_color_attribute_add_based_on_count = array => {
   return _.map(array, D => {
-    return { ...D, backgroundColor: D.count == 0 ? "#ebedf0" : "#00ff00" };
+    return {
+      ...D,
+      color: D.count == 0 ? "black" : "white",
+      backgroundColor: D.count == 0 ? "#ebedf0" : "black",
+    };
   });
 };
 export const goals_data_last_n_days_from_transformed_goals_array_chunked = ({
@@ -121,40 +125,107 @@ export const goals_data_last_n_days_from_transformed_goals_array_chunked = ({
   return _.chunk(last_fourteen_days_with_goals_count_with_color, chunk_size || 7);
 };
 
-function determine_number_of_days_from_now(latest_time_stamp) {
-  const difference_hours = moment().diff(moment(latest_time_stamp), "hours");
-  return difference_hours / 24;
-}
-
-function determine_how_long_ago_acceptable({ cadenceCount, cadence }) {
-  const is_daily = String(cadence).toLowerCase() == "daily";
-  const is_weekly = String(cadence).toLowerCase() == "weekly";
-  const is_monthly = String(cadence).toLowerCase() == "monthly";
-
-  const numerator = is_daily ? 1 : is_weekly ? 7 : is_monthly ? 30 : 0;
-  const cadenceInt = cadenceCount == 0 ? 1 : cadenceCount;
-  const calculated_days_away_acceptable = numerator / cadenceInt;
-  return calculated_days_away_acceptable;
-}
-
-const GoalLastTimeStamp = ({ goals, id }) => {
+const getGoalTimeStamps = ({ goals, id }) => {
   const goals_filtered =
     goals.find(function(D) {
       return D["id"] == id;
     })["timeStamps"] || [];
-  const lastTimeStamp = _.max(goals_filtered, function(timeStamp) {
-    return moment(timeStamp).unix();
+
+  return goals_filtered;
+};
+
+const getStartEndDateTime = time_interval => {
+  const end = moment().endOf(time_interval);
+  const start = moment().startOf(time_interval);
+  return { start, end };
+};
+const determineStartEndDateRange = cadence => {
+  const is_daily = String(cadence).toLowerCase() == "daily";
+  const is_weekly = String(cadence).toLowerCase() == "weekly";
+  const is_monthly = String(cadence).toLowerCase() == "monthly";
+  if (is_weekly) {
+    return getStartEndDateTime("week");
+  } else if (is_monthly) {
+    return getStartEndDateTime("month");
+  } else {
+    return getStartEndDateTime("day");
+  }
+};
+
+export const filterTimeStampsForCadence = ({ timeStamps, cadence }) => {
+  const { start, end } = determineStartEndDateRange(cadence);
+  const filteredTimeStamps = timeStamps.filter(function(timeStamp) {
+    const is_after_start = moment(timeStamp).isAfter(start);
+    const is_before_end = moment(timeStamp).isBefore(end);
+    return is_after_start && is_before_end;
   });
-  return lastTimeStamp;
+  return filteredTimeStamps;
 };
 
 export const determineOverDue = ({ cadence, cadenceCount, goals, id }) => {
-  const lastTimeStamp = GoalLastTimeStamp({ goals, id });
-  const calculated_days_away_acceptable = determine_how_long_ago_acceptable({
-    cadenceCount,
-    cadence,
-  });
-  const days_away = determine_number_of_days_from_now(lastTimeStamp);
-  const is_overdue = days_away > calculated_days_away_acceptable;
+  const timeStamps = getGoalTimeStamps({ goals, id });
+  const filteredTimeStamps = filterTimeStampsForCadence({ timeStamps, cadence });
+  const cadenceInt = cadenceCount == 0 ? 1 : cadenceCount;
+  const is_overdue = cadenceInt > filteredTimeStamps.length;
   return is_overdue;
+};
+
+export const GoalsSort = ({ goals }) => {
+  const [sortOrder, updateSortOrder] = useState("none");
+  const goals_copy = [...goals];
+
+  if (sortOrder == "none") {
+    var sorted_goals = goals_copy;
+    return { sorted_goals, updateSortOrder, sortOrder };
+  } else if (sortOrder == "asc") {
+    var sorted_goals = _.sortBy(goals_copy, function(D) {
+      return D["title"];
+    });
+    return { sorted_goals, updateSortOrder, sortOrder };
+  } else {
+    var sorted_goals = _.sortBy(goals_copy, function(D) {
+      return D["title"];
+    });
+    sorted_goals.reverse();
+    return { sorted_goals, updateSortOrder, sortOrder };
+  }
+};
+
+export const GoalsFilterState = ({ goals, state }) => {
+  if (state == "all") {
+    return goals;
+  } else if (state == "incomplete") {
+    var filtered_goals = goals.filter(function(D) {
+      return determineOverDue({ ...D, goals });
+    });
+    return filtered_goals;
+  } else if (state == "complete") {
+    var filtered_goals = goals.filter(function(D) {
+      return !determineOverDue({ ...D, goals });
+    });
+    return filtered_goals;
+  }
+};
+
+export const GoalsFilterCadence = ({ goals, cadence }) => {
+  if (cadence == "all") {
+    return goals;
+  } else {
+    var filtered_goals = goals.filter(function(D) {
+      return String(D["cadence"]).toLowerCase() == cadence;
+    });
+    return filtered_goals;
+  }
+};
+
+export const determinePercentageDone = array => {
+  const number_of_goals = array.length;
+  const completed_count = array.filter(function(D) {
+    return !determineOverDue({ ...D, goals: array });
+  }).length;
+  const remaining_count = array.filter(function(D) {
+    return determineOverDue({ ...D, goals: array });
+  }).length;
+  const complete_percentage = ((completed_count / number_of_goals) * 100).toFixed(0);
+  return complete_percentage;
 };

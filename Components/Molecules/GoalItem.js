@@ -1,45 +1,38 @@
-import React, { useState } from "react";
-import { StyleSheet, View, Vibration } from "react-native";
-import APIStore from "../Atoms/APIStore";
-import GoalComponent from "../Atoms/GoalComponent";
+import React from "react";
+import { Vibration } from "react-native";
 import moment from "moment";
-import GoalButton from "../Atoms/GoalButton";
-import GoalListItem from "../Atoms/GoalListItem";
 import _ from "lodash";
-import { determineOverDue } from "../Atoms/BarChart.functions.js";
+import GoalListItem from "../Atoms/GoalListItem";
+import { determineOverDue, filterTimeStampsForCadence } from "../Atoms/BarChart.functions.js";
 
 const GoalOptionsPress = ({ id, navigation, goals }) => {
   const pass_dict = { id: id, goals: goals };
-  console.log({ pass_dict });
   navigation.navigate("Goal", pass_dict);
-  console.log(`navigate to options page ${id}`);
 };
 
-const GoalCountGet = ({ goals, id }) => {
-  const goals_filtered =
-    goals.find(function(D) {
+const GoalCountGet = ({ goals, id, cadence }) => {
+  const timeStamps =
+    goals.find(function (D) {
       return D["id"] == id;
     })["timeStamps"] || [];
-    console.log(goals_filtered);
-    // filter for todays goals
-    goals_filtered.map(date => moment(date).isSame(moment(), 'day')?date:null)
-  const totalCount = goals_filtered.length;
+  const filteredTimeStamps = filterTimeStampsForCadence({ timeStamps, cadence });
+  const totalCount = filteredTimeStamps.length;
   return totalCount;
 };
 
 const GoalLastTimeStamp = ({ goals, id }) => {
   const goals_filtered =
-    goals.find(function(D) {
+    goals.find(function (D) {
       return D["id"] == id;
     })["timeStamps"] || [];
-  const lastTimeStamp = _.max(goals_filtered, function(timeStamp) {
+  const lastTimeStamp = _.max(goals_filtered, function (timeStamp) {
     return moment(timeStamp).unix();
   });
   return lastTimeStamp;
 };
 
 const lastTimeStampMessageCreate = lastTimeStamp => {
-  return moment(lastTimeStamp).fromNow();
+  return moment(lastTimeStamp).format("M/DD(ddd) h:mma"); //fromNow();
 };
 
 const GoalItem = ({
@@ -54,8 +47,9 @@ const GoalItem = ({
   updateGoal,
   removeGoal,
   refetch,
+  goalsListConfetti,
 }) => {
-  const totalCount = GoalCountGet({ goals, id });
+  const totalCount = GoalCountGet({ goals, id, cadence });
   const lastTimeStamp = GoalLastTimeStamp({ goals, id });
   const lastTimeStampMessage = lastTimeStampMessageCreate(lastTimeStamp);
   const is_overdue = determineOverDue({ cadence, cadenceCount, goals, id });
@@ -63,8 +57,11 @@ const GoalItem = ({
   const navigateToGoal = () => {
     GoalOptionsPress({ id, navigation, goals });
   };
-
+  const navigateToEditGoal = () => {
+    navigation.navigate("editGoal", { _id: _id });
+  };
   const pushGoalPress = () => {
+    Vibration.vibrate();
     const timeStampsWithNew = timeStamps.concat(moment().format());
     updateGoal({
       variables: {
@@ -74,9 +71,13 @@ const GoalItem = ({
         cadenceCount,
         timeStamps: timeStampsWithNew,
       },
-    });
-    Vibration.vibrate();
-    refetch();
+    })
+      .then(() => refetch())
+      .catch(e => console.error(e));
+
+    if (totalCount + 1 == cadenceCount) {
+      goalsListConfetti();
+    }
   };
   const deleteGoalPress = () => {
     removeGoal({ variables: { _id } });
@@ -86,11 +87,13 @@ const GoalItem = ({
   return (
     <GoalListItem
       navigateToGoal={navigateToGoal}
+      navigateToEditGoal={navigateToEditGoal}
       pushGoal={pushGoalPress}
       deleteGoal={deleteGoalPress}
       text={title}
       totalCount={totalCount}
-      cadence={cadenceCount}
+      cadence={cadence}
+      cadenceCount={cadenceCount}
       lastTimeStamp={lastTimeStamp}
       lastTimeStampMessage={lastTimeStampMessage}
       is_overdue={is_overdue}

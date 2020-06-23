@@ -9,31 +9,40 @@ import {
   SafeAreaView,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  Dimensions,
 } from "react-native";
 import Constants from "expo-constants";
 import { TextClass } from "../Atoms/Text";
 import Theme from "../Atoms/Theme";
-import { DataFlattenConvertGoals, determineOverDue } from "../Atoms/BarChart.functions";
+import {
+  DataFlattenConvertGoals,
+  determineOverDue,
+  GoalsFilterCadence,
+} from "../Atoms/BarChart.functions";
 import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
+import LoadingIndicator from "../Atoms/LoadingIndicator";
+import HeaderButtons from "./HeaderButtons";
 
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
-const AnimatedSubHeaderMetrics = ({ goals, updateFilter }) => {
-  const number_of_goals = goals.length;
-  const number_of_pushes = DataFlattenConvertGoals(goals).length;
-  const completed_count = goals.filter(function(D) {
-    return !determineOverDue({ ...D, goals });
+const AnimatedSubHeaderMetrics = ({ goals, updateFilter, filter }) => {
+  const filtered_goals = GoalsFilterCadence({ goals, cadence: filter.cadence });
+  const number_of_goals = filtered_goals.length;
+  const number_of_pushes = DataFlattenConvertGoals(filtered_goals).length;
+  const completed_count = filtered_goals.filter(function(D) {
+    return !determineOverDue({ ...D, goals: filtered_goals });
   }).length;
-  const remaining_count = goals.filter(function(D) {
-    return determineOverDue({ ...D, goals });
+  const remaining_count = filtered_goals.filter(function(D) {
+    return determineOverDue({ ...D, goals: filtered_goals });
   }).length;
   const complete_percentage = ((completed_count / number_of_goals) * 100).toFixed(0);
   return (
     <Fragment>
       <TouchableWithoutFeedback
         onPress={() => {
-          updateFilter("incomplete");
+          updateFilter({ ...filter, state: "incomplete" });
         }}
       >
         <View>
@@ -42,7 +51,7 @@ const AnimatedSubHeaderMetrics = ({ goals, updateFilter }) => {
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback
         onPress={() => {
-          updateFilter("complete");
+          updateFilter({ ...filter, state: "complete" });
         }}
       >
         <View>
@@ -51,11 +60,11 @@ const AnimatedSubHeaderMetrics = ({ goals, updateFilter }) => {
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback
         onPress={() => {
-          updateFilter("all");
+          updateFilter({ ...filter, state: "all" });
         }}
       >
         <View>
-          <AnimatedText type="large">{goals.length + " Total"}</AnimatedText>
+          <AnimatedText type="large">{filtered_goals.length + " Total"}</AnimatedText>
         </View>
       </TouchableWithoutFeedback>
       <View>
@@ -91,36 +100,73 @@ const AnimatedSubHeader = ({
   updateSortOrder,
   sortOrder,
   updateFilter,
+  filter,
 }) => {
   const [fadeAnim] = useState(new Animated.Value(0));
-  const transformOpacity = scrollAnimation.interpolate({
-    inputRange: [0, 60],
-    outputRange: [1, 0],
-    extrapolate: "clamp",
-  });
-
-  const transformY = scrollAnimation.interpolate({
-    inputRange: [0, 60],
-    outputRange: [0, -30],
-    extrapolate: "clamp",
-  });
 
   useEffect(() => {
     Animated.timing(fadeAnim, { toValue: 1, duration: 1000 }).start();
   }, []);
-
   return (
     <AnimatedSafeAreaView
       style={[
         styles.subheader,
-        { opacity: transformOpacity, transform: [{ translateY: transformY }] }, //translateY: transformY
+        { opacity: 1, transform: [{ translateY: 0 }] }, //translateY: transformY
       ]}
     >
       <Animated.View style={[styles.innerSubHeader, { opacity: fadeAnim }]}>
         <AnimatedSubHeaderSort sortOrder={sortOrder} updateSortOrder={updateSortOrder} />
-        <AnimatedSubHeaderMetrics goals={goals} updateFilter={updateFilter} />
+        <AnimatedSubHeaderMetrics goals={goals} updateFilter={updateFilter} filter={filter} />
       </Animated.View>
     </AnimatedSafeAreaView>
+  );
+};
+
+const AnimatedSubHeaderTimeIntervalText = ({ text, cadence, updateFilter, filter }) => {
+  const is_active = filter.cadence == cadence;
+  const background_color = is_active ? "#005AFF" : "black";
+  return (
+    <TouchableWithoutFeedback
+      onPress={() => {
+        updateFilter({ ...filter, cadence });
+      }}
+    >
+      <View style={[styles.innerTimeSubHeaderSelected, { backgroundColor: background_color }]}>
+        <AnimatedText type="header3" style={{ fontSize: 12, color: "white" }}>
+          {text}
+        </AnimatedText>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+};
+const AnimatedSubHeaderTimeInterval = ({ filter, updateFilter }) => {
+  return (
+    <View style={[styles.innerTimeSubHeader]}>
+      <AnimatedSubHeaderTimeIntervalText
+        text={"All"}
+        filter={filter}
+        updateFilter={updateFilter}
+        cadence={"all"}
+      />
+      <AnimatedSubHeaderTimeIntervalText
+        text={"Today"}
+        filter={filter}
+        updateFilter={updateFilter}
+        cadence={"daily"}
+      />
+      <AnimatedSubHeaderTimeIntervalText
+        text={"Week"}
+        filter={filter}
+        updateFilter={updateFilter}
+        cadence={"weekly"}
+      />
+      <AnimatedSubHeaderTimeIntervalText
+        text={"Month"}
+        filter={filter}
+        updateFilter={updateFilter}
+        cadence={"monthly"}
+      />
+    </View>
   );
 };
 
@@ -135,14 +181,14 @@ const AnimatedHeader = ({
   updateSortOrder,
   sortOrder,
   updateFilter,
+  filter,
+  scrollAnimation,
+  navigation,
 }) => {
-  const [scrollAnimation] = React.useState(new Animated.Value(0));
-  const [showDetailHeader, updateShowDetailHeader] = useState(false);
+  const [showDetailHeader, updateShowDetailHeader] = useState(Platform.OS === "android");
   scrollAnimation.addListener(({ value }) => {
     if (value < -20) {
       updateShowDetailHeader(true);
-    } else if (value > 100) {
-      updateShowDetailHeader(false);
     }
   });
   const opacity = scrollAnimation.interpolate({
@@ -158,58 +204,38 @@ const AnimatedHeader = ({
   return (
     <View style={styles.container}>
       <AnimatedSafeAreaView style={[styles.header, { shadowOpacity: 0 }]}>
+        <HeaderButtons navigation={navigation} logout={logout} />
         <Animated.View
-          style={[styles.innerHeader, { height: Platform.OS === "android" ? 70 : 80 }]}
+          style={[styles.innerHeader, { height: Platform.OS === "android" ? 85 : 80 }]}
         >
           <View>
             <AnimatedText
-              type="large"
+              type="header2"
               style={{
-                position: "absolute",
-                top: 0,
-                opacity: opacity,
-                transform: [{ translateY: translateY }],
+                fontSize: 36,
+
+                marginTop: Platform.OS === "android" ? 0 : 24,
+                color: "white",
+                width: Dimensions.get("window").width * 0.9,
               }}
             >
-              {String(goals.length)}
-            </AnimatedText>
-
-            <AnimatedText type="header2" style={{ fontSize: 36, marginTop: 24, color: "#17355A" }}>
               {title || "title"}
             </AnimatedText>
+            <AnimatedSubHeaderTimeInterval filter={filter} updateFilter={updateFilter} />
           </View>
-
-          <TouchableOpacity onPress={logout} style={styles.settings}>
+          {/* <TouchableOpacity onPress={logout} style={[styles.settings, { right: 60 }]}>
             <View>
-              <Animated.Text
-                style={{ color: "white", opacity, transform: [{ translateY: translateY }] }}
-              >
-                {logout_text}
-              </Animated.Text>
+              <Text style={{ color: "white" }}>{logout_text}</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </Animated.View>
       </AnimatedSafeAreaView>
       {showDetailHeader ? (
         <AnimatedSubHeader
-          {...{ scrollAnimation, goals, refetch, updateSortOrder, sortOrder, updateFilter }}
+          {...{ scrollAnimation, goals, refetch, updateSortOrder, sortOrder, updateFilter, filter }}
         />
       ) : null}
-      <Animated.ScrollView
-        style={styles.scrollView}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: { contentOffset: { y: scrollAnimation } },
-            },
-          ],
-          {
-            useNativeDriver: true,
-          },
-        )}
-      >
-        {children}
-      </Animated.ScrollView>
+      {children}
     </View>
   );
 };
@@ -219,8 +245,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  list: {
+    flex: 1,
+  },
   subheader: {
-    backgroundColor: Theme.palette.background, // Theme.palette.background, //"white",
+    backgroundColor: "#FFF9FD", // Theme.palette.background, // Theme.palette.background, //"white",
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
@@ -235,12 +264,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   header: {
-    backgroundColor: main_background, //"white",
+    backgroundColor: "black", //"white",
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
     elevation: 8,
     zIndex: 10000,
+    // borderTopLeftRadius: 25,
+    // borderTopRightRadius: 25,
+    borderBottomLeftRadius: 25,
   },
   innerHeader: {
     marginHorizontal: Theme.spacing.base,
@@ -248,6 +280,22 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: Platform.OS === "android" ? 5 : 20,
   },
+  innerTimeSubHeader: {
+    marginHorizontal: 20,
+    marginVertical: Theme.spacing.tiny,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    alignSelf: "stretch",
+  },
+  innerTimeSubHeaderSelected: {
+    borderRadius: 25,
+    paddingHorizontal: 15,
+  },
+  settings: {
+    color: "#ffffff",
+  }
 });
 export default AnimatedHeader;

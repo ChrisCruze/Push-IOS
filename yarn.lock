@@ -1177,6 +1177,13 @@
     wcwidth "^1.0.1"
     ws "^1.1.0"
 
+"@react-native-community/datetimepicker@2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-2.1.0.tgz#4e3413462cbbe5c48fab6cebd422835031cdf7b9"
+  integrity sha512-InktUrx0/4JTy1YsgswljgID7oB3L8wkFobRhnLGWPExSsNHeecGW2/nBP31ZaOPHcjVWhpOQMZt0zDpKfGE/Q==
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native-community/masked-view@^0.1.7":
   version "0.1.9"
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.9.tgz#383aca2fb053e3e14405c99cce2d5805df730821"
@@ -5200,6 +5207,11 @@ path-type@^2.0.0:
   dependencies:
     pify "^2.0.0"
 
+paths-js@^0.4.10:
+  version "0.4.10"
+  resolved "https://registry.yarnpkg.com/paths-js/-/paths-js-0.4.10.tgz#a3575f409b4a36f8aa795ba4d051989021be58c7"
+  integrity sha512-JZoqlRSHtx+bc+xKI9o4bropEbqZBF4ZfYImiB1T9RYpHB73h5I8XZ7FfSBbHbBMtdD1c04ujjAPH8wUuu4+Gw==
+
 performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
@@ -5255,6 +5267,11 @@ plugin-error@^0.1.2:
     arr-diff "^1.0.1"
     arr-union "^2.0.1"
     extend-shallow "^1.1.2"
+
+point-in-polygon@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/point-in-polygon/-/point-in-polygon-1.0.1.tgz#d59b64e8fee41c49458aac82b56718c5957b2af7"
+  integrity sha1-1Ztk6P7kHElFiqyCtWcYxZV7Kvc=
 
 posix-character-classes@^0.1.0:
   version "0.1.1"
@@ -5419,6 +5436,20 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-native-chart-kit@^5.6.0:
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-chart-kit/-/react-native-chart-kit-5.6.0.tgz#288b55eedb83c457999c818178fbf84dac22611d"
+  integrity sha512-KYcbU5X5w2afFFbgfYL7W6yZudjBegswwkn6heg2JDwpX5fll7nRYenMnfskzqbZ0yTg7gpWgrR66byxLcxddQ==
+  dependencies:
+    lodash "^4.17.13"
+    paths-js "^0.4.10"
+    point-in-polygon "^1.0.1"
+
+react-native-confetti-cannon@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/react-native-confetti-cannon/-/react-native-confetti-cannon-1.5.0.tgz#8d3c306f785481d8fec48a83195cc908f7550652"
+  integrity sha512-5Z/s6G6cUU8aMJTgBCvladzjEJAgTPbEmu5kYfeWbigu0ru8XAeLzMYN9JDLfAoGkF3WRqW5roOFXaM5L2oIfA==
+
 react-native-dotenv@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/react-native-dotenv/-/react-native-dotenv-0.2.0.tgz#311551cb6a35a3dcfede648bded55c0e3ece579d"
@@ -5426,7 +5457,7 @@ react-native-dotenv@^0.2.0:
   dependencies:
     babel-plugin-dotenv "0.1.1"
 
-react-native-drawer@2.5.1:
+react-native-drawer@2.5.1, react-native-drawer@^2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/react-native-drawer/-/react-native-drawer-2.5.1.tgz#08b9314184f48c724f1b467f8859797369798654"
   integrity sha512-cxcQNbSWy5sbGi7anSVp6EDr6JarOBMY9lbFOeLFeVYbONiudoqRKbgEsSDgSw3/LFCLvUXK5zdjXCOedeytxQ==
@@ -5538,6 +5569,11 @@ react-native-paper@^3.8.0:
     "@callstack/react-theme-provider" "^3.0.5"
     color "^3.1.2"
     react-native-safe-area-view "^0.14.9"
+
+react-native-progress-circle@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-progress-circle/-/react-native-progress-circle-2.1.0.tgz#62bdf31c76962d10c5c14446b61ff7d05cf0d0ec"
+  integrity sha512-VP0s92bgbTMQy4hQzPU4LlGyFj3z5u7i1HYFG8/yzXXfGkX1cxKS4xOlE+OTaObWC99w7Bodi3h8R7En2nQPYw==
 
 react-native-ratings@^6.3.0:
   version "6.5.0"

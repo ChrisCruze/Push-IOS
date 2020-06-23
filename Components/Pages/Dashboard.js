@@ -1,49 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Dimensions, FlatList, TouchableOpacity, Image } from "react-native";
+import { View, StyleSheet, Dimensions, Animated } from "react-native";
 import Constants from "expo-constants";
-import { Feather as Icon } from "@expo/vector-icons";
 import Theme from "../Atoms/Theme";
-import Text from "../Atoms/Text";
-import Images from "../Atoms/Images";
-import GoalItem from "../Molecules/GoalItem";
-import BarChartSummary from "../Molecules/BarChartSummary";
-import Header from "../Molecules/Header";
 import TableGrid from "../Molecules/TableGrid";
-import {
-  goals_data_last_n_days_from_transformed_goals_array,
-  goals_data_last_n_days_from_transformed_goals_array_chunked,
-} from "../Atoms/BarChart.functions";
+import { goals_data_last_n_days_from_transformed_goals_array_chunked } from "../Atoms/BarChart.functions";
 import BarChart from "../Atoms/BarChart";
 import { AsyncStorage } from "react-native";
 import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
 import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
-import ProgressCircle from 'react-native-progress-circle';
-
-import {
-  LineChart,
-  // BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart
-} from "react-native-chart-kit";
-
+import DashboardHeader from "../Molecules/DashboardHeader";
+import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
+import DashboardCharts from "../Molecules/DashboardCharts";
+import DashboardMetrics from "../Molecules/DashboardMetrics";
+import NetworkCheckNav from "../Molecules/NetworkCheckNav";
 import { useGoalsPull } from "../../API";
+import { NavigationEvents } from "react-navigation";
+
+const GoalsFilter = ({ goals }) => {
+  const [filter, updateFilter] = useState({ state: "all", cadence: "all" });
+  const filtered_state_goals = GoalsFilterState({ goals, state: filter.state });
+  const filtered_cadence_goals = GoalsFilterCadence({
+    goals: filtered_state_goals,
+    cadence: filter.cadence,
+  });
+  return { filtered_goals: filtered_cadence_goals, updateFilter, filter };
+};
+
 const Dashboard = ({ navigation }) => {
+  const [scrollAnimation] = useState(new Animated.Value(0));
+
   const logout = () => {
     AsyncStorage.setItem("token", "")
       .then(() => AsyncStorage.setItem("token_created_date", ""))
       .then(() => navigation.navigate("Login"));
   };
-  const { goals, refetch } = useGoalsPull();
-  const timeStamps = DataFlattenConvertGoals(goals);
+  const { goals, refetch, networkStatus } = useGoalsPull();
+  const { filtered_goals, updateFilter, filter } = GoalsFilter({ goals });
+
+  NetworkCheckNav({ networkStatus, navigation });
+
+  const timeStamps = DataFlattenConvertGoals(filtered_goals);
   useEffect(() => {
     refetch();
   }, []);
-  const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
-    goals,
-    number_of_days: 7,
-  });
 
   const goals_count_by_day_array_chunked = goals_data_last_n_days_from_transformed_goals_array_chunked(
     {
@@ -52,82 +51,38 @@ const Dashboard = ({ navigation }) => {
       chunk_size: 7,
     },
   );
-  let data =goals_count_by_day_array.map(data => data.count)
   return (
     <View style={styles.container}>
-      <Header title={"Dashboard"} sub_title={"Today"} logout={logout} />
-      {/* <BarChart chartData={goals_count_by_day_array} /> */}
-      {/* <LineChart
-      data={{
-        labels: goals_count_by_day_array.map(data => data.date),
-        datasets: [
+      <NavigationEvents
+        onWillFocus={() => {
+          refetch();
+        }}
+      />
+      <DashboardHeader
+        title={"Dashboard"}
+        logout={logout}
+        updateFilter={updateFilter}
+        filter={filter}
+        navigation={navigation}
+      />
+      <Animated.ScrollView
+        style={styles.scrollView}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: { contentOffset: { y: scrollAnimation } },
+            },
+          ],
           {
-            data: goals_count_by_day_array.map(data => data.count)
-          }
-        ]
-      }}
-      width={Dimensions.get("window").width}
-      height={256}
-      verticalLabelRotation={30}
-      chartConfig={{
-        backgroundColor: "#FFFFFF",
-        decimalPlaces: 0, // optional, defaults to 2dp
-        color: (opacity = 1) => `rgba(25, 215, 155, ${opacity})`,
-        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        style: {
-          borderRadius: 16
-        },
-        propsForDots: {
-          r: "6",
-          strokeWidth: "2",
-          stroke: "#FFFFFF"
-        }
-      }}
-      bezier
-    ></LineChart> */}
-
-        <ProgressCircle
-            percent={30}
-            radius={100}
-            borderWidth={20}
-            color="#3399FF"
-            shadowColor="#999"
-            bgColor="#fff"
-            alignSelf="center"
-        >
-            <Text style={{ fontSize: 24 }}>{'30%'}</Text>
-        </ProgressCircle>
-
-
-    {/* <StackedBarChart
-      data={{
-        labels:  goals_count_by_day_array.map(data => data.date),
-        data: [[60, 60, 60], [30, 30, 60]],
-        barColors: ["#dfe4ea", "#ced6e0", "#a4b0be"]
-      }}
-      width={Dimensions.get("window").width}
-      height={256}
-      chartConfig={{
-        backgroundColor: "#e26a00",
-        backgroundGradientFrom: "#fb8c00",
-        backgroundGradientTo: "#ffa726",
-        decimalPlaces: 2, // optional, defaults to 2dp
-        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        style: {
-          borderRadius: 16
-        },
-        propsForDots: {
-          r: "6",
-          strokeWidth: "2",
-          stroke: "#ffa726"
-        }
-      }}
-      showLegend={false}
-    /> */}
-    {/* {console.log(goals_count_by_day_array, goals, goals_count_by_day_array_chunked)} */}
-      <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
-      <DashboardTimeStamps timeStamps={timeStamps} navigation={navigation} />
+            useNativeDriver: true,
+          },
+        )}
+      >
+        <DashboardCharts goals={filtered_goals} />
+        <DashboardMetrics goals={filtered_goals} timeStamps={timeStamps} />
+        <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
+        <DashboardTimeStamps timeStamps={timeStamps} navigation={navigation} />
+      </Animated.ScrollView>
     </View>
   );
 };
@@ -139,7 +94,6 @@ const { statusBarHeight } = Constants;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Theme.palette.background,
   },
   list: {
     flex: 1,

@@ -33,7 +33,7 @@ const SignUpContainer = ({
               {title}
             </Text>
             <View>{children}</View>
-            <Button label={nextLabel || "Next"} onPress={next} full primary />
+            <Button label={nextLabel || "Next"} onPress={next} full white style={{backgroundColor:Theme.palette.buttonTheme, borderRadius:32}} />
             <Button label="Back" onPress={back} full />
             {navigation.state.routeName === "Login" && (
               <Button

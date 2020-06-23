@@ -1,10 +1,9 @@
-import React, { useState, Fragment } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
-import Constants from "expo-constants";
-import ButtonNeomorph from "../Atoms/ButtonNeomorph";
-import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
-import _ from "lodash";
+import React from "react";
+import { StyleSheet, View, Vibration } from "react-native";
 import moment from "moment";
+import ButtonNeomorph from "../Atoms/ButtonNeomorph";
+import { useGoalUpdate, useGoalDelete } from "../../API";
+
 const GoalPageButtons = ({
   _id,
   navigation,
@@ -26,6 +25,7 @@ const GoalPageButtons = ({
   };
 
   const pushGoalPress = () => {
+    Vibration.vibrate();
     const timeStampsWithNew = timeStamps.concat(moment().format());
     updateGoal({
       variables: {
@@ -35,14 +35,14 @@ const GoalPageButtons = ({
         cadenceCount,
         timeStamps: timeStampsWithNew,
       },
-    });
-    refetch();
+    })
+      .then(() => refetch())
+      .catch(e => console.error(e));
   };
 
   return (
     <View style={styles.row_container}>
       <ButtonNeomorph text={"Push"} onPress={pushGoalPress} />
-
       <ButtonNeomorph text={"Delete"} onPress={deleteGoal} />
       <ButtonNeomorph text={"Edit"} onPress={editGoal} />
     </View>

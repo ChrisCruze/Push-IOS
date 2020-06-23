@@ -13,6 +13,7 @@ const Button = ({
   style,
   loading,
   textStyle,
+  white
 }) => {
   const computedStyle = [styles.base];
   if (primary && !transparent) {
@@ -36,7 +37,7 @@ const Button = ({
           style={[
             primary ? Theme.typography.large : Theme.typography.regular,
             {
-              color: disabled
+              color: white?"white":disabled
                 ? "transparent"
                 : primary
                 ? transparent

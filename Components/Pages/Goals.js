@@ -1,71 +1,40 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import {
+  AsyncStorage,
   View,
   Button,
   StyleSheet,
   Dimensions,
+  Animated,
   FlatList,
-  TouchableOpacity,
-  Image,
-  TouchableWithoutFeedback,
   Vibration,
   Platform,
+  Text,
 } from "react-native";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
-import { Feather as Icon } from "@expo/vector-icons";
 import Theme from "../Atoms/Theme";
-import Text from "../Atoms/Text";
-import Images from "../Atoms/Images";
-import FirstPost from "../Atoms/FirstPost";
 import GoalItem from "../Molecules/GoalItem";
-import Header from "../Molecules/Header";
-import moment from "moment";
 import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
-import { AsyncStorage } from "react-native";
 import { NavigationEvents } from "react-navigation";
 import AnimatedHeader from "../Molecules/AnimatedHeader";
-import _ from "lodash";
-import { determineOverDue } from "../Atoms/BarChart.functions";
+import Confetti from "../Molecules/Confetti";
+import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
+import AnimatedLoading from "../Molecules/AnimatedLoading";
+import NetworkCheckNav from "../Molecules/NetworkCheckNav";
 
-const GoalsSort = ({ goals }) => {
-  const [sortOrder, updateSortOrder] = useState("none");
-  const goals_copy = [...goals];
-
-  if (sortOrder == "none") {
-    var sorted_goals = goals_copy;
-    return { sorted_goals, updateSortOrder, sortOrder };
-  } else if (sortOrder == "asc") {
-    var sorted_goals = _.sortBy(goals_copy, function(D) {
-      return D["timeStamps"].length;
-    });
-    return { sorted_goals, updateSortOrder, sortOrder };
-  } else {
-    var sorted_goals = _.sortBy(goals_copy, function(D) {
-      return D["timeStamps"].length * -1;
-    });
-    return { sorted_goals, updateSortOrder, sortOrder };
-  }
-};
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const GoalsFilter = ({ goals }) => {
-  const [filter, updateFilter] = useState("all");
-  const goals_copy = [...goals];
+  const [filter, updateFilter] = useState({ state: "all", cadence: "all" });
 
-  if (filter == "all") {
-    return { filtered_goals: goals, updateFilter, filter };
-  } else if (filter == "incomplete") {
-    var filtered_goals = goals.filter(function(D) {
-      return determineOverDue({ ...D, goals });
-    });
-    return { filtered_goals, updateFilter, filter };
-  } else if (filter == "complete") {
-    var filtered_goals = goals.filter(function(D) {
-      return !determineOverDue({ ...D, goals });
-    });
-    return { filtered_goals, updateFilter, filter };
-  }
+  const filtered_state_goals = GoalsFilterState({ goals, state: filter.state });
+  const filtered_cadence_goals = GoalsFilterCadence({
+    goals: filtered_state_goals,
+    cadence: filter.cadence,
+  });
+  return { filtered_goals: filtered_cadence_goals, updateFilter, filter };
 };
 
 const Goals = ({ navigation }) => {
@@ -74,9 +43,10 @@ const Goals = ({ navigation }) => {
       .then(() => AsyncStorage.setItem("token_created_date", ""))
       .then(() => navigation.navigate("Login"));
   };
-
-  const { goals, refetch } = useGoalsPull();
-  const { filtered_goals, updateFilter } = GoalsFilter({ goals });
+  const [scrollAnimation] = React.useState(new Animated.Value(0));
+  const { goals, refetch, loading, networkStatus } = useGoalsPull();
+  NetworkCheckNav({ networkStatus, navigation });
+  const { filtered_goals, updateFilter, filter } = GoalsFilter({ goals });
   const { sorted_goals, updateSortOrder, sortOrder } = GoalsSort({ goals: filtered_goals });
 
   const { updateGoal } = useGoalUpdate();
@@ -97,7 +67,6 @@ const Goals = ({ navigation }) => {
         return;
       }
       let token = await Notifications.getExpoPushTokenAsync();
-      console.log(token);
       setExpoPushToken(token);
     } else {
       // alert("Must use physical device for Push Notifications");
@@ -122,8 +91,8 @@ const Goals = ({ navigation }) => {
     const message = {
       to: expoPushToken,
       sound: "default",
-      title: "Original Title",
-      body: "And here is the body!",
+      title: "Push",
+      body: "🏴‍☠️ Arg! Walk the plank",
       data: { data: "goes here" },
       _displayInForeground: true,
     };
@@ -143,13 +112,9 @@ const Goals = ({ navigation }) => {
   useEffect(() => {
     registerForPushNotificationsAsync();
     notificationSubscription = Notifications.addListener(_handleNotification);
-    console.log(notificationSubscription);
-    //update goal timestamp
-    //update daily push value
   }, []);
-  const createNewGoal = () => {
-    navigation.navigate("createGoal");
-  };
+
+  const refToConfetti = useRef(null);
 
   return (
     <View style={styles.container}>
@@ -168,44 +133,44 @@ const Goals = ({ navigation }) => {
         updateSortOrder={updateSortOrder}
         sortOrder={sortOrder}
         updateFilter={updateFilter}
+        filter={filter}
+        scrollAnimation={scrollAnimation}
+        navigation={navigation}
       >
-        <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'space-around',
-        }}>
-        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Text>Origin: {this.state.notification.origin}</Text>
-          <Text>Data: {JSON.stringify(this.state.notification.data)}</Text>
-        </View>
-        <Button title={'Press to Send Notification'} onPress={() => this.sendPushNotification()} />
-      </View>
-        <FlatList
-          bounces={false}
-          showsVerticalScrollIndicator={false}
-          style={styles.list}
-          data={sorted_goals}
-          keyExtractor={goal => goal.id}
-          renderItem={({ item }) => {
-            return GoalItem({
-              ...item,
-              navigation,
-              goals,
-              updateGoal,
-              removeGoal,
-              refetch,
-            });
-          }}
-          ListEmptyComponent={
-            <View style={styles.post}>
-              <TouchableWithoutFeedback onPress={createNewGoal}>
-                <Icon name="plus-circle" color={Theme.palette.primary} size={25} />
-              </TouchableWithoutFeedback>
-            </View>
-          }
-        />
+        <Fragment>
+          <AnimatedLoading scrollAnimation={scrollAnimation} loading={loading} refetch={refetch} />
+          <AnimatedFlatList
+            onScroll={Animated.event(
+              [
+                {
+                  nativeEvent: { contentOffset: { y: scrollAnimation } },
+                },
+              ],
+              {
+                useNativeDriver: true,
+              },
+            )}
+            refreshing={loading}
+            scrollEventThrottle={16}
+            showsVerticalScrollIndicator={false}
+            style={styles.list}
+            data={sorted_goals}
+            keyExtractor={goal => goal.id}
+            renderItem={({ item }) => {
+              return GoalItem({
+                ...item,
+                navigation,
+                goals,
+                updateGoal,
+                removeGoal,
+                refetch,
+                goalsListConfetti: () => refToConfetti.current.start(),
+              });
+            }}
+          />
+        </Fragment>
       </AnimatedHeader>
+      <Confetti ref={refToConfetti} />
     </View>
   );
 };
