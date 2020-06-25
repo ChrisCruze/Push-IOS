@@ -29,10 +29,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     flex: 1,
     fontSize: 24,
+    textAlign: "center",
   },
   text: {
     flex: 1,
     fontSize: 12,
+    textAlign: "center",
   },
 });
 export default MetricNeomorph;

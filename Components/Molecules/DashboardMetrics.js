@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginTop: 20,
+    textAlign: "center",
   },
 });
 export default DashboardMetrics;
