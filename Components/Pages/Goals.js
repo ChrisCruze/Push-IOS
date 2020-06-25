@@ -96,6 +96,10 @@ const Goals = ({ navigation }) => {
 
 
   const attachToken = async () => {
+    AsyncStorage.getItem("notification_token").then(token => {
+      setnotificationsEnabled(token !== null);
+    });
+
     if (!notificationsEnabled) {
       if (expoPushToken) {
         await fetch(NOTIFICATION_URI, {
@@ -106,6 +110,8 @@ const Goals = ({ navigation }) => {
             "Content-Type": "application/json",
           },
           body: { expoPushToken },
+        }).then(() => {
+          AsyncStorage.setItem("notification_token", expoPushToken);
         });
       }
     }

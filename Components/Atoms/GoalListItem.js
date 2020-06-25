@@ -7,11 +7,14 @@ import {
   Dimensions,
   Animated,
   Alert,
+  Platform,
 } from "react-native";
 import { Neomorph } from "react-native-neomorph-shadows";
-import { SwipeRow } from "react-native-swipe-list-view";
-import { Feather as Icon } from "@expo/vector-icons";
-
+import { SwipeListView, SwipeRow } from "react-native-swipe-list-view";
+import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
+import AwesomeButton from "react-native-really-awesome-button";
+import AwesomeButtonRick from "react-native-really-awesome-button/src/themes/rick";
+import AwesomeButtonProgress from "react-native-really-awesome-button";
 
 const GoalButtonBackPushAction = ({ pushGoal, closeRow, pushGoalAnimate }) => {
   return (
