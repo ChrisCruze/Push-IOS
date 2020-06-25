@@ -37,16 +37,24 @@ const DashboardCharts = ({ goals }) => {
   const percentage_complete = determinePercentageDone(goals);
   return (
     <Fragment>
+      <Dropdown
+        label="Chart Type"
+        data={dropdownData}
+        value={selectedValue}
+        onChangeText={setSelectedValue}
+        style={{ textAlign: "center" }}
+      />
       {selectedValue === "Pie Chart" ? (
         <ProgressCircle
           percent={percentage_complete}
           width={Dimensions.get("window").width}
-          radius={100}
-          borderWidth={20}
-          color="#3399FF"
+          radius={130}
+          borderWidth={30}
+          color="#000"
           shadowColor="#999"
           bgColor="#fff"
           alignSelf="center"
+          outerCircleStyle={{ alignSelf: "center", marginRight: 10, marginBottom: 30 }}
         >
           <Text style={{ fontSize: 24 }}>{percentage_complete + "% of tasks completed"}</Text>
         </ProgressCircle>
@@ -80,13 +88,6 @@ const DashboardCharts = ({ goals }) => {
           bezier
         ></LineChart>
       )}
-
-      <Dropdown
-        label="Chart Type"
-        data={dropdownData}
-        value={selectedValue}
-        onChangeText={setSelectedValue}
-      />
     </Fragment>
   );
 };
