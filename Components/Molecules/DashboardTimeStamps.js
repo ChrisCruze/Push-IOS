@@ -1,14 +1,14 @@
-import React, { useState, Fragment } from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import _ from "lodash";
 import moment from "moment";
 import DashboardTimeStamp from "../Atoms/DashboardTimeStamp";
-import { useGoalsPull, useGoalUpdate, useGoalDelete } from "../../API";
+import { useGoalsPull, useGoalUpdate } from "../../API";
 
 import TimePickerModal from "../Atoms/TimePickerModal";
 
 const timeStampsSort = ({ timeStamps }) => {
-  const sorted_time_stamps = _.sortBy(timeStamps, function(i) {
+  const sorted_time_stamps = _.sortBy(timeStamps, function (i) {
     return moment(i.timeStamp).unix();
   });
   sorted_time_stamps.reverse();
@@ -17,15 +17,15 @@ const timeStampsSort = ({ timeStamps }) => {
 const timeStampsWithRemoved = ({ timeStamps, timeStamp }) => {
   const timeStampsCopy = [...timeStamps];
   const prevIndex = timeStampsCopy.findIndex(item => item === timeStamp);
-  const timeStampsCopyFiltered = timeStampsCopy.filter(function(i, num) {
+  const timeStampsCopyFiltered = timeStampsCopy.filter(function (i, num) {
     return num !== prevIndex;
   });
   return timeStampsCopyFiltered;
 };
 
-const DashboardTimeStamps = ({ timeStamps, navigation }) => {
+const DashboardTimeStamps = ({ timeStamps, navigation, hideTitle }) => {
   const timeStampsSorted = timeStampsSort({ timeStamps: timeStamps });
-  const timeStampArray = _.map(timeStampsSorted, function(i, num) {
+  const timeStampArray = _.map(timeStampsSorted, function (i, num) {
     return { key: num, ...i };
   });
   const { updateGoal } = useGoalUpdate();
@@ -75,6 +75,7 @@ const DashboardTimeStamps = ({ timeStamps, navigation }) => {
             updateGoal,
             refetch,
             navigation,
+            hideTitle,
           });
         }}
       />

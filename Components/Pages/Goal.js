@@ -9,7 +9,6 @@ import {
 } from "../Atoms/BarChart.functions";
 import BarChart from "../Atoms/BarChart";
 import { useGoalsPull } from "../../API";
-import GoalTimeStamps from "../Molecules/GoalTimeStamps";
 import Theme from "../Atoms/Theme";
 import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
 import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
@@ -47,7 +46,7 @@ const Goal = ({ navigation }) => {
   useEffect(() => {
     refetch();
   }, []);
-  const goals_filtered = goals.filter(function(D) {
+  const goals_filtered = goals.filter(function (D) {
     return D["_id"] == _id;
   });
 
@@ -57,10 +56,10 @@ const Goal = ({ navigation }) => {
       <GoalBarChart goals_filtered={goals_filtered} />
       <GoalTableGrid goals_filtered={goals_filtered} />
       <GoalPageButtons {...goals_filtered[0]} _id={_id} navigation={navigation} refetch={refetch} />
-      {/* <GoalTimeStamps {...goals_filtered[0]} navigation={navigation} /> */}
       <DashboardTimeStamps
         timeStamps={DataFlattenConvertGoals(goals_filtered)}
         navigation={navigation}
+        hideTitle={true}
       />
     </View>
   );
