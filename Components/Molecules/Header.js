@@ -1,19 +1,9 @@
 import * as React from "react";
-import moment from "moment";
-import {
-  FlatList,
-  Text,
-  StyleSheet,
-  View,
-  Animated,
-  SafeAreaView,
-  TouchableOpacity,
-} from "react-native";
+import { Text, StyleSheet, View, Animated, SafeAreaView, TouchableOpacity } from "react-native";
 import Constants from "expo-constants";
 import { TextClass } from "../Atoms/Text";
 import Theme from "../Atoms/Theme";
 
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedText = Animated.createAnimatedComponent(TextClass);
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
@@ -41,7 +31,6 @@ const Header = ({ title, sub_title, logout, logout_text }) => {
     </AnimatedSafeAreaView>
   );
 };
-const main_background = "#F17355"; //E0E5EC //"#17355A" //"#F17355"
 
 const styles = StyleSheet.create({
   container: {
@@ -52,11 +41,12 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight + 100 + Theme.spacing.base,
   },
   header: {
-    backgroundColor: "black", //"white",
+    backgroundColor: "black",
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
     elevation: 8,
+    marginBottom: 20,
   },
   innerHeader: {
     marginHorizontal: Theme.spacing.base,
@@ -69,7 +59,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Theme.spacing.small,
   },
   settings: {
-    color: "#FFFFFF"
-  }
+    color: "#FFFFFF",
+  },
 });
 export default Header;

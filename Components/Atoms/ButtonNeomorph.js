@@ -1,15 +1,13 @@
-import React, { useState, Fragment } from "react";
-import { StyleSheet, Text, View, Button, Dimensions, TouchableWithoutFeedback } from "react-native";
+import React from "react";
+import { StyleSheet, Text, Dimensions, TouchableWithoutFeedback } from "react-native";
 import { Neomorph } from "react-native-neomorph-shadows";
 import Theme from "./Theme";
 
 const ButtonNeomorph = ({ onPress, text }) => {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
-      <Neomorph darkShadowColor="#D1CDC7" lightShadowColor="#FFF" style={styles.neomorph}>
-        <View style={styles.wrapper}>
-          <Text style={styles.text}>{text}</Text>
-        </View>
+      <Neomorph darkShadowColor="#D1CDC7" lightShadowColor="#F8F8FF" style={styles.neomorph}>
+        <Text style={styles.text}>{text}</Text>
       </Neomorph>
     </TouchableWithoutFeedback>
   );
@@ -25,17 +23,16 @@ const styles = StyleSheet.create({
     borderLeftColor: "#FFF",
     borderBottomColor: "#D1CDC7",
     borderRightColor: "#D1CDC7",
-    backgroundColor: Theme.palette.background, //"#ECF0F3",
+    backgroundColor: Theme.palette.background,
     width: width * 0.3,
     height: 50,
     alignItems: "center",
     justifyContent: "center",
+    flex: 1,
   },
-  wrapper: {},
   text: {
     fontWeight: "bold",
-    flex: 1,
-    fontSize: 28,
+    fontSize: 25,
   },
 });
 export default ButtonNeomorph;

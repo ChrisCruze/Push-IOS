@@ -53,9 +53,9 @@ const Goal = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <GoalHeader goals_filtered={goals_filtered} back={back} />
+      <GoalPageButtons {...goals_filtered[0]} _id={_id} navigation={navigation} refetch={refetch} />
       <GoalBarChart goals_filtered={goals_filtered} />
       <GoalTableGrid goals_filtered={goals_filtered} />
-      <GoalPageButtons {...goals_filtered[0]} _id={_id} navigation={navigation} refetch={refetch} />
       <DashboardTimeStamps
         timeStamps={DataFlattenConvertGoals(goals_filtered)}
         navigation={navigation}
