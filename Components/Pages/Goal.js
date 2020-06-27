@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Animated } from "react-native";
 import TableGrid from "../Molecules/TableGrid";
 import GoalPageButtons from "../Molecules/GoalPageButtons";
 import Header from "../Molecules/Header";
@@ -42,6 +42,7 @@ const GoalHeader = ({ goals_filtered, back }) => {
 const Goal = ({ navigation }) => {
   const back = () => navigation.navigate("Goals");
   const _id = navigation.getParam("id");
+  const [scrollAnimation] = useState(new Animated.Value(0));
   const { goals, refetch } = useGoalsPull();
   useEffect(() => {
     refetch();
@@ -52,15 +53,33 @@ const Goal = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <GoalHeader goals_filtered={goals_filtered} back={back} />
-      <GoalPageButtons {...goals_filtered[0]} _id={_id} navigation={navigation} refetch={refetch} />
-      <GoalBarChart goals_filtered={goals_filtered} />
-      <GoalTableGrid goals_filtered={goals_filtered} />
-      <DashboardTimeStamps
-        timeStamps={DataFlattenConvertGoals(goals_filtered)}
-        navigation={navigation}
-        hideTitle={true}
-      />
+      <Animated.ScrollView
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: { contentOffset: { y: scrollAnimation } },
+            },
+          ],
+          {
+            useNativeDriver: true,
+          },
+        )}
+      >
+        <GoalHeader goals_filtered={goals_filtered} back={back} />
+        <GoalPageButtons
+          {...goals_filtered[0]}
+          _id={_id}
+          navigation={navigation}
+          refetch={refetch}
+        />
+        <GoalBarChart goals_filtered={goals_filtered} />
+        <GoalTableGrid goals_filtered={goals_filtered} />
+        <DashboardTimeStamps
+          timeStamps={DataFlattenConvertGoals(goals_filtered)}
+          navigation={navigation}
+          hideTitle={true}
+        />
+      </Animated.ScrollView>
     </View>
   );
 };
