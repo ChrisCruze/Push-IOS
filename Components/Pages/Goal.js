@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Animated } from "react-native";
+import { Text, View, StyleSheet, Animated } from "react-native";
 import TableGrid from "../Molecules/TableGrid";
 import GoalPageButtons from "../Molecules/GoalPageButtons";
 import Header from "../Molecules/Header";
@@ -18,7 +18,12 @@ const GoalBarChart = ({ goals_filtered }) => {
     goals: goals_filtered,
     number_of_days: 7,
   });
-  return <BarChart chartData={goals_count_by_day_array} />;
+  return (
+    <View style={styles.barchartContainer}>
+      <Text>Your week at a glance:</Text>
+      <BarChart chartData={goals_count_by_day_array} />
+    </View>
+  );
 };
 
 const GoalTableGrid = ({ goals_filtered }) => {
@@ -88,6 +93,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Theme.palette.background,
+  },
+  barchartContainer: {
+    alignItems: "center",
+    paddingTop: 30,
   },
 });
 
