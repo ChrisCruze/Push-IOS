@@ -7,10 +7,14 @@ import {
   Dimensions,
   Animated,
   Alert,
+  Platform,
 } from "react-native";
 import { Neomorph } from "react-native-neomorph-shadows";
-import { SwipeRow } from "react-native-swipe-list-view";
-import { Feather as Icon } from "@expo/vector-icons";
+import { SwipeListView, SwipeRow } from "react-native-swipe-list-view";
+import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
+import AwesomeButton from "react-native-really-awesome-button";
+import AwesomeButtonRick from "react-native-really-awesome-button/src/themes/rick";
+import AwesomeButtonProgress from "react-native-really-awesome-button";
 
 const GoalButtonBackPushAction = ({ pushGoal, closeRow, pushGoalAnimate }) => {
   return (
@@ -360,8 +364,10 @@ const styles = StyleSheet.create({
   task: {
     fontWeight: "bold",
     color: "#17355A",
-    flex: 1,
+    flex: 2,
     fontSize: 28,
+    alignContent: "flex-start",
+    textAlign: "justify",
   },
   duration: {
     color: "#17355A",
@@ -370,19 +376,17 @@ const styles = StyleSheet.create({
   },
   frequency: {
     flex: 1,
+    alignSelf: "baseline",
     color: "#17355A",
     fontSize: 32,
     textAlign: "right",
+    alignContent: "flex-end",
   },
   topRow: {
     width: 250,
     marginTop: 10,
-    marginLeft: 20,
-    marginRight: 10,
     flexDirection: "row",
     flex: 2,
-    alignSelf: "stretch",
-    textAlign: "left",
   },
   botRow: {
     marginTop: 10,

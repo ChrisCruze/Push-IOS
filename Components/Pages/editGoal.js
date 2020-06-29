@@ -121,6 +121,9 @@ const styles = StyleSheet.create({
     height: 30,
     marginTop: 25,
     marginBottom: 30,
+    borderBottomColor: '#0f0f0f',
+    borderBottomWidth: 1,
+    height: 50
   },
   snackbar: {
     position: "absolute",

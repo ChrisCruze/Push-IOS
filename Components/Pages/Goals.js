@@ -23,6 +23,9 @@ import Confetti from "../Molecules/Confetti";
 import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
 import AnimatedLoading from "../Molecules/AnimatedLoading";
 import NetworkCheckNav from "../Molecules/NetworkCheckNav";
+import APIClient from "../../API";
+
+import { NOTIFICATION_URI } from "react-native-dotenv";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
@@ -53,6 +56,7 @@ const Goals = ({ navigation }) => {
   const { removeGoal } = useGoalDelete();
   const [notification, setNotification] = useState({});
   const [expoPushToken, setExpoPushToken] = useState("");
+  const [notificationsEnabled, setnotificationsEnabled] = useState(false);
 
   const registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
@@ -68,6 +72,7 @@ const Goals = ({ navigation }) => {
       }
       let token = await Notifications.getExpoPushTokenAsync();
       setExpoPushToken(token);
+      await attachToken();
     } else {
       // alert("Must use physical device for Push Notifications");
     }
@@ -87,24 +92,30 @@ const Goals = ({ navigation }) => {
     setNotification({ notification: notification });
   };
 
-  const sendPushNotification = async () => {
-    const message = {
-      to: expoPushToken,
-      sound: "default",
-      title: "Push",
-      body: "🏴‍☠️ Arg! Walk the plank",
-      data: { data: "goes here" },
-      _displayInForeground: true,
-    };
-    const response = await fetch("https://exp.host/--/api/v2/push/send", {
-      method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Accept-encoding": "gzip, deflate",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(message),
+  const attachToken = async () => {
+    AsyncStorage.getItem("notification_token").then(token => {
+      setnotificationsEnabled(token !== null);
     });
+    const token = AsyncStorage.getItem("token").then(token => {
+      return token;
+    });
+
+    if (!notificationsEnabled) {
+      if (expoPushToken) {
+        await fetch(NOTIFICATION_URI, {
+          method: "POST",
+          headers: {
+            "Accept": "application/json",
+            "Accept-encoding": "gzip, deflate",
+            "Content-Type": "application/json",
+            "authorization": `Bearer ${await token}`,
+          },
+          body: { expoPushToken },
+        }).then(() => {
+          AsyncStorage.setItem("notification_token", expoPushToken);
+        });
+      }
+    }
   };
 
   let notificationSubscription;

@@ -106,11 +106,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textInput: {
+
     borderColor: "black",
     borderBottomWidth: 2,
     height: 30,
     marginTop: 25,
     marginBottom: 30,
+    height: 40,
   },
   snackbar: {
     position: "absolute",
