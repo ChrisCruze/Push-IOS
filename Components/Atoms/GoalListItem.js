@@ -253,14 +253,16 @@ const GoalListItem = ({
         duration: 100,
       }),
     ]).start(() => {
-      Animated.timing(moveAnim, {
-        toValue: 0,
-        duration: 0,
-      }).start(() => {
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 1500,
-        }).start();
+      pushGoal().then(() => {
+        Animated.timing(moveAnim, {
+          toValue: 0,
+          duration: 0,
+        }).start(() => {
+          Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 1500,
+          }).start();
+        });
       });
     });
   };
@@ -283,10 +285,10 @@ const GoalListItem = ({
         >
           <GoalButtonBack
             deleteGoal={deleteGoal}
-            pushGoal={pushGoal}
+            pushGoal={pushGoalAnimate}
             goalName={text}
             closeRow={() => refToSwipeRow.current.closeRow()}
-            pushGoalAnimate={pushGoalAnimate}
+            pushGoalAnimate={() => {}}
             navigateToEditGoal={navigateToEditGoal}
           />
           <GoalButtonFront
