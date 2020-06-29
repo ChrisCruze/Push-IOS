@@ -197,10 +197,10 @@ const GoalButtonFront = ({
   is_overdue,
 }) => {
   const backgroundColor = is_overdue ? "#FFF9FD" : "#D3D5DA";
-  const color = is_overdue ? "#17355A" : "black";
+  const color = "black";
   const borderColor = is_overdue ? "#000000" : "#D3D5DA";
   const opacity = is_overdue ? 1 : 0.7;
-  const textDecorationLine = is_overdue ? "none" : "line-through";
+  const textDecorationLine = "none";
   return (
     <GoalButtonFrontBase
       {...{
