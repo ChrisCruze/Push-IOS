@@ -109,14 +109,28 @@ const GoalTitleTextFontSizeDetermine = textLength => {
   }
 };
 
-const GoalTitleText = ({ text }) => {
+const GoalTitleText = ({ text, color, textDecorationLine }) => {
   const textLength = text.length;
   const fontSizeCalculated = GoalTitleTextFontSizeDetermine(textLength, text);
-  return <Text style={[styles.task, { fontSize: fontSizeCalculated }]}>{text}</Text>;
+  return (
+    <Text
+      style={[
+        styles.task,
+        {
+          fontSize: fontSizeCalculated,
+          color,
+          textDecorationLine,
+        },
+      ]}
+    >
+      {text}
+    </Text>
+  );
 };
 
-const GoalButtonFront = ({
+const GoalButtonFrontBase = ({
   text,
+  subTitle,
   totalCount,
   cadenceCount,
   cadence,
@@ -126,13 +140,29 @@ const GoalButtonFront = ({
   navigateToGoal,
   rowOpen,
   closeRow,
+  backgroundColor,
+  color,
+  borderColor,
+  opacity,
+  textDecorationLine,
 }) => {
-  const color = "#17355A";
+  const neomorph = {
+    shadowOpacity: 0.7,
+    shadowRadius: 4,
+    borderRadius: 18,
+    borderColor: borderColor,
+    backgroundColor: backgroundColor,
+    width: width * 0.8,
+    height: 95,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: Platform.OS === "android" ? 4 : 2,
+  };
   return (
     <TouchableWithoutFeedback onPress={rowOpen ? closeRow : navigateToGoal}>
-      <Neomorph lightShadowColor="#FFF" style={styles.neomorph}>
-        <View style={styles.topRow}>
-          <GoalTitleText text={text} />
+      <Neomorph lightShadowColor="#FFF" style={neomorph}>
+        <View style={[styles.topRow, { opacity }]}>
+          <GoalTitleText text={text} color={color} textDecorationLine={textDecorationLine} />
           <View style={[styles.dash, { borderColor: color }]}>
             <Animated.Text
               style={[
@@ -144,14 +174,54 @@ const GoalButtonFront = ({
             </Animated.Text>
           </View>
         </View>
-        <View style={styles.botRow}>
-          <Text style={styles.duration}>{lastTimeStampMessage}</Text>
-          <Text style={styles.duration}>
-            {totalCount} / {cadenceCount} ({cadence})
-          </Text>
+        <View style={[styles.botRow, { opacity }]}>
+          <Text style={[styles.duration, { color }]}>{lastTimeStampMessage}</Text>
+          <Text style={[styles.duration, { color }]}>{subTitle}</Text>
         </View>
       </Neomorph>
     </TouchableWithoutFeedback>
+  );
+};
+const GoalButtonFront = ({
+  text,
+  subTitle,
+  totalCount,
+  cadenceCount,
+  cadence,
+  lastTimeStampMessage,
+  moveAnim,
+  fadeAnim,
+  navigateToGoal,
+  rowOpen,
+  closeRow,
+  is_overdue,
+}) => {
+  const backgroundColor = is_overdue ? "#FFF9FD" : "#D3D5DA";
+  const color = "black";
+  const borderColor = is_overdue ? "#000000" : "#D3D5DA";
+  const opacity = is_overdue ? 1 : 0.7;
+  const textDecorationLine = "none";
+  return (
+    <GoalButtonFrontBase
+      {...{
+        text,
+        subTitle,
+        totalCount,
+        cadenceCount,
+        cadence,
+        lastTimeStampMessage,
+        moveAnim,
+        fadeAnim,
+        navigateToGoal,
+        rowOpen,
+        closeRow,
+        backgroundColor,
+        color,
+        borderColor,
+        opacity,
+        textDecorationLine,
+      }}
+    />
   );
 };
 
@@ -166,6 +236,7 @@ const GoalListItem = ({
   deleteGoal,
   lastTimeStampMessage,
   is_overdue,
+  subTitle,
 }) => {
   const refToSwipeRow = useRef();
   const [fadeAnim] = useState(new Animated.Value(1));
@@ -230,6 +301,7 @@ const GoalListItem = ({
             fadeAnim={fadeAnim}
             closeRow={() => refToSwipeRow.current.closeRow()}
             rowOpen={rowOpen}
+            subTitle={subTitle}
           />
         </SwipeRow>
       </View>

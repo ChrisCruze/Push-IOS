@@ -152,8 +152,7 @@ const determineStartEndDateRange = cadence => {
   }
 };
 
-export const filterTimeStampsForCadence = ({ timeStamps, cadence }) => {
-  const { start, end } = determineStartEndDateRange(cadence);
+export const filterTimeStampsForCadenceFromStartEnd = ({ timeStamps, start, end }) => {
   const filteredTimeStamps = timeStamps.filter(function(timeStamp) {
     const is_after_start = moment(timeStamp).isAfter(start);
     const is_before_end = moment(timeStamp).isBefore(end);
@@ -161,13 +160,40 @@ export const filterTimeStampsForCadence = ({ timeStamps, cadence }) => {
   });
   return filteredTimeStamps;
 };
+export const filterTimeStampsForCadence = ({ timeStamps, cadence }) => {
+  const { start, end } = determineStartEndDateRange(cadence);
+  const filteredTimeStamps = filterTimeStampsForCadenceFromStartEnd({ timeStamps, start, end });
+  return filteredTimeStamps;
+};
+
+const percentageTimeFrameComplete = ({ start, end }) => {
+  const minutes_difference_from_start = moment().diff(start, "minutes");
+  const minutes_total = end.diff(start, "minutes");
+  const percentage_complete = minutes_difference_from_start / minutes_total;
+  return percentage_complete;
+};
+
+//if goal is 7 times a week, and its monday, and you only completed once, it will show overdue, since you should have been at 2 by Monday
+const determineOverDueFromTimeStamps = ({ cadence, cadenceCount, timeStamps }) => {
+  const { start, end } = determineStartEndDateRange(cadence);
+  const filteredTimeStamps = filterTimeStampsForCadenceFromStartEnd({ timeStamps, start, end });
+  const percentageTimePassed = percentageTimeFrameComplete({ start, end });
+  const cadenceInt = cadenceCount == 0 ? 1 : cadenceCount;
+  const goalCountTresholdForCadence = percentageTimePassed * cadenceInt;
+  const is_overdue = goalCountTresholdForCadence > filteredTimeStamps.length;
+  return is_overdue;
+};
 
 export const determineOverDue = ({ cadence, cadenceCount, goals, id }) => {
   const timeStamps = getGoalTimeStamps({ goals, id });
-  const filteredTimeStamps = filterTimeStampsForCadence({ timeStamps, cadence });
-  const cadenceInt = cadenceCount == 0 ? 1 : cadenceCount;
-  const is_overdue = cadenceInt > filteredTimeStamps.length;
-  return is_overdue;
+  return determineOverDueFromTimeStamps({ cadence, cadenceCount, timeStamps });
+};
+
+const sortByOverDue = goals => {
+  const sortedGoals = _.sortBy(goals, goal =>
+    determineOverDueFromTimeStamps({ ...goal }) ? 0 : 1,
+  );
+  return sortedGoals;
 };
 
 export const GoalsSort = ({ goals }) => {
@@ -175,7 +201,7 @@ export const GoalsSort = ({ goals }) => {
   const goals_copy = [...goals];
 
   if (sortOrder == "none") {
-    var sorted_goals = goals_copy;
+    var sorted_goals = sortByOverDue(goals_copy);
     return { sorted_goals, updateSortOrder, sortOrder };
   } else if (sortOrder == "asc") {
     var sorted_goals = _.sortBy(goals_copy, function(D) {
