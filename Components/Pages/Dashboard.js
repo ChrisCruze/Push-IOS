@@ -4,12 +4,11 @@ import Constants from "expo-constants";
 import Theme from "../Atoms/Theme";
 import TableGrid from "../Molecules/TableGrid";
 import { goals_data_last_n_days_from_transformed_goals_array_chunked } from "../Atoms/BarChart.functions";
-import BarChart from "../Atoms/BarChart";
 import { AsyncStorage } from "react-native";
 import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
 import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
 import DashboardHeader from "../Molecules/DashboardHeader";
-import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
+import { GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
 import DashboardCharts from "../Molecules/DashboardCharts";
 import DashboardMetrics from "../Molecules/DashboardMetrics";
 import NetworkCheckNav from "../Molecules/NetworkCheckNav";
@@ -66,7 +65,6 @@ const Dashboard = ({ navigation }) => {
         navigation={navigation}
       />
       <Animated.ScrollView
-        style={styles.scrollView}
         onScroll={Animated.event(
           [
             {

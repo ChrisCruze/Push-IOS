@@ -1,12 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, View, TouchableWithoutFeedback, Alert, Button } from "react-native";
-import _ from "lodash";
+import { StyleSheet, Text, View, TouchableWithoutFeedback, Alert } from "react-native";
 import moment from "moment";
-import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
+import { Feather as Icon } from "@expo/vector-icons";
 const timeStampsWithRemoved = ({ timeStamps, timeStamp }) => {
   const timeStampsCopy = [...timeStamps];
   const prevIndex = timeStampsCopy.findIndex(item => item === timeStamp);
-  const timeStampsCopyFiltered = timeStampsCopy.filter(function(i, num) {
+  const timeStampsCopyFiltered = timeStampsCopy.filter(function (i, num) {
     return num !== prevIndex;
   });
   return timeStampsCopyFiltered;
@@ -14,20 +13,17 @@ const timeStampsWithRemoved = ({ timeStamps, timeStamp }) => {
 
 const DashboardTimeStamp = ({
   timeStamp,
-  key,
   _id,
   title,
   cadence,
   cadenceCount,
   timeStamps,
-  timeStampArray,
   updateGoal,
   refetch,
   setModalVisible,
-  navigation,
   updateTimeStampConfig,
   setDate,
-  date,
+  hideTitle,
 }) => {
   const time_stamp_formatted = moment(timeStamp).format("M/DD(ddd) h:mma");
   const deleteTimeStamp = () => {
@@ -66,28 +62,42 @@ const DashboardTimeStamp = ({
     setDate(moment(timeStamp).toDate());
     refetch();
   };
+
   return (
     <View style={styles.container}>
-      <Text>{title}</Text>
-      <Text>{time_stamp_formatted}</Text>
-
-      <TouchableWithoutFeedback onPress={updateTimeStamp}>
-        <Icon name="edit" size={25} {...{ color: "black" }} />
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={deleteTimeStamp}>
-        <Icon name="trash" size={25} {...{ color: "black" }} />
-      </TouchableWithoutFeedback>
+      <View style={styles.text}>
+        {hideTitle || <Text>{title}</Text>}
+        <Text>{time_stamp_formatted}</Text>
+      </View>
+      <View style={styles.icon}>
+        <TouchableWithoutFeedback onPress={updateTimeStamp}>
+          <Icon name="edit" size={25} color="black" />
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={deleteTimeStamp}>
+          <Icon name="trash" size={25} color="black" />
+        </TouchableWithoutFeedback>
+      </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     marginTop: 15,
     marginBottom: 15,
-    marginHorizontal: 40,
+    marginHorizontal: 30,
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  text: {
+    flex: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  icon: {
+    flex: 2,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginLeft: 20,
   },
 });
 

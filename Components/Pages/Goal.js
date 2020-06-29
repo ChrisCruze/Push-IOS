@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Text, View, StyleSheet, Animated } from "react-native";
 import TableGrid from "../Molecules/TableGrid";
 import GoalPageButtons from "../Molecules/GoalPageButtons";
 import Header from "../Molecules/Header";
@@ -9,7 +9,6 @@ import {
 } from "../Atoms/BarChart.functions";
 import BarChart from "../Atoms/BarChart";
 import { useGoalsPull } from "../../API";
-import GoalTimeStamps from "../Molecules/GoalTimeStamps";
 import Theme from "../Atoms/Theme";
 import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
 import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
@@ -19,7 +18,12 @@ const GoalBarChart = ({ goals_filtered }) => {
     goals: goals_filtered,
     number_of_days: 7,
   });
-  return <BarChart chartData={goals_count_by_day_array} />;
+  return (
+    <View style={styles.barchartContainer}>
+      <Text>Your week at a glance:</Text>
+      <BarChart chartData={goals_count_by_day_array} />
+    </View>
+  );
 };
 
 const GoalTableGrid = ({ goals_filtered }) => {
@@ -43,25 +47,44 @@ const GoalHeader = ({ goals_filtered, back }) => {
 const Goal = ({ navigation }) => {
   const back = () => navigation.navigate("Goals");
   const _id = navigation.getParam("id");
+  const [scrollAnimation] = useState(new Animated.Value(0));
   const { goals, refetch } = useGoalsPull();
   useEffect(() => {
     refetch();
   }, []);
-  const goals_filtered = goals.filter(function(D) {
+  const goals_filtered = goals.filter(function (D) {
     return D["_id"] == _id;
   });
 
   return (
     <View style={styles.container}>
-      <GoalHeader goals_filtered={goals_filtered} back={back} />
-      <GoalBarChart goals_filtered={goals_filtered} />
-      <GoalTableGrid goals_filtered={goals_filtered} />
-      <GoalPageButtons {...goals_filtered[0]} _id={_id} navigation={navigation} refetch={refetch} />
-      {/* <GoalTimeStamps {...goals_filtered[0]} navigation={navigation} /> */}
-      <DashboardTimeStamps
-        timeStamps={DataFlattenConvertGoals(goals_filtered)}
-        navigation={navigation}
-      />
+      <Animated.ScrollView
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: { contentOffset: { y: scrollAnimation } },
+            },
+          ],
+          {
+            useNativeDriver: true,
+          },
+        )}
+      >
+        <GoalHeader goals_filtered={goals_filtered} back={back} />
+        <GoalPageButtons
+          {...goals_filtered[0]}
+          _id={_id}
+          navigation={navigation}
+          refetch={refetch}
+        />
+        <GoalBarChart goals_filtered={goals_filtered} />
+        <GoalTableGrid goals_filtered={goals_filtered} />
+        <DashboardTimeStamps
+          timeStamps={DataFlattenConvertGoals(goals_filtered)}
+          navigation={navigation}
+          hideTitle={true}
+        />
+      </Animated.ScrollView>
     </View>
   );
 };
@@ -70,6 +93,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Theme.palette.background,
+  },
+  barchartContainer: {
+    alignItems: "center",
+    paddingTop: 30,
   },
 });
 
