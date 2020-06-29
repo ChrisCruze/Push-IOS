@@ -23,9 +23,9 @@ import Confetti from "../Molecules/Confetti";
 import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
 import AnimatedLoading from "../Molecules/AnimatedLoading";
 import NetworkCheckNav from "../Molecules/NetworkCheckNav";
+import APIClient from "../../API";
 
 import { NOTIFICATION_URI } from "react-native-dotenv";
-
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
@@ -58,7 +58,6 @@ const Goals = ({ navigation }) => {
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notificationsEnabled, setnotificationsEnabled] = useState(false);
 
-
   const registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
@@ -69,7 +68,6 @@ const Goals = ({ navigation }) => {
       }
       if (finalStatus !== "granted") {
         // alert("Failed to get push token for push notification!");
-
         return;
       }
       let token = await Notifications.getExpoPushTokenAsync();
@@ -94,10 +92,12 @@ const Goals = ({ navigation }) => {
     setNotification({ notification: notification });
   };
 
-
   const attachToken = async () => {
     AsyncStorage.getItem("notification_token").then(token => {
       setnotificationsEnabled(token !== null);
+    });
+    const token = AsyncStorage.getItem("token").then(token => {
+      return token;
     });
 
     if (!notificationsEnabled) {
@@ -108,6 +108,7 @@ const Goals = ({ navigation }) => {
             "Accept": "application/json",
             "Accept-encoding": "gzip, deflate",
             "Content-Type": "application/json",
+            "authorization": `Bearer ${await token}`,
           },
           body: { expoPushToken },
         }).then(() => {
@@ -115,7 +116,6 @@ const Goals = ({ navigation }) => {
         });
       }
     }
-
   };
 
   let notificationSubscription;
@@ -125,9 +125,7 @@ const Goals = ({ navigation }) => {
     notificationSubscription = Notifications.addListener(_handleNotification);
   }, []);
 
-
   const refToConfetti = useRef(null);
-
 
   return (
     <View style={styles.container}>
