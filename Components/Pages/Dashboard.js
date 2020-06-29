@@ -77,8 +77,8 @@ const Dashboard = ({ navigation }) => {
         )}
       >
         <DashboardCharts goals={filtered_goals} />
-        <DashboardMetrics goals={filtered_goals} timeStamps={timeStamps} />
         <TableGrid list_of_lists={goals_count_by_day_array_chunked} />
+        <DashboardMetrics goals={filtered_goals} timeStamps={timeStamps} />
         <DashboardTimeStamps timeStamps={timeStamps} navigation={navigation} />
       </Animated.ScrollView>
     </View>
