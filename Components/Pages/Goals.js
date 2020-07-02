@@ -61,9 +61,11 @@ const Goals = ({ navigation }) => {
   const registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      console.log(existingStatus);
       let finalStatus = existingStatus;
-      if (existingStatus !== "granted") {
+      if (existingStatus === "granted") {
         const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        console.log(status);
         finalStatus = status;
       }
       if (finalStatus !== "granted") {
@@ -72,7 +74,7 @@ const Goals = ({ navigation }) => {
       }
       let token = await Notifications.getExpoPushTokenAsync();
       setExpoPushToken(token);
-      await attachToken();
+      attachToken();
     } else {
       // alert("Must use physical device for Push Notifications");
     }
@@ -90,15 +92,17 @@ const Goals = ({ navigation }) => {
   const _handleNotification = notification => {
     Vibration.vibrate();
     setNotification({ notification: notification });
+    console.log(notification);
   };
 
   const attachToken = async () => {
     AsyncStorage.getItem("notification_token").then(token => {
+      console.log(token);
+      console.log(token !== null);
       setnotificationsEnabled(token !== null);
     });
-    const token = AsyncStorage.getItem("token").then(token => {
-      return token;
-    });
+    const token = await AsyncStorage.getItem("token");
+    console.log({ expoPushToken });
 
     if (!notificationsEnabled) {
       if (expoPushToken) {
@@ -108,9 +112,9 @@ const Goals = ({ navigation }) => {
             "Accept": "application/json",
             "Accept-encoding": "gzip, deflate",
             "Content-Type": "application/json",
-            "authorization": `Bearer ${await token}`,
+            "authorization": `Bearer ${token}`,
           },
-          body: { expoPushToken },
+          body: JSON.stringify({ expoPushToken: expoPushToken }),
         }).then(() => {
           AsyncStorage.setItem("notification_token", expoPushToken);
         });
