@@ -83,7 +83,8 @@ const GoalItem = ({
   const pushGoalPress = () => {
     Vibration.vibrate();
     const timeStampsWithNew = timeStamps.concat(moment().format());
-    updateGoal({
+
+    return updateGoal({
       variables: {
         _id,
         title,
@@ -93,11 +94,12 @@ const GoalItem = ({
       },
     })
       .then(() => refetch())
+      .then(() => {
+        if (totalCount + 1 == cadenceCount) {
+          goalsListConfetti();
+        }
+      })
       .catch(e => console.error(e));
-
-    if (totalCount + 1 == cadenceCount) {
-      goalsListConfetti();
-    }
   };
   const deleteGoalPress = () => {
     removeGoal({ variables: { _id } });

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -245,6 +245,7 @@ const GoalListItem = ({
   const refToSwipeRow = useRef();
   const [fadeAnim] = useState(new Animated.Value(1));
   const [moveAnim] = useState(new Animated.Value(0));
+  const [opacityAnim] = useState(new Animated.Value(0));
 
   const pushGoalAnimate = () => {
     Animated.parallel([
@@ -252,26 +253,35 @@ const GoalListItem = ({
         toValue: 0,
         duration: 500,
       }),
-      Animated.timing(moveAnim, {
-        toValue: 20,
-        duration: 100,
-      }),
+      // Animated.timing(moveAnim, {
+      //   toValue: 20,
+      //   duration: 100,
+      // }),
     ]).start(() => {
-      Animated.timing(moveAnim, {
-        toValue: 0,
-        duration: 0,
-      }).start(() => {
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 1500,
-        }).start();
-      });
+      pushGoal()
+        .then(() => {
+          // Animated.timing(moveAnim, {
+          //   toValue: 0,
+          //   duration: 0,
+          // }).start(() => {
+          Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 500,
+          }).start();
+          // });
+        })
+        .catch(e => console.error(e));
     });
   };
   const [rowOpen, setRowOpen] = useState(false);
-
+  useEffect(() => {
+    Animated.timing(opacityAnim, {
+      toValue: 1,
+      duration: 2000,
+    }).start();
+  }, []);
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, { opacity: opacityAnim }]}>
       <View style={styles.standalone}>
         <SwipeRow
           leftActionValue={80} // the exposed length when swiped
@@ -287,10 +297,10 @@ const GoalListItem = ({
         >
           <GoalButtonBack
             deleteGoal={deleteGoal}
-            pushGoal={pushGoal}
+            pushGoal={pushGoalAnimate}
             goalName={text}
             closeRow={() => refToSwipeRow.current.closeRow()}
-            pushGoalAnimate={pushGoalAnimate}
+            pushGoalAnimate={() => {}}
             navigateToEditGoal={navigateToEditGoal}
           />
           <GoalButtonFront
@@ -309,7 +319,7 @@ const GoalListItem = ({
           />
         </SwipeRow>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 
