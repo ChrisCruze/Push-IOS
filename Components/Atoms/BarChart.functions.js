@@ -47,7 +47,7 @@ const TransformToDayArrayCount = array => {
 };
 
 export const dates_array_create_from_start = ({ number_of_days, start_date }) => {
-  var start = start_date || moment();
+  var start = start_date; //|| moment();
   var dates_list = [];
   for (i = 0; i < number_of_days; i++) {
     var next_time = start.clone();
@@ -93,6 +93,9 @@ export const goals_data_last_n_days_from_transformed_goals_array = ({ goals, num
   const flattened_goals_array = DataFlattenConvertGoals(goals);
   const last_fourteen_days = dates_array_create_from_start({
     number_of_days: number_of_days || 7,
+    start_date: moment()
+      .startOf("week")
+      .add(1, "week"),
   });
   const last_fourteen_days_with_goals_count = _.map(last_fourteen_days, function(moment_date) {
     return goals_data_combine_with_date({ moment_date, flattened_goals_array });

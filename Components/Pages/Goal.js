@@ -52,7 +52,7 @@ const Goal = ({ navigation }) => {
   useEffect(() => {
     refetch();
   }, []);
-  const goals_filtered = goals.filter(function (D) {
+  const goals_filtered = goals.filter(function(D) {
     return D["_id"] == _id;
   });
 
