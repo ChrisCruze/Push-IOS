@@ -249,22 +249,24 @@ const GoalListItem = ({
         toValue: 0,
         duration: 500,
       }),
-      Animated.timing(moveAnim, {
-        toValue: 20,
-        duration: 100,
-      }),
+      // Animated.timing(moveAnim, {
+      //   toValue: 20,
+      //   duration: 100,
+      // }),
     ]).start(() => {
-      pushGoal().then(() => {
-        Animated.timing(moveAnim, {
-          toValue: 0,
-          duration: 0,
-        }).start(() => {
+      pushGoal()
+        .then(() => {
+          // Animated.timing(moveAnim, {
+          //   toValue: 0,
+          //   duration: 0,
+          // }).start(() => {
           Animated.timing(fadeAnim, {
             toValue: 1,
-            duration: 1500,
+            duration: 500,
           }).start();
-        });
-      });
+          // });
+        })
+        .catch(e => console.error(e));
     });
   };
   const [rowOpen, setRowOpen] = useState(false);

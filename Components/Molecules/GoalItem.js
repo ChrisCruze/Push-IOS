@@ -94,12 +94,12 @@ const GoalItem = ({
       },
     })
       .then(() => refetch())
-      .catch(e => console.error(e))
       .then(() => {
         if (totalCount + 1 == cadenceCount) {
           goalsListConfetti();
         }
-      });
+      })
+      .catch(e => console.error(e));
   };
   const deleteGoalPress = () => {
     removeGoal({ variables: { _id } });
