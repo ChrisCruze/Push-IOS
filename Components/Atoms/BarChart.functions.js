@@ -95,7 +95,8 @@ export const goals_data_last_n_days_from_transformed_goals_array = ({ goals, num
     number_of_days: number_of_days || 7,
     start_date: moment()
       .startOf("week")
-      .add(1, "week"),
+      .add(1, "week")
+      .subtract(1, "day"),
   });
   const last_fourteen_days_with_goals_count = _.map(last_fourteen_days, function(moment_date) {
     return goals_data_combine_with_date({ moment_date, flattened_goals_array });

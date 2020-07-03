@@ -2,7 +2,7 @@ import React, { useState, Fragment } from "react";
 import TableCell from "../Atoms/TableCell";
 import { StyleSheet, Text, View, Button } from "react-native";
 
-const days = ["Mon", "Tues", "Wed", "Thur", "Fri", "Sat", "Sun"];
+const days = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
 
 const TableHeader = () => {
   return (
