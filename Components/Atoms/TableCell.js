@@ -13,7 +13,7 @@ const TableCell = ({ cell }) => {
         alignItems: "center",
       }}
     >
-      <Text style={{ color: cell.color || "#ebedf0" }}>{cell.count > 0 ? cell.count : "-"}</Text>
+      <Text style={{ color: cell.color || "#ebedf0" }}>{cell.date_day}</Text>
     </View>
   );
 };
