@@ -107,12 +107,40 @@ export const goals_data_last_n_days_from_transformed_goals_array = ({ goals, num
   return last_fourteen_days_with_goals_count;
 };
 
+const generateColorsScale = n => {
+  var r = 0;
+  var g = 0;
+  var b = 0;
+  var l = [];
+  for (var i = 0; i < n; i++) {
+    r += 33;
+    g += 33;
+    b += 33;
+    var rgb_color = "rgb(" + r + "," + g + "," + b + ")";
+    l.push(rgb_color);
+  }
+  return l;
+};
+
+const countGetRankDictCreate = array => {
+  const sorted_array = _.sortBy(Object.keys(_.groupBy(array, "count")), i => {
+    return parseFloat(i) * -1 || 0;
+  });
+  const rgb_scale = generateColorsScale(sorted_array.length);
+  const rgb_dict = {};
+  sorted_array.forEach((D, i) => {
+    rgb_dict[D] = rgb_scale[i];
+  });
+
+  return rgb_dict;
+};
 const background_color_attribute_add_based_on_count = array => {
+  const color_dict = countGetRankDictCreate(array);
   return _.map(array, D => {
     return {
       ...D,
       color: D.count == 0 ? "black" : "white",
-      backgroundColor: D.count == 0 ? "#ebedf0" : "black",
+      backgroundColor: D.count == 0 ? "#ebedf0" : color_dict[String(D["count"])], // rgb_scale[4], // rgb_scale[0], //"rgb(255, 0, 255)", //
     };
   });
 };

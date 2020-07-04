@@ -6,7 +6,6 @@ const TableCell = ({ cell }) => {
     <View
       style={{
         backgroundColor: cell.backgroundColor || "#ebedf0",
-
         margin: 2,
         height: 20,
         width: 30,
