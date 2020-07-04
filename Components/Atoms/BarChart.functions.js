@@ -91,14 +91,20 @@ const goals_data_combine_with_date = ({ moment_date, flattened_goals_array }) =>
 
   return { date: moment_date_formatted, count: goals_length, date_day };
 };
-export const goals_data_last_n_days_from_transformed_goals_array = ({ goals, number_of_days }) => {
+export const goals_data_last_n_days_from_transformed_goals_array = ({
+  goals,
+  number_of_days,
+  start_date,
+}) => {
   const flattened_goals_array = DataFlattenConvertGoals(goals);
   const last_fourteen_days = dates_array_create_from_start({
     number_of_days: number_of_days || 7,
-    start_date: moment()
-      .startOf("week")
-      .add(1, "week")
-      .subtract(1, "day"),
+    start_date:
+      start_date ||
+      moment()
+        .startOf("week")
+        .add(1, "week")
+        .subtract(1, "day"),
   });
   const last_fourteen_days_with_goals_count = _.map(last_fourteen_days, function(moment_date) {
     return goals_data_combine_with_date({ moment_date, flattened_goals_array });
@@ -131,7 +137,6 @@ const countGetRankDictCreate = array => {
   sorted_array.forEach((D, i) => {
     rgb_dict[D] = rgb_scale[i];
   });
-
   return rgb_dict;
 };
 const background_color_attribute_add_based_on_count = array => {
