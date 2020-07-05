@@ -61,15 +61,15 @@ const Goals = ({ navigation }) => {
   const registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-      console.log(existingStatus);
       let finalStatus = existingStatus;
-      if (existingStatus === "granted") {
+      if (existingStatus !== "granted") {
         const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-        console.log(status);
         finalStatus = status;
       }
       if (finalStatus !== "granted") {
-        // alert("Failed to get push token for push notification!");
+        alert(
+          "Push Notifications have not been enabled. They will need to be enabled via your phone's settings page",
+        );
         return;
       }
       let token = await Notifications.getExpoPushTokenAsync();
@@ -92,17 +92,13 @@ const Goals = ({ navigation }) => {
   const _handleNotification = notification => {
     Vibration.vibrate();
     setNotification({ notification: notification });
-    console.log(notification);
   };
 
   const attachToken = async () => {
     AsyncStorage.getItem("notification_token").then(token => {
-      console.log(token);
-      console.log(token !== null);
       setnotificationsEnabled(token !== null);
     });
-    const token = await AsyncStorage.getItem("token");
-    console.log({ expoPushToken });
+    const apiToken = await AsyncStorage.getItem("token");
 
     if (!notificationsEnabled) {
       if (expoPushToken) {
@@ -112,7 +108,7 @@ const Goals = ({ navigation }) => {
             "Accept": "application/json",
             "Accept-encoding": "gzip, deflate",
             "Content-Type": "application/json",
-            "authorization": `Bearer ${token}`,
+            "authorization": `Bearer ${apiToken}`,
           },
           body: JSON.stringify({ expoPushToken: expoPushToken }),
         }).then(() => {
