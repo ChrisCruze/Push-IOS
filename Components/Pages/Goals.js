@@ -75,8 +75,6 @@ const Goals = ({ navigation }) => {
       let token = await Notifications.getExpoPushTokenAsync();
       setExpoPushToken(token);
       attachToken();
-    } else {
-      // alert("Must use physical device for Push Notifications");
     }
 
     if (Platform.OS === "android") {
@@ -108,7 +106,7 @@ const Goals = ({ navigation }) => {
             "Accept": "application/json",
             "Accept-encoding": "gzip, deflate",
             "Content-Type": "application/json",
-            "authorization": `Bearer ${apiToken}`,
+            "Authorization": `Bearer ${apiToken}`,
           },
           body: JSON.stringify({ expoPushToken: expoPushToken }),
         }).then(() => {
