@@ -67,14 +67,14 @@ const Goals = ({ navigation }) => {
         finalStatus = status;
       }
       if (finalStatus !== "granted") {
-        // alert("Failed to get push token for push notification!");
+        alert(
+          "Push Notifications have not been enabled. They will need to be enabled via your phone's settings page",
+        );
         return;
       }
       let token = await Notifications.getExpoPushTokenAsync();
       setExpoPushToken(token);
-      await attachToken();
-    } else {
-      // alert("Must use physical device for Push Notifications");
+      attachToken();
     }
 
     if (Platform.OS === "android") {
@@ -96,9 +96,7 @@ const Goals = ({ navigation }) => {
     AsyncStorage.getItem("notification_token").then(token => {
       setnotificationsEnabled(token !== null);
     });
-    const token = AsyncStorage.getItem("token").then(token => {
-      return token;
-    });
+    const apiToken = await AsyncStorage.getItem("token");
 
     if (!notificationsEnabled) {
       if (expoPushToken) {
@@ -108,9 +106,9 @@ const Goals = ({ navigation }) => {
             "Accept": "application/json",
             "Accept-encoding": "gzip, deflate",
             "Content-Type": "application/json",
-            "authorization": `Bearer ${await token}`,
+            "Authorization": `Bearer ${apiToken}`,
           },
-          body: { expoPushToken },
+          body: JSON.stringify({ expoPushToken: expoPushToken }),
         }).then(() => {
           AsyncStorage.setItem("notification_token", expoPushToken);
         });
