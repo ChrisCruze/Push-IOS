@@ -82,6 +82,7 @@ export const GoalsDataTransformForBar = ({ goals }) => {
 const goals_data_combine_with_date = ({ moment_date, flattened_goals_array }) => {
   const moment_date_formatted = moment_date.format("MM/DD");
   const date_day = moment_date.format("D");
+  const month = moment_date.format("MMM");
 
   const goals_array_for_date = flattened_goals_array.filter(function(D) {
     const goal_time_stamp_format = moment(D["timeStamp"]).format("MM/DD");
@@ -89,7 +90,7 @@ const goals_data_combine_with_date = ({ moment_date, flattened_goals_array }) =>
   });
   const goals_length = goals_array_for_date.length;
 
-  return { date: moment_date_formatted, count: goals_length, date_day };
+  return { date: moment_date_formatted, count: goals_length, date_day, month };
 };
 export const goals_data_last_n_days_from_transformed_goals_array = ({
   goals,
