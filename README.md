@@ -1,6 +1,15 @@
 # Push
 
-Push App is a goal oriented habit tracker with visual measurements. It lets users create goals and record their activities that count towards their desired cadence
+## Summary
 
-- Marvel Wireframe - https://marvelapp.com/10g3ch8e/screen/66603286
-- Requirements - https://docs.google.com/document/d/1BcZrPV8WKHjAqA4e6mokfnoVX_rlIRyF8KuQO9oy9Qs/edit
+An easy to use goal oriented habit tracker with visual measurements
+
+## Description
+
+Push Pirates is a free and easy-to-use habit forming app that helps you to build and maintain habits/routines so that you can take better control of your life. By setting goals, tracking your habits, and holding yourself accountable through this tool, you can start to build a healthier lifestyle focused on behaviors you are trying to improve.
+
+## Features
+
+- Allows you to set and track goals/habits on a daily, weekly, or monthly basis
+- Provides a dashboard giving you insight into how you're tracking and progressing against your habits
+- Send reminder notifications to help you remember to accomplish your habits
