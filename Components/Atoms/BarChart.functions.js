@@ -114,9 +114,9 @@ export const goals_data_last_n_days_from_transformed_goals_array = ({
 };
 
 const generateColorsScale = n => {
-  var r = 0;
-  var g = 0;
-  var b = 0;
+  var r = 0; //0;
+  var g = 90; //0;
+  var b = 255; //0;
   var l = [];
   for (var i = 0; i < n; i++) {
     r += 33;
