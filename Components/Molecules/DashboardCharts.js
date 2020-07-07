@@ -4,6 +4,7 @@ import Constants from "expo-constants";
 import Theme from "../Atoms/Theme";
 import { goals_data_last_n_days_from_transformed_goals_array } from "../Atoms/BarChart.functions";
 import BarChart from "../Atoms/BarChart";
+import moment from "moment";
 
 import ProgressCircle from "react-native-progress-circle";
 import { Dropdown } from "react-native-material-dropdown";
@@ -32,6 +33,7 @@ const DashboardCharts = ({ goals }) => {
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
     goals,
     number_of_days: 7,
+    start_date: moment(),
   });
 
   const percentage_complete = determinePercentageDone(goals);
