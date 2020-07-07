@@ -17,6 +17,7 @@ const GoalBarChart = ({ goals_filtered }) => {
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
     goals: goals_filtered,
     number_of_days: 7,
+    start_date: moment(),
   });
   return (
     <View style={styles.barchartContainer}>
