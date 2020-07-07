@@ -12,6 +12,7 @@ import { useGoalsPull } from "../../API";
 import Theme from "../Atoms/Theme";
 import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
 import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
+import moment from "moment";
 
 const GoalBarChart = ({ goals_filtered }) => {
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
