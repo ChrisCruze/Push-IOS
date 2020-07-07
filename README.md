@@ -1,6 +1,10 @@
 # Push
 
-## Summary
+## What's new in this version?
+
+This new version includes notifications, a redesigned view, improved animations, and we addressed a few bugs to increase performance.
+
+## Promotional Text
 
 An easy-to-use goal oriented habit tracker with visual measurements
 
