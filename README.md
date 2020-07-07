@@ -2,7 +2,7 @@
 
 ## Summary
 
-An easy to use goal oriented habit tracker with visual measurements
+An easy-to-use goal oriented habit tracker with visual measurements
 
 ## Description
 
@@ -10,6 +10,6 @@ Push Pirates is a free and easy-to-use habit forming app that helps you to build
 
 ## Features
 
-- Allows you to set and track goals/habits on a daily, weekly, or monthly basis
-- Provides a dashboard giving you insight into how you're tracking and progressing against your habits
-- Send reminder notifications to help you remember to accomplish your habits
+- Allows you to set and track goals and habits on a daily, weekly, or monthly basis
+- Provides a dashboard giving you insight into how you're tracking and progressing towards your habits
+- Sends reminder notifications to help you remember to accomplish your goals
