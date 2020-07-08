@@ -2,14 +2,11 @@ import React, { useState, useEffect, useRef, Fragment } from "react";
 import {
   AsyncStorage,
   View,
-  Button,
   StyleSheet,
   Dimensions,
   Animated,
   FlatList,
-  Vibration,
   Platform,
-  Text,
 } from "react-native";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
@@ -23,8 +20,6 @@ import Confetti from "../Molecules/Confetti";
 import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarChart.functions";
 import AnimatedLoading from "../Molecules/AnimatedLoading";
 import NetworkCheckNav from "../Molecules/NetworkCheckNav";
-import APIClient from "../../API";
-
 import { NOTIFICATION_URI } from "react-native-dotenv";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -48,15 +43,12 @@ const Goals = ({ navigation }) => {
   };
   const [scrollAnimation] = React.useState(new Animated.Value(0));
   const { goals, refetch, loading, networkStatus } = useGoalsPull();
-  NetworkCheckNav({ networkStatus, navigation });
   const { filtered_goals, updateFilter, filter } = GoalsFilter({ goals });
   const { sorted_goals, updateSortOrder, sortOrder } = GoalsSort({ goals: filtered_goals });
-
   const { updateGoal } = useGoalUpdate();
   const { removeGoal } = useGoalDelete();
-  const [notification, setNotification] = useState({});
-  const [expoPushToken, setExpoPushToken] = useState("");
-  const [notificationsEnabled, setnotificationsEnabled] = useState(false);
+
+  NetworkCheckNav({ networkStatus, navigation });
 
   const registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
@@ -73,8 +65,7 @@ const Goals = ({ navigation }) => {
         return;
       }
       let token = await Notifications.getExpoPushTokenAsync();
-      setExpoPushToken(token);
-      attachToken();
+      attachToken(token);
     }
 
     if (Platform.OS === "android") {
@@ -87,40 +78,27 @@ const Goals = ({ navigation }) => {
     }
   };
 
-  const _handleNotification = notification => {
-    Vibration.vibrate();
-    setNotification({ notification: notification });
-  };
-
-  const attachToken = async () => {
-    AsyncStorage.getItem("notification_token").then(token => {
-      setnotificationsEnabled(token !== null);
-    });
+  const attachToken = async expoPushToken => {
     const apiToken = await AsyncStorage.getItem("token");
-
-    if (!notificationsEnabled) {
-      if (expoPushToken) {
-        await fetch(NOTIFICATION_URI, {
-          method: "POST",
-          headers: {
-            "Accept": "application/json",
-            "Accept-encoding": "gzip, deflate",
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${apiToken}`,
-          },
-          body: JSON.stringify({ expoPushToken: expoPushToken }),
-        }).then(() => {
-          AsyncStorage.setItem("notification_token", expoPushToken);
-        });
-      }
+    if (expoPushToken) {
+      await fetch(NOTIFICATION_URI, {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Accept-encoding": "gzip, deflate",
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiToken}`,
+        },
+        body: JSON.stringify({ expoPushToken: expoPushToken }),
+      }).then(() => {
+        AsyncStorage.setItem("notification_token", expoPushToken);
+        // TODO: Saving to async storage for now. Not being used. Can be used in registerForPushNotificationsAsync() for an early exit.
+      });
     }
   };
 
-  let notificationSubscription;
-
   useEffect(() => {
     registerForPushNotificationsAsync();
-    notificationSubscription = Notifications.addListener(_handleNotification);
   }, []);
 
   const refToConfetti = useRef(null);
