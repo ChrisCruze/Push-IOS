@@ -21,13 +21,11 @@ const HomeTabButtonInactive = ({ info }) => {
       style={{
         alignItems: "center",
         justifyContent: "center",
-        shadowRadius: 10,
         borderRadius: 12,
-        backgroundColor: "#DDDDDD",
         width: 50,
         height: 50,
-        shadowOpacity: 0.7, // <- and this or yours opacity
-        shadowRadius: 7,
+        shadowOpacity: 0.5, // <- and this or yours opacity
+        shadowRadius: 3,
         borderTopColor: "#FFF",
         borderLeftColor: "#FFF",
         borderBottomColor: "#D1CDC7",
@@ -50,7 +48,7 @@ const HomeTabButton = ({ i, current, info }) => {
 const HomeTab = ({ navigation }) => {
   const navigate = i => navigation.navigate(i);
   const tabs = [
-     { label: "Goals", icon: "list" },
+    { label: "Goals", icon: "list" },
     { label: "createGoal", icon: "plus" },
     { label: "Dashboard", icon: "bar-chart" },
   ];
@@ -61,7 +59,6 @@ const HomeTab = ({ navigation }) => {
     <SafeAreaView style={styles.tabs}>
       <View style={styles.container}>
         {tabs.map((info, i) => {
-          const color = "white";
           return (
             <TouchableWithoutFeedback
               key={info.label}
@@ -101,6 +98,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     height: 60, //0.08 * height, //57
+    paddingTop: 20,
   },
   tab: {
     flexGrow: 1,
