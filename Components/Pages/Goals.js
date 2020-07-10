@@ -51,7 +51,9 @@ const Goals = ({ navigation }) => {
   NetworkCheckNav({ networkStatus, navigation });
 
   const registerForPushNotificationsAsync = async () => {
-    if (Constants.isDevice) {
+    const notification_token = await AsyncStorage.getItem("notification_token");
+
+    if (Constants.isDevice && notification_token == null) {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
       let finalStatus = existingStatus;
       if (existingStatus !== "granted") {
@@ -92,7 +94,6 @@ const Goals = ({ navigation }) => {
         body: JSON.stringify({ expoPushToken: expoPushToken }),
       }).then(() => {
         AsyncStorage.setItem("notification_token", expoPushToken);
-        // TODO: Saving to async storage for now. Not being used. Can be used in registerForPushNotificationsAsync() for an early exit.
       });
     }
   };
