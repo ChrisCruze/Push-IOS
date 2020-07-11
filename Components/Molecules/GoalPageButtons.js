@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Vibration } from "react-native";
+import { StyleSheet, View, Vibration, Alert } from "react-native";
 import moment from "moment";
 import ButtonNeomorph from "../Atoms/ButtonNeomorph";
 import { useGoalUpdate, useGoalDelete } from "../../API";
@@ -20,8 +20,25 @@ const GoalPageButtons = ({
     navigation.navigate("editGoal", { _id: _id });
   };
   const deleteGoal = () => {
-    removeGoal({ variables: { _id } });
-    navigation.navigate("Goals");
+    Alert.alert(
+      "Are you sure you want to delete this goal?",
+      title,
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          onPress: () => {
+            removeGoal({ variables: { _id } });
+            navigation.navigate("Goals");
+          },
+        },
+      ],
+      { cancelable: false },
+    );
   };
 
   const pushGoalPress = () => {
@@ -43,7 +60,7 @@ const GoalPageButtons = ({
   return (
     <View style={styles.row_container}>
       <ButtonNeomorph text={"Push"} onPress={pushGoalPress} />
-      <ButtonNeomorph text={"Delete"} onPress={deleteGoal} />
+      <ButtonNeomorph text={"Delete"} onPress={() => deleteGoal()} />
       <ButtonNeomorph text={"Edit"} onPress={editGoal} />
     </View>
   );
