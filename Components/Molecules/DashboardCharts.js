@@ -1,23 +1,11 @@
-import React, { useState, useEffect, Fragment } from "react";
-import { View, StyleSheet, Dimensions, Text } from "react-native";
-import Constants from "expo-constants";
-import Theme from "../Atoms/Theme";
-import { goals_data_last_n_days_from_transformed_goals_array } from "../Atoms/BarChart.functions";
-import BarChart from "../Atoms/BarChart";
-import moment from "moment";
-
+import React, { useState, Fragment } from "react";
+import { View, Dimensions, Text } from "react-native";
 import ProgressCircle from "react-native-progress-circle";
 import { Dropdown } from "react-native-material-dropdown";
+import { LineChart } from "react-native-chart-kit";
+import moment from "moment";
 import { determinePercentageDone } from "../Atoms/BarChart.functions";
-
-import {
-  LineChart,
-  // BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart,
-} from "react-native-chart-kit";
+import { goals_data_last_n_days_from_transformed_goals_array } from "../Atoms/BarChart.functions";
 
 const DashboardCharts = ({ goals }) => {
   let dropdownData = [
@@ -39,13 +27,15 @@ const DashboardCharts = ({ goals }) => {
   const percentage_complete = determinePercentageDone(goals);
   return (
     <Fragment>
-      <Dropdown
-        label="Chart Type"
-        data={dropdownData}
-        value={selectedValue}
-        onChangeText={setSelectedValue}
-        style={{ textAlign: "center" }}
-      />
+      <View style={{ marginHorizontal: 20 }}>
+        <Dropdown
+          label="Chart Type"
+          data={dropdownData}
+          value={selectedValue}
+          onChangeText={setSelectedValue}
+        />
+      </View>
+
       {selectedValue === "Pie Chart" ? (
         <ProgressCircle
           percent={percentage_complete}
@@ -58,7 +48,9 @@ const DashboardCharts = ({ goals }) => {
           alignSelf="center"
           outerCircleStyle={{ alignSelf: "center", marginRight: 10, marginBottom: 30 }}
         >
-          <Text style={{ fontSize: 24 }}>{percentage_complete + "% of tasks completed"}</Text>
+          <Text style={{ fontSize: 24, textAlign: "center" }}>
+            {(percentage_complete === "NaN" ? 0 : percentage_complete) + "% of tasks completed"}
+          </Text>
         </ProgressCircle>
       ) : (
         <LineChart

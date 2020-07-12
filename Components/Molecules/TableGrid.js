@@ -55,9 +55,10 @@ const TableGrid = ({ list_of_lists }) => {
   );
 };
 const styles = StyleSheet.create({
+  table_title: { marginBottom: 15 },
   calendar_container: {
     marginHorizontal: 50,
-    marginTop: 10,
+    marginTop: 25,
   },
   row_container: {
     flexDirection: "row",
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
   calendar_title: {
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 10,
   },
   calendar_title_text: {
     fontSize: 18,

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, TouchableWithoutFeedback, SafeAreaView, View } from "react-native";
+import { StyleSheet, TouchableWithoutFeedback, SafeAreaView, View, Dimensions } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 import { Neomorph } from "react-native-neomorph-shadows";
 
@@ -21,13 +21,11 @@ const HomeTabButtonInactive = ({ info }) => {
       style={{
         alignItems: "center",
         justifyContent: "center",
-        shadowRadius: 10,
         borderRadius: 12,
-        backgroundColor: "#DDDDDD",
         width: 50,
         height: 50,
-        shadowOpacity: 0.7, // <- and this or yours opacity
-        shadowRadius: 7,
+        shadowOpacity: 0.5, // <- and this or yours opacity
+        shadowRadius: 3,
         borderTopColor: "#FFF",
         borderLeftColor: "#FFF",
         borderBottomColor: "#D1CDC7",
@@ -50,7 +48,7 @@ const HomeTabButton = ({ i, current, info }) => {
 const HomeTab = ({ navigation }) => {
   const navigate = i => navigation.navigate(i);
   const tabs = [
-     { label: "Goals", icon: "list" },
+    { label: "Goals", icon: "list" },
     { label: "createGoal", icon: "plus" },
     { label: "Dashboard", icon: "bar-chart" },
   ];
@@ -61,7 +59,6 @@ const HomeTab = ({ navigation }) => {
     <SafeAreaView style={styles.tabs}>
       <View style={styles.container}>
         {tabs.map((info, i) => {
-          const color = "white";
           return (
             <TouchableWithoutFeedback
               key={info.label}
@@ -78,6 +75,8 @@ const HomeTab = ({ navigation }) => {
   );
 };
 
+const { height } = Dimensions.get("window");
+
 const styles = StyleSheet.create({
   tabButton: {
     borderRadius: 12,
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   tabs: {
-    backgroundColor: "white", //"#FFF9FD",
+    backgroundColor: "white",
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -95,16 +94,19 @@ const styles = StyleSheet.create({
     elevation: 8,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
+    height: height * 0.12,
   },
   container: {
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-around",
-    height: 60, //0.08 * height, //57
+    height: 60,
+    marginTop: 15,
+    marginBottom: 15,
   },
   tab: {
     flexGrow: 1,
-    height: 60, //0.08 * height, //57
+    height: 60,
     justifyContent: "center",
     alignItems: "center",
   },
