@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import MetricNeomorph from "../Atoms/MetricNeomorph";
 import { StyleSheet, View } from "react-native";
 import { determinePercentageDone } from "../Atoms/BarChart.functions";
@@ -15,7 +15,12 @@ const TotalGoals = ({ goals }) => {
 
 const PercentageComplete = ({ goals }) => {
   const percentage_complete = determinePercentageDone(goals);
-  return <MetricNeomorph number={percentage_complete + "%"} text={"Complete"} />;
+  return (
+    <MetricNeomorph
+      number={(percentage_complete === "NaN" ? 0 : percentage_complete) + "%"}
+      text={"Complete"}
+    />
+  );
 };
 
 const DashboardMetrics = ({ goals, timeStamps }) => {
