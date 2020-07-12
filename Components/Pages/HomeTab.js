@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, TouchableWithoutFeedback, SafeAreaView, View } from "react-native";
+import { StyleSheet, TouchableWithoutFeedback, SafeAreaView, View, Dimensions } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 import { Neomorph } from "react-native-neomorph-shadows";
 
@@ -75,6 +75,8 @@ const HomeTab = ({ navigation }) => {
   );
 };
 
+const { height } = Dimensions.get("window");
+
 const styles = StyleSheet.create({
   tabButton: {
     borderRadius: 12,
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   tabs: {
-    backgroundColor: "white", //"#FFF9FD",
+    backgroundColor: "white",
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -92,17 +94,19 @@ const styles = StyleSheet.create({
     elevation: 8,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
+    height: height * 0.12,
   },
   container: {
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-around",
-    height: 60, //0.08 * height, //57
-    paddingTop: 20,
+    height: 60,
+    marginTop: 15,
+    marginBottom: 15,
   },
   tab: {
     flexGrow: 1,
-    height: 60, //0.08 * height, //57
+    height: 60,
     justifyContent: "center",
     alignItems: "center",
   },
