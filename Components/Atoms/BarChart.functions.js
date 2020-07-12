@@ -120,11 +120,13 @@ const generateColorsScale = n => {
   var b = 255; //0;
   var l = [];
   for (var i = 0; i < n; i++) {
-    r += 33;
-    g += 33;
-    b += 33;
     var rgb_color = "rgb(" + r + "," + g + "," + b + ")";
     l.push(rgb_color);
+    if (i < 4) {
+      r += 33;
+      g += 33;
+      b += 33;
+    }
   }
   return l;
 };
