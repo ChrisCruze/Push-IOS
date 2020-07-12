@@ -48,7 +48,9 @@ const DashboardCharts = ({ goals }) => {
           alignSelf="center"
           outerCircleStyle={{ alignSelf: "center", marginRight: 10, marginBottom: 30 }}
         >
-          <Text style={{ fontSize: 24 }}>{percentage_complete + "% of tasks completed"}</Text>
+          <Text style={{ fontSize: 24, textAlign: "center" }}>
+            {(percentage_complete === "NaN" ? 0 : percentage_complete) + "% of tasks completed"}
+          </Text>
         </ProgressCircle>
       ) : (
         <LineChart
