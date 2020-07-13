@@ -69,10 +69,11 @@ const DashboardTimeStamp = ({
         {hideTitle || <Text>{title}</Text>}
         <Text>{time_stamp_formatted}</Text>
       </View>
-      <View style={styles.icon}>
-        <TouchableWithoutFeedback onPress={updateTimeStamp}>
+      <View style={styles.icon}>   
+        {Platform.OS == "android"?null: <TouchableWithoutFeedback onPress={updateTimeStamp}>
           <Icon name="edit" size={25} color="black" />
-        </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>}
+
         <TouchableWithoutFeedback onPress={deleteTimeStamp}>
           <Icon name="trash" size={25} color="black" />
         </TouchableWithoutFeedback>
