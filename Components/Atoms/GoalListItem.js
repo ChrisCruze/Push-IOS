@@ -281,7 +281,7 @@ const GoalListItem = ({
     }).start();
   }, []);
   return (
-    <Animated.View style={[styles.container, { opacity: opacityAnim }]}>
+    <Animated.View style={[styles.container, { opacity: Platform.OS == "android"?1: opacityAnim }]}>
       <View style={styles.standalone}>
         <SwipeRow
           leftActionValue={80} // the exposed length when swiped
