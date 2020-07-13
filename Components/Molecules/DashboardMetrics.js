@@ -1,7 +1,7 @@
 import React from "react";
 import MetricNeomorph from "../Atoms/MetricNeomorph";
 import { StyleSheet, View } from "react-native";
-import { determinePercentageDone } from "../Atoms/BarChart.functions";
+import { determinePercentageDone, determineOverDue } from "../Atoms/BarChart.functions";
 import { CarouselMetrics } from "../Atoms/CarouselMetrics";
 
 const DashboardMetrics = ({ goals, timeStamps }) => {
@@ -25,12 +25,16 @@ const DashboardMetrics = ({ goals, timeStamps }) => {
               (determinePercentageDone(goals) === "NaN" ? 0 : determinePercentageDone(goals)) + "%",
           },
           {
-            label: "YESTERDAY",
-            value: 3,
+            label: "Remaining",
+            value: goals.filter(function(D) {
+              return determineOverDue({ ...D, goals: goals });
+            }).length,
           },
           {
-            label: "LAST WEEK",
-            value: 25,
+            label: "Remaining %",
+            value:
+              (determinePercentageDone(goals) === "NaN" ? 0 : 1 - determinePercentageDone(goals)) +
+              "%",
           },
           {
             label: "LAST MONTH",

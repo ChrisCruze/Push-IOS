@@ -3,23 +3,7 @@ import { View, ScrollView, Text, StyleSheet } from "react-native";
 import MetricNeomorph from "./MetricNeomorph";
 
 const Stat = ({ label, value }) => {
-  return (
-    <MetricNeomorph text={label} number={value} />
-    // <View style={styles_stat.stat}>
-    //   <Text style={{ ...styles_stat.statText }}>{value}</Text>
-    //   <View style={styles_stat.statHold}>
-    //     <Text style={{ ...styles_stat.statLabel }}>{label}</Text>
-    //   </View>
-    // </View>
-  );
-};
-
-export const Slide = ({ title }) => {
-  return (
-    <View style={styles_slide.slide}>
-      <Text style={{ ...styles_slide.slideText }}>{title}</Text>
-    </View>
-  );
+  return <MetricNeomorph text={label} number={value} />;
 };
 
 export const CarouselMetrics = ({ items, itemsPerInterval }) => {
@@ -30,9 +14,7 @@ export const CarouselMetrics = ({ items, itemsPerInterval }) => {
   const [width, setWidth] = React.useState(0);
 
   const init = width => {
-    // initialise width
     setWidth(width);
-    // initialise total intervals
     const totalItems = items.length;
     setIntervals(Math.ceil(totalItems / itemsPerIntervalCalc));
   };
@@ -82,66 +64,9 @@ export const CarouselMetrics = ({ items, itemsPerInterval }) => {
           return <Stat key={index} label={item.label} value={item.value} />;
         })}
       </ScrollView>
-      <View style={styles.bullets}>{bullets}</View>
     </View>
   );
 };
-
-const styles_slide = StyleSheet.create({
-  slide: {
-    paddingHorizontal: 20,
-    paddingBottom: 10,
-    paddingTop: 30,
-    flexBasis: "100%",
-    flex: 1,
-    maxWidth: "100%",
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    alignContent: "center",
-    justifyContent: "center",
-    height: 200,
-  },
-  slideText: {
-    width: "100%",
-    textAlign: "left",
-    fontSize: 20,
-  },
-});
-
-const styles_stat = StyleSheet.create({
-  stat: {
-    paddingHorizontal: 20,
-    paddingBottom: 10,
-    paddingTop: 30,
-    flexBasis: "33%",
-    flex: 1,
-    maxWidth: "33%",
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    alignContent: "center",
-    justifyContent: "center",
-  },
-  statText: {
-    width: "100%",
-    textAlign: "left",
-    fontSize: 20,
-  },
-  statHold: {
-    width: "100%",
-    marginBottom: 8,
-  },
-  statLabel: {
-    width: "100%",
-    textAlign: "left",
-    fontSize: 11,
-    fontWeight: "600",
-    paddingTop: 5,
-  },
-});
 
 export const styles = StyleSheet.create({
   statsHead: {
