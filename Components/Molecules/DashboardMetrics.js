@@ -2,33 +2,42 @@ import React from "react";
 import MetricNeomorph from "../Atoms/MetricNeomorph";
 import { StyleSheet, View } from "react-native";
 import { determinePercentageDone } from "../Atoms/BarChart.functions";
-
-const TotalPushes = ({ timeStamps }) => {
-  const total_pushes_count = timeStamps.length;
-  return <MetricNeomorph number={total_pushes_count} text={"Total Pushes"} />;
-};
-
-const TotalGoals = ({ goals }) => {
-  const count = goals.length;
-  return <MetricNeomorph number={count} text={"Total Goals"} />;
-};
-
-const PercentageComplete = ({ goals }) => {
-  const percentage_complete = determinePercentageDone(goals);
-  return (
-    <MetricNeomorph
-      number={(percentage_complete === "NaN" ? 0 : percentage_complete) + "%"}
-      text={"Complete"}
-    />
-  );
-};
+import { CarouselMetrics } from "../Atoms/CarouselMetrics";
 
 const DashboardMetrics = ({ goals, timeStamps }) => {
   return (
     <View style={styles.container}>
-      <PercentageComplete goals={goals} />
-      <TotalGoals goals={goals} />
-      <TotalPushes timeStamps={timeStamps} />
+      <CarouselMetrics
+        style="stats"
+        itemsPerInterval={3}
+        items={[
+          {
+            label: "Total Pushes",
+            value: timeStamps.length,
+          },
+          {
+            label: "Total Goals",
+            value: goals.length,
+          },
+          {
+            label: "Complete",
+            value:
+              (determinePercentageDone(goals) === "NaN" ? 0 : determinePercentageDone(goals)) + "%",
+          },
+          {
+            label: "YESTERDAY",
+            value: 3,
+          },
+          {
+            label: "LAST WEEK",
+            value: 25,
+          },
+          {
+            label: "LAST MONTH",
+            value: 175,
+          },
+        ]}
+      />
     </View>
   );
 };
