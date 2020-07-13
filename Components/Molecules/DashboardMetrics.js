@@ -12,11 +12,11 @@ const DashboardMetrics = ({ goals, timeStamps }) => {
         itemsPerInterval={3}
         items={[
           {
-            label: "Total Pushes",
+            label: "Pushes",
             value: timeStamps.length,
           },
           {
-            label: "Total Goals",
+            label: "Goals",
             value: goals.length,
           },
           {
