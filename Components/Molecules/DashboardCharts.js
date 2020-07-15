@@ -1,7 +1,6 @@
 import React, { useState, Fragment } from "react";
 import { View, Dimensions, Text } from "react-native";
 import ProgressCircle from "react-native-progress-circle";
-import { Dropdown } from "react-native-material-dropdown";
 import { LineChart } from "react-native-chart-kit";
 import moment from "moment";
 import { determinePercentageDone } from "../Atoms/BarChart.functions";
@@ -61,16 +60,6 @@ const DashboardLine = ({ goals_count_by_day_array }) => {
   );
 };
 const DashboardCharts = ({ goals }) => {
-  let dropdownData = [
-    {
-      value: "Pie Chart",
-    },
-    {
-      value: "Line Chart",
-    },
-  ];
-
-  const [selectedValue, setSelectedValue] = useState("");
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
     goals,
     number_of_days: 7,
@@ -84,32 +73,10 @@ const DashboardCharts = ({ goals }) => {
         style="stats"
         itemsPerInterval={1}
         items={[
-          {
-            elem: <DashboardLine goals_count_by_day_array={goals_count_by_day_array} />,
-          },
-          {
-            elem: <DashboardPie percentage_complete={percentage_complete} />,
-          },
+          <DashboardLine goals_count_by_day_array={goals_count_by_day_array} />,
+          <DashboardPie percentage_complete={percentage_complete} />,
         ]}
       />
-      {/* 
-
-      <View style={{ marginHorizontal: 20 }}>
-        <Dropdown
-          label="Chart Type"
-          data={dropdownData}
-          value={selectedValue}
-          onChangeText={setSelectedValue}
-        />
-      </View>
-
-
-
-      {selectedValue === "Pie Chart" ? (
-        <DashboardPie percentage_complete={percentage_complete} />
-      ) : (
-        <DashboardLine goals_count_by_day_array={goals_count_by_day_array} />
-      )} */}
     </Fragment>
   );
 };

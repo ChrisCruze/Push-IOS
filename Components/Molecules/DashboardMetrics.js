@@ -31,24 +31,12 @@ const DashboardMetrics = ({ goals, timeStamps }) => {
         style="stats"
         itemsPerInterval={3}
         items={[
-          {
-            elem: <PercentageComplete goals={goals} />,
-          },
-          {
-            elem: <TotalGoals goals={goals} />,
-          },
-          {
-            elem: <TotalPushes timeStamps={timeStamps} />,
-          },
-          {
-            elem: <PercentageComplete goals={goals} />,
-          },
-          {
-            elem: <PercentageComplete goals={goals} />,
-          },
-          {
-            elem: <PercentageComplete goals={goals} />,
-          },
+          <PercentageComplete goals={goals} />,
+          <TotalGoals goals={goals} />,
+          <TotalPushes timeStamps={timeStamps} />,
+          <TotalPushes timeStamps={timeStamps} />,
+          <TotalPushes timeStamps={timeStamps} />,
+          <TotalPushes timeStamps={timeStamps} />,
         ]}
       />
     </View>
