@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { View, ScrollView, Text, StyleSheet } from "react-native";
 import MetricNeomorph from "./MetricNeomorph";
 
@@ -30,21 +30,6 @@ export const CarouselMetrics = ({ items, itemsPerInterval }) => {
     }
   };
 
-  let bullets = [];
-  for (let i = 1; i <= intervals; i++) {
-    bullets.push(
-      <Text
-        key={i}
-        style={{
-          ...styles.bullet,
-          opacity: interval === i ? 0.5 : 0.1,
-        }}
-      >
-        &bull;
-      </Text>,
-    );
-  }
-
   return (
     <View style={styles.container}>
       <ScrollView
@@ -61,7 +46,9 @@ export const CarouselMetrics = ({ items, itemsPerInterval }) => {
         decelerationRate="fast"
       >
         {items.map((item, index) => {
-          return <Stat key={index} label={item.label} value={item.value} />;
+          return <Fragment key={index}>{item.elem}</Fragment>;
+
+          // return <Stat key={index} label={item.label} value={item.value} />;
         })}
       </ScrollView>
     </View>

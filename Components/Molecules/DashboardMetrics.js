@@ -4,6 +4,26 @@ import { StyleSheet, View } from "react-native";
 import { determinePercentageDone, determineOverDue } from "../Atoms/BarChart.functions";
 import { CarouselMetrics } from "../Atoms/CarouselMetrics";
 
+const TotalPushes = ({ timeStamps }) => {
+  const total_pushes_count = timeStamps.length;
+  return <MetricNeomorph number={total_pushes_count} text={"Total Pushes"} />;
+};
+
+const TotalGoals = ({ goals }) => {
+  const count = goals.length;
+  return <MetricNeomorph number={count} text={"Total Goals"} />;
+};
+
+const PercentageComplete = ({ goals }) => {
+  const percentage_complete = determinePercentageDone(goals);
+  return (
+    <MetricNeomorph
+      number={(percentage_complete === "NaN" ? 0 : percentage_complete) + "%"}
+      text={"Complete"}
+    />
+  );
+};
+
 const DashboardMetrics = ({ goals, timeStamps }) => {
   return (
     <View style={styles.container}>
@@ -12,33 +32,22 @@ const DashboardMetrics = ({ goals, timeStamps }) => {
         itemsPerInterval={3}
         items={[
           {
-            label: "Pushes",
-            value: timeStamps.length,
+            elem: <PercentageComplete goals={goals} />,
           },
           {
-            label: "Goals",
-            value: goals.length,
+            elem: <TotalGoals goals={goals} />,
           },
           {
-            label: "Complete",
-            value:
-              (determinePercentageDone(goals) === "NaN" ? 0 : determinePercentageDone(goals)) + "%",
+            elem: <TotalPushes timeStamps={timeStamps} />,
           },
           {
-            label: "Remaining",
-            value: goals.filter(function(D) {
-              return determineOverDue({ ...D, goals: goals });
-            }).length,
+            elem: <PercentageComplete goals={goals} />,
           },
           {
-            label: "Remaining %",
-            value:
-              (determinePercentageDone(goals) === "NaN" ? 0 : 1 - determinePercentageDone(goals)) +
-              "%",
+            elem: <PercentageComplete goals={goals} />,
           },
           {
-            label: "LAST MONTH",
-            value: 175,
+            elem: <PercentageComplete goals={goals} />,
           },
         ]}
       />
