@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from "react";
-import { View, Dimensions, Text } from "react-native";
+import { View, Dimensions, Text, StyleSheet } from "react-native";
 import ProgressCircle from "react-native-progress-circle";
 import { LineChart } from "react-native-chart-kit";
 import moment from "moment";
@@ -68,7 +68,7 @@ const DashboardCharts = ({ goals }) => {
 
   const percentage_complete = determinePercentageDone(goals);
   return (
-    <Fragment>
+    <View style={styles.container}>
       <CarouselMetrics
         style="stats"
         itemsPerInterval={1}
@@ -77,8 +77,14 @@ const DashboardCharts = ({ goals }) => {
           <DashboardPie percentage_complete={percentage_complete} />,
         ]}
       />
-    </Fragment>
+    </View>
   );
 };
+
+export const styles = StyleSheet.create({
+  container: {
+    paddingTop: 10,
+  },
+});
 
 export default DashboardCharts;

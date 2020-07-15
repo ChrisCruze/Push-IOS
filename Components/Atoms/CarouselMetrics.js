@@ -24,7 +24,20 @@ export const CarouselMetrics = ({ items, itemsPerInterval }) => {
       }
     }
   };
-
+  let bullets = [];
+  for (let i = 1; i <= intervals; i++) {
+    bullets.push(
+      <Text
+        key={i}
+        style={{
+          ...styles.bullet,
+          opacity: interval === i ? 0.5 : 0.1,
+        }}
+      >
+        &bull;
+      </Text>,
+    );
+  }
   return (
     <View style={styles.container}>
       <ScrollView
@@ -42,10 +55,9 @@ export const CarouselMetrics = ({ items, itemsPerInterval }) => {
       >
         {items.map((item, index) => {
           return <Fragment key={index}>{item}</Fragment>;
-
-          // return <Stat key={index} label={item.label} value={item.value} />;
         })}
       </ScrollView>
+      <View style={styles.bullets}>{bullets}</View>
     </View>
   );
 };
@@ -85,6 +97,8 @@ export const styles = StyleSheet.create({
     paddingTop: 5,
   },
   bullet: {
+    top: -30,
+
     paddingHorizontal: 5,
     fontSize: 20,
   },
