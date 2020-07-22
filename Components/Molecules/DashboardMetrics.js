@@ -4,6 +4,7 @@ import { StyleSheet, View } from "react-native";
 import { determinePercentageDone, determineOverDue } from "../Atoms/BarChart.functions";
 import { CarouselMetrics } from "../Atoms/CarouselMetrics";
 import { determineStreak } from "../Atoms/Calculations";
+import _ from "lodash";
 
 const TotalPushes = ({ timeStamps }) => {
   const total_pushes_count = timeStamps.length;
@@ -27,9 +28,15 @@ const PercentageComplete = ({ goals }) => {
 
 const DueGoals = ({ goals }) => {
   const remaining_count = goals.filter(function(D) {
-    return determineOverDue({ ...D, goals: array });
+    return determineOverDue({ ...D, goals });
   }).length;
   return <MetricNeomorph number={remaining_count} text={"Due Goals"} />;
+};
+const CompleteGoals = ({ goals }) => {
+  const count = goals.filter(function(D) {
+    return !determineOverDue({ ...D, goals });
+  }).length;
+  return <MetricNeomorph number={count} text={"Complete Goals"} />;
 };
 
 const LongestStreak = ({ goals }) => {
@@ -37,7 +44,6 @@ const LongestStreak = ({ goals }) => {
     determineStreak({ timeStamps, cadence }),
   );
   const max_streak_count = _.max(streak_counts);
-
   return <MetricNeomorph number={max_streak_count} text={"Longest Streak"} />;
 };
 
@@ -49,11 +55,12 @@ const DashboardMetrics = ({ goals, timeStamps }) => {
         itemsPerInterval={3}
         items={[
           <PercentageComplete goals={goals} />,
-          <TotalGoals goals={goals} />,
           <TotalPushes timeStamps={timeStamps} />,
+          <LongestStreak goals={goals} />,
           <DueGoals goals={goals} />,
-          <LongestStreak goals={LongestStreak} />,
-          <TotalPushes timeStamps={timeStamps} />,
+          <CompleteGoals goals={goals} />,
+          <TotalGoals goals={goals} />,
+          ,
         ]}
       />
     </View>
