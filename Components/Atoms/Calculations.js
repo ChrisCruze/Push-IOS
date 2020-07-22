@@ -53,3 +53,35 @@ export const determineStreak = ({ timeStamps, cadence }) => {
   const longest_streak = diffs[0];
   return longest_streak;
 };
+
+export const timeStampsFromGoals = ({ goals }) => {
+  const timeStamps = _.map(goals, ({ timeStamps }) =>
+    _.max(timeStamps, function(timeStamp) {
+      return moment(timeStamp).unix();
+    }),
+  );
+  return timeStamps;
+};
+
+export const numbersSum = numbers => {
+  return _.reduce(
+    numbers,
+    function(memo, num) {
+      var r = memo + (parseFloat(num) || 0);
+      return r;
+    },
+    0,
+  );
+};
+
+export const numbersAvg = numbers => {
+  const total_sum = numbersSum(numbers);
+  const avg = total_sum / numbers.length;
+  return avg;
+};
+export const daysAgoCalculate = oldestTimeStamp => {
+  const minutes_oldest = moment().diff(moment(oldestTimeStamp), "minutes");
+  const hours_oldest = minutes_oldest / 60;
+  const days_oldest = hours_oldest / 24;
+  return days_oldest;
+};

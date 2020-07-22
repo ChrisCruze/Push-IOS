@@ -12,7 +12,6 @@ import Dashboard from "./Components/Pages/Dashboard";
 import editGoal from "./Components/Pages/editGoal";
 import Notifications from "./Components/Pages/Notifications";
 
-
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import { Feather } from "@expo/vector-icons";
@@ -99,7 +98,6 @@ const Home = createBottomTabNavigator(
     Goals: { screen: Goals },
     createGoal: { screen: createGoal },
     Dashboard: { screen: Dashboard },
-    
   },
   {
     animationEnabled: true,
