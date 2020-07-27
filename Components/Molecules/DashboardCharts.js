@@ -9,21 +9,23 @@ import { CarouselMetrics } from "../Atoms/CarouselMetrics";
 
 const DashboardPie = ({ percentage_complete }) => {
   return (
-    <ProgressCircle
-      percent={percentage_complete}
-      width={Dimensions.get("window").width}
-      radius={130}
-      borderWidth={30}
-      color="#000"
-      shadowColor="#999"
-      bgColor="#fff"
-      alignSelf="center"
-      outerCircleStyle={{ alignSelf: "center", marginRight: 10, marginBottom: 30 }}
-    >
-      <Text style={{ fontSize: 24, textAlign: "center" }}>
-        {(percentage_complete === "NaN" ? 0 : percentage_complete) + "% of tasks completed"}
-      </Text>
-    </ProgressCircle>
+    <View style={styles.progress_circle}>
+      <ProgressCircle
+        percent={percentage_complete}
+        width={Dimensions.get("window").width}
+        radius={130}
+        borderWidth={30}
+        color="#000"
+        shadowColor="#999"
+        bgColor="#fff"
+        alignSelf="center"
+        outerCircleStyle={{ alignSelf: "center", marginRight: 10, marginBottom: 30 }}
+      >
+        <Text style={{ fontSize: 24, textAlign: "center" }}>
+          {(percentage_complete === "NaN" ? 0 : percentage_complete) + "% of tasks completed"}
+        </Text>
+      </ProgressCircle>
+    </View>
   );
 };
 
@@ -84,6 +86,11 @@ const DashboardCharts = ({ goals }) => {
 export const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
+  },
+  progress_circle: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });
 
