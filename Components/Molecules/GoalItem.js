@@ -67,6 +67,7 @@ const GoalItem = ({
   removeGoal,
   refetch,
   goalsListConfetti,
+  setModalVisible,
 }) => {
   const totalCount = GoalCountGet({ goals, id, cadence });
   const lastTimeStamp = GoalLastTimeStamp({ goals, id });
@@ -83,7 +84,9 @@ const GoalItem = ({
   const pushGoalPress = () => {
     Vibration.vibrate();
     const timeStampsWithNew = timeStamps.concat(moment().format());
-
+    // .then(() => {
+    // setModalVisible(true);
+    // })
     return updateGoal({
       variables: {
         _id,
@@ -99,6 +102,7 @@ const GoalItem = ({
           goalsListConfetti();
         }
       })
+
       .catch(e => console.error(e));
   };
   const deleteGoalPress = () => {

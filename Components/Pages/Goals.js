@@ -21,7 +21,7 @@ import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarCha
 import AnimatedLoading from "../Molecules/AnimatedLoading";
 import NetworkCheckNav from "../Molecules/NetworkCheckNav";
 import { NOTIFICATION_URI } from "react-native-dotenv";
-
+import ModalSmall from "../Atoms/ModalSmall";
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const GoalsFilter = ({ goals }) => {
@@ -103,9 +103,11 @@ const Goals = ({ navigation }) => {
   }, []);
 
   const refToConfetti = useRef(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <View style={styles.container}>
+      <ModalSmall modalVisible={modalVisible} setModalVisible={setModalVisible} />
       <NavigationEvents
         onWillFocus={() => {
           refetch();
@@ -153,6 +155,7 @@ const Goals = ({ navigation }) => {
                 removeGoal,
                 refetch,
                 goalsListConfetti: () => refToConfetti.current.start(),
+                setModalVisible,
               });
             }}
           />
