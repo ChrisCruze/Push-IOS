@@ -133,33 +133,31 @@ const PushesLastMonthPrior = ({ timeStamps }) => {
 };
 
 const DashboardMetrics = ({ goals, timeStamps }) => {
-  const [items, updateItems] = useState([]);
-  useEffect(() => {
-    updateItems([
-      <DueGoals goals={goals} />,
-      <CompleteGoals goals={goals} />,
-      <PercentageComplete goals={goals} />,
-      <TotalPushes timeStamps={timeStamps} />,
-      <LongestStreak goals={goals} />,
-      <OldestTask goals={goals} />,
-      <PushesToday timeStamps={timeStamps} />,
-      <PushesYesterday timeStamps={timeStamps} />,
-      <PushesBeforeYesterday timeStamps={timeStamps} />,
-      <PushesThisWeek timeStamps={timeStamps} />,
-      <PushesLastWeek timeStamps={timeStamps} />,
-      <PushesLastWeekPrior timeStamps={timeStamps} />,
-      <PushesThisMonth timeStamps={timeStamps} />,
-      <PushesLastMonth timeStamps={timeStamps} />,
-      <PushesLastMonthPrior timeStamps={timeStamps} />,
-
-      // <PercentageComplete goals={goals} />,
-      // <AverageAge goals={goals} />,
-    ]);
-  }, []);
-
   return (
     <View style={styles.container}>
-      <CarouselMetrics style="stats" itemsPerInterval={3} items={items} />
+      <CarouselMetrics
+        style="stats"
+        itemsPerInterval={3}
+        items={[
+          <DueGoals goals={goals} />,
+          <CompleteGoals goals={goals} />,
+          <PercentageComplete goals={goals} />,
+          <TotalPushes timeStamps={timeStamps} />,
+          <LongestStreak goals={goals} />,
+          <OldestTask goals={goals} />,
+          <PushesToday timeStamps={timeStamps} />,
+          <PushesYesterday timeStamps={timeStamps} />,
+          <PushesBeforeYesterday timeStamps={timeStamps} />,
+          <PushesThisWeek timeStamps={timeStamps} />,
+          <PushesLastWeek timeStamps={timeStamps} />,
+          <PushesLastWeekPrior timeStamps={timeStamps} />,
+          <PushesThisMonth timeStamps={timeStamps} />,
+          <PushesLastMonth timeStamps={timeStamps} />,
+          <PushesLastMonthPrior timeStamps={timeStamps} />,
+          <AverageAge goals={goals} />,
+          <TotalGoals goals={goals} />,
+        ]}
+      />
     </View>
   );
 };

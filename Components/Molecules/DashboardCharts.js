@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React from "react";
 import { View, Dimensions, Text, StyleSheet } from "react-native";
 import ProgressCircle from "react-native-progress-circle";
 import { LineChart } from "react-native-chart-kit";
