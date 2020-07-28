@@ -99,7 +99,7 @@ const PushesYesterday = ({ timeStamps }) => {
 
 const PushesBeforeYesterday = ({ timeStamps }) => {
   const count = PushesFromTimeRange({ timeStamps, time_interval: "day", step: 2 });
-  return <MetricNeomorph number={count} text={"Prior Day"} />;
+  return <MetricNeomorph number={count} text={"Day Before"} />;
 };
 
 const PushesThisWeek = ({ timeStamps }) => {
@@ -114,7 +114,7 @@ const PushesLastWeek = ({ timeStamps }) => {
 
 const PushesLastWeekPrior = ({ timeStamps }) => {
   const count = PushesFromTimeRange({ timeStamps, time_interval: "week", step: 2 });
-  return <MetricNeomorph number={count} text={"Prior Week"} />;
+  return <MetricNeomorph number={count} text={"Week Before"} />;
 };
 
 const PushesThisMonth = ({ timeStamps }) => {
@@ -129,7 +129,7 @@ const PushesLastMonth = ({ timeStamps }) => {
 
 const PushesLastMonthPrior = ({ timeStamps }) => {
   const count = PushesFromTimeRange({ timeStamps, time_interval: "month", step: 2 });
-  return <MetricNeomorph number={count} text={"Prior Month"} />;
+  return <MetricNeomorph number={count} text={"Month Before"} />;
 };
 
 const DashboardMetrics = ({ goals, timeStamps }) => {
