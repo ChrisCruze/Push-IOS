@@ -5,7 +5,7 @@ import _ from "lodash";
 import GoalListItem from "../Atoms/GoalListItem";
 import { determineOverDue, filterTimeStampsForCadence } from "../Atoms/BarChart.functions.js";
 import { determineStreak } from "../Atoms/Calculations";
-
+import { Text } from "react-native";
 const GoalOptionsPress = ({ id, navigation, goals }) => {
   const pass_dict = { id: id, goals: goals };
   navigation.navigate("Goal", pass_dict);
@@ -68,6 +68,7 @@ const GoalItem = ({
   refetch,
   goalsListConfetti,
   setModalVisible,
+  setModalContent,
 }) => {
   const totalCount = GoalCountGet({ goals, id, cadence });
   const lastTimeStamp = GoalLastTimeStamp({ goals, id });
@@ -84,9 +85,6 @@ const GoalItem = ({
   const pushGoalPress = () => {
     Vibration.vibrate();
     const timeStampsWithNew = timeStamps.concat(moment().format());
-    // .then(() => {
-    // setModalVisible(true);
-    // })
     return updateGoal({
       variables: {
         _id,
@@ -102,7 +100,10 @@ const GoalItem = ({
           goalsListConfetti();
         }
       })
-
+      .then(() => {
+        setModalContent(<Text>Test</Text>);
+        setModalVisible(true);
+      })
       .catch(e => console.error(e));
   };
   const deleteGoalPress = () => {

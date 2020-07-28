@@ -36,6 +36,9 @@ const GoalsFilter = ({ goals }) => {
 };
 
 const Goals = ({ navigation }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
+
   const logout = () => {
     AsyncStorage.setItem("token", "")
       .then(() => AsyncStorage.setItem("token_created_date", ""))
@@ -103,11 +106,9 @@ const Goals = ({ navigation }) => {
   }, []);
 
   const refToConfetti = useRef(null);
-  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <View style={styles.container}>
-      <ModalSmall modalVisible={modalVisible} setModalVisible={setModalVisible} />
       <NavigationEvents
         onWillFocus={() => {
           refetch();
@@ -156,11 +157,15 @@ const Goals = ({ navigation }) => {
                 refetch,
                 goalsListConfetti: () => refToConfetti.current.start(),
                 setModalVisible,
+                setModalContent,
               });
             }}
           />
         </Fragment>
       </AnimatedHeader>
+      <ModalSmall modalVisible={modalVisible} setModalVisible={setModalVisible}>
+        {modalContent}
+      </ModalSmall>
       <Confetti ref={refToConfetti} />
     </View>
   );

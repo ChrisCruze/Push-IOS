@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Alert, Modal, StyleSheet, Text, TouchableHighlight, View } from "react-native";
 
-const ModalSmall = ({ modalVisible, setModalVisible }) => {
-  // const [modalVisible, setModalVisible] = useState(false);
+const ModalSmall = ({ modalVisible, setModalVisible, children }) => {
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -15,7 +14,7 @@ const ModalSmall = ({ modalVisible, setModalVisible }) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
+            <Text style={styles.modalText}>{children}</Text>
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
               onPress={() => {
