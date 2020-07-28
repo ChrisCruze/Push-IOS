@@ -87,18 +87,13 @@ export const styles = StyleSheet.create({
     overflow: "hidden",
   },
   bullets: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    display: "flex",
-    justifyContent: "flex-start",
+    bottom: 0,
+    flex: 1,
+    justifyContent: "center",
     flexDirection: "row",
-    paddingHorizontal: 10,
-    paddingTop: 5,
   },
   bullet: {
-    top: -30,
-
+    bottom: 0,
     paddingHorizontal: 5,
     fontSize: 20,
   },
