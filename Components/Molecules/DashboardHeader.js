@@ -1,12 +1,5 @@
-import React, { useState, useEffect, Fragment } from "react";
-import {
-  StyleSheet,
-  View,
-  Animated,
-  SafeAreaView,
-  TouchableWithoutFeedback,
-  Dimensions,
-} from "react-native";
+import React from "react";
+import { StyleSheet, View, Animated, SafeAreaView, Dimensions } from "react-native";
 import { TextClass } from "../Atoms/Text";
 import Theme from "../Atoms/Theme";
 import HeaderButtons from "./HeaderButtons";

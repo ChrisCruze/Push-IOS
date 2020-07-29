@@ -35,7 +35,6 @@ const Dashboard = ({ navigation }) => {
   };
   const { goals, refetch, networkStatus } = useGoalsPull();
   const { filtered_goals, updateFilter, filter } = GoalsFilter({ goals });
-
   NetworkCheckNav({ networkStatus, navigation });
 
   const timeStamps = DataFlattenConvertGoals(filtered_goals);

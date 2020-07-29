@@ -208,6 +208,22 @@ export const filterTimeStampsForCadence = ({ timeStamps, cadence }) => {
   return filteredTimeStamps;
 };
 
+const getStartEndDateTimeRelative = (time_interval, n) => {
+  const end = moment()
+    .endOf(time_interval)
+    .subtract(n, time_interval);
+  const start = moment()
+    .startOf(time_interval)
+    .subtract(n, time_interval);
+  return { start, end };
+};
+
+export const filterTimeStampsForCadenceRelative = ({ timeStamps, time_interval, step }) => {
+  const { start, end } = getStartEndDateTimeRelative(time_interval, step || 0);
+  const filteredTimeStamps = filterTimeStampsForCadenceFromStartEnd({ timeStamps, start, end });
+  return filteredTimeStamps;
+};
+
 const percentageTimeFrameComplete = ({ start, end }) => {
   const minutes_difference_from_start = moment().diff(start, "minutes");
   const minutes_total = end.diff(start, "minutes");
