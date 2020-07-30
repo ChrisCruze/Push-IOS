@@ -5,7 +5,8 @@ import _ from "lodash";
 import GoalListItem from "../Atoms/GoalListItem";
 import { determineOverDue, filterTimeStampsForCadence } from "../Atoms/BarChart.functions.js";
 import { determineStreak } from "../Atoms/Calculations";
-import { Text } from "react-native";
+import NotificationsModal from "../Atoms/NotificationsModal";
+
 const GoalOptionsPress = ({ id, navigation, goals }) => {
   const pass_dict = { id: id, goals: goals };
   navigation.navigate("Goal", pass_dict);
@@ -101,8 +102,7 @@ const GoalItem = ({
         }
       })
       .then(() => {
-        setModalContent(<Text>Test</Text>);
-        setModalVisible(true);
+        NotificationsModal({ setModalContent, setModalVisible, timeStampsWithNew, cadence });
       })
       .catch(e => console.error(e));
   };
