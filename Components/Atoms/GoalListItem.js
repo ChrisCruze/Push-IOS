@@ -15,6 +15,7 @@ import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
 import AwesomeButton from "react-native-really-awesome-button";
 import AwesomeButtonRick from "react-native-really-awesome-button/src/themes/rick";
 import AwesomeButtonProgress from "react-native-really-awesome-button";
+import LoadingIndicator from "./LoadingIndicator";
 
 const GoalButtonBackPushAction = ({ pushGoal, closeRow, pushGoalAnimate }) => {
   return (
@@ -149,6 +150,7 @@ const GoalButtonFrontBase = ({
   borderColor,
   opacity,
   textDecorationLine,
+  is_loading,
 }) => {
   const neomorph = {
     shadowOpacity: 0.7,
@@ -174,7 +176,7 @@ const GoalButtonFrontBase = ({
                 { textDecorationColor: color, color: color, opacity: fadeAnim, bottom: moveAnim },
               ]}
             >
-              {calculatePercentage(totalCount, cadenceCount)}
+              {is_loading ? <LoadingIndicator /> : calculatePercentage(totalCount, cadenceCount)}
             </Animated.Text>
           </View>
         </View>
@@ -199,6 +201,7 @@ const GoalButtonFront = ({
   rowOpen,
   closeRow,
   is_overdue,
+  is_loading,
 }) => {
   const backgroundColor = is_overdue ? "#FFF9FD" : "#D3D5DA";
   const color = "black";
@@ -224,11 +227,47 @@ const GoalButtonFront = ({
         borderColor,
         opacity,
         textDecorationLine,
+        is_loading,
       }}
     />
   );
 };
 
+const pushGoalAnimation = ({ fadeAnim, updateIsLoading, pushGoal }) => {
+  Animated.timing(fadeAnim, {
+    toValue: 0,
+    duration: 500,
+  }).start(() => {
+    new Promise((resolve, reject) => {
+      updateIsLoading(true);
+      resolve();
+    })
+      .then(() => {
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 500,
+        }).start(() => {
+          pushGoal().then(() => {
+            Animated.timing(fadeAnim, {
+              toValue: 0,
+              duration: 500,
+            })
+              .start(() => {
+                updateIsLoading(false);
+              })
+              .then(() => {
+                Animated.timing(fadeAnim, {
+                  toValue: 1,
+                  duration: 500,
+                }).start();
+              })
+              .catch(e => console.error(e));
+          });
+        });
+      })
+      .catch(e => console.error(e));
+  });
+};
 const GoalListItem = ({
   text,
   navigateToGoal,
@@ -246,32 +285,10 @@ const GoalListItem = ({
   const [fadeAnim] = useState(new Animated.Value(1));
   const [moveAnim] = useState(new Animated.Value(0));
   const [opacityAnim] = useState(new Animated.Value(0));
+  const [is_loading, updateIsLoading] = useState(false);
 
   const pushGoalAnimate = () => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 500,
-      }),
-      // Animated.timing(moveAnim, {
-      //   toValue: 20,
-      //   duration: 100,
-      // }),
-    ]).start(() => {
-      pushGoal()
-        .then(() => {
-          // Animated.timing(moveAnim, {
-          //   toValue: 0,
-          //   duration: 0,
-          // }).start(() => {
-          Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 500,
-          }).start();
-          // });
-        })
-        .catch(e => console.error(e));
-    });
+    pushGoalAnimation({ fadeAnim, updateIsLoading, pushGoal });
   };
   const [rowOpen, setRowOpen] = useState(false);
   useEffect(() => {
@@ -316,6 +333,7 @@ const GoalListItem = ({
             closeRow={() => refToSwipeRow.current.closeRow()}
             rowOpen={rowOpen}
             subTitle={subTitle}
+            is_loading={is_loading}
           />
         </SwipeRow>
       </View>
