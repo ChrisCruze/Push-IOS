@@ -26,7 +26,6 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const GoalsFilter = ({ goals }) => {
   const [filter, updateFilter] = useState({ state: "all", cadence: "all" });
-
   const filtered_state_goals = GoalsFilterState({ goals, state: filter.state });
   const filtered_cadence_goals = GoalsFilterCadence({
     goals: filtered_state_goals,

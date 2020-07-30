@@ -86,24 +86,27 @@ const GoalItem = ({
   const pushGoalPress = () => {
     Vibration.vibrate();
     const timeStampsWithNew = timeStamps.concat(moment().format());
-    return updateGoal({
-      variables: {
-        _id,
-        title,
-        cadence,
-        cadenceCount,
-        timeStamps: timeStampsWithNew,
-      },
+    return new Promise((resolve, reject) => {
+      NotificationsModal({ setModalContent, setModalVisible, timeStampsWithNew, cadence });
+      resolve();
     })
-      .then(() => refetch())
       .then(() => {
         if (totalCount + 1 == cadenceCount) {
           goalsListConfetti();
         }
       })
-      .then(() => {
-        NotificationsModal({ setModalContent, setModalVisible, timeStampsWithNew, cadence });
-      })
+      .then(
+        updateGoal({
+          variables: {
+            _id,
+            title,
+            cadence,
+            cadenceCount,
+            timeStamps: timeStampsWithNew,
+          },
+        }),
+      )
+      .then(() => refetch())
       .catch(e => console.error(e));
   };
   const deleteGoalPress = () => {
