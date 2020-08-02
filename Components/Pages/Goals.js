@@ -105,22 +105,7 @@ const Goals = ({ navigation }) => {
   useEffect(() => {
     registerForPushNotificationsAsync();
   }, []);
-  useEffect(() => {
-    if (popup != null) {
-      console.log({ popup_here: popup });
-      popup.show({
-        onPress: function() {
-          console.log("Pressed");
-        },
-        appIconSource: require("../../assets/images/logo.jpg"),
-        appTitle: "Some App",
-        timeText: "Now",
-        title: "Hello World",
-        body: "This is a sample message",
-        slideOutTime: 5000,
-      });
-    }
-  }, [popup]);
+
   const refToConfetti = useRef(null);
   return (
     <View style={styles.container}>
@@ -182,10 +167,7 @@ const Goals = ({ navigation }) => {
         modalState={modalState}
         setModalState={setModalState}
       ></NotificationsModal>
-      <NotificationPopup
-        ref={ref => setPopUp(ref)}
-        // renderPopupContent={renderCustomPopup}
-      ></NotificationPopup>
+      <NotificationPopup ref={ref => setPopUp(ref)}></NotificationPopup>
       <Confetti ref={refToConfetti} />
     </View>
   );

@@ -5,7 +5,7 @@ import _ from "lodash";
 import GoalListItem from "../Atoms/GoalListItem";
 import { determineOverDue, filterTimeStampsForCadence } from "../Atoms/BarChart.functions.js";
 import { determineStreak } from "../Atoms/Calculations";
-import NotificationsModalState from "../Atoms/NotificationsModalState";
+import NotificationsState from "../Atoms/NotificationsState";
 
 const GoalOptionsPress = ({ id, navigation, goals }) => {
   const pass_dict = { id: id, goals: goals };
@@ -87,12 +87,13 @@ const GoalItem = ({
     Vibration.vibrate();
     const timeStampsWithNew = timeStamps.concat(moment().format());
 
-    return NotificationsModalState({
+    return NotificationsState({
       setModalState,
       timeStampsWithNew,
       cadence,
       goals,
       popup,
+      title,
     })
       .then(() => {
         if (totalCount + 1 == cadenceCount) {

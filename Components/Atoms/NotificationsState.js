@@ -36,9 +36,11 @@ const maxPushesText = ({ time_stamp_count }) => {
 const NotificationsStateCreate = ({ time_stamp_count, streakCount, cadence, maxPushCount }) => {
   if (determineIfFirstPush({ time_stamp_count })) {
     return { text: firstPushText() };
-  } else if (determineIfStreak({ streakCount })) {
-    return { text: streakText({ streakCount, cadence }) };
-  } else if (determineIfMaxPushCount({ time_stamp_count, maxPushCount })) {
+  }
+  // else if (determineIfStreak({ streakCount })) {
+  //   return { text: streakText({ streakCount, cadence }) };
+  // }
+  else if (determineIfMaxPushCount({ time_stamp_count, maxPushCount })) {
     return { text: maxPushesText({ time_stamp_count }) };
   } else if (determineIf10Threshold({ time_stamp_count })) {
     return { text: tenThresholdText({ time_stamp_count }) };
@@ -63,15 +65,15 @@ const notificationModalUpdate = ({
   setModalState({ ...notificationState, visible: true, time_stamp_count, streakCount });
 };
 
-const notificationPopUpUpdate = ({ popup, time_stamp_count, streakCount }) => {
+const notificationPopUpUpdate = ({ popup, time_stamp_count, streakCount, title }) => {
   popup.show({
     onPress: function() {
       console.log("Pressed");
     },
     appIconSource: require("../../assets/images/logo.jpg"),
-    appTitle: "Some App",
+    // appTitle: "Some App",
     timeText: "Now",
-    title: "Hello World",
+    title: title,
     body: `You have ${time_stamp_count} pushes and streak of ${streakCount}`,
     slideOutTime: 5000,
   });
@@ -82,6 +84,7 @@ const NotificationsModalStateBase = ({
   goals,
   setModalState,
   popup,
+  title,
 }) => {
   const { time_stamp_count, streakCount, maxPushCount } = NotificationMetrics({
     timeStampsWithNew,
@@ -94,14 +97,13 @@ const NotificationsModalStateBase = ({
     cadence,
     maxPushCount,
   });
-
   if (notificationState != null) {
     notificationModalUpdate({ setModalState, notificationState, time_stamp_count, streakCount });
   } else {
-    notificationPopUpUpdate({ popup, time_stamp_count, streakCount });
+    notificationPopUpUpdate({ popup, time_stamp_count, streakCount, title });
   }
 };
-const NotificationsModalState = ({ setModalState, timeStampsWithNew, cadence, goals, popup }) => {
+const NotificationsState = ({ setModalState, timeStampsWithNew, cadence, goals, popup, title }) => {
   return new Promise((resolve, reject) => {
     NotificationsModalStateBase({
       setModalState,
@@ -109,8 +111,9 @@ const NotificationsModalState = ({ setModalState, timeStampsWithNew, cadence, go
       cadence,
       goals,
       popup,
+      title,
     });
     resolve();
   });
 };
-export default NotificationsModalState;
+export default NotificationsState;
