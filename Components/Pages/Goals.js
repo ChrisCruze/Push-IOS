@@ -7,6 +7,7 @@ import {
   Animated,
   FlatList,
   Platform,
+  Text,
 } from "react-native";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
@@ -21,7 +22,8 @@ import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarCha
 import AnimatedLoading from "../Molecules/AnimatedLoading";
 import NetworkCheckNav from "../Molecules/NetworkCheckNav";
 import { NOTIFICATION_URI } from "react-native-dotenv";
-import ModalSmall from "../Atoms/ModalSmall";
+import NotificationsModal from "../Atoms/NotificationsModal";
+import NotificationPopup from "react-native-push-notification-popup";
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const GoalsFilter = ({ goals }) => {
@@ -35,8 +37,8 @@ const GoalsFilter = ({ goals }) => {
 };
 
 const Goals = ({ navigation }) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalContent, setModalContent] = useState(null);
+  const [modalState, setModalState] = useState({ visible: false });
+  const [popup, setPopUp] = useState(null);
 
   const logout = () => {
     AsyncStorage.setItem("token", "")
@@ -103,9 +105,23 @@ const Goals = ({ navigation }) => {
   useEffect(() => {
     registerForPushNotificationsAsync();
   }, []);
-
+  useEffect(() => {
+    if (popup != null) {
+      console.log({ popup_here: popup });
+      popup.show({
+        onPress: function() {
+          console.log("Pressed");
+        },
+        appIconSource: require("../../assets/images/logo.jpg"),
+        appTitle: "Some App",
+        timeText: "Now",
+        title: "Hello World",
+        body: "This is a sample message",
+        slideOutTime: 5000,
+      });
+    }
+  }, [popup]);
   const refToConfetti = useRef(null);
-
   return (
     <View style={styles.container}>
       <NavigationEvents
@@ -155,16 +171,21 @@ const Goals = ({ navigation }) => {
                 removeGoal,
                 refetch,
                 goalsListConfetti: () => refToConfetti.current.start(),
-                setModalVisible,
-                setModalContent,
+                setModalState,
+                popup,
               });
             }}
           />
         </Fragment>
       </AnimatedHeader>
-      <ModalSmall modalVisible={modalVisible} setModalVisible={setModalVisible}>
-        {modalContent}
-      </ModalSmall>
+      <NotificationsModal
+        modalState={modalState}
+        setModalState={setModalState}
+      ></NotificationsModal>
+      <NotificationPopup
+        ref={ref => setPopUp(ref)}
+        // renderPopupContent={renderCustomPopup}
+      ></NotificationPopup>
       <Confetti ref={refToConfetti} />
     </View>
   );

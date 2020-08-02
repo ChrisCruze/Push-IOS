@@ -38,9 +38,9 @@ const Dashboard = ({ navigation }) => {
   NetworkCheckNav({ networkStatus, navigation });
 
   const timeStamps = DataFlattenConvertGoals(filtered_goals);
-  useEffect(() => {
-    refetch();
-  }, []);
+  // useEffect(() => {
+  //   refetch();
+  // }, []);
 
   const goals_count_by_day_array_chunked = goals_data_last_n_days_from_transformed_goals_array_chunked(
     {

@@ -16,6 +16,7 @@ const difference_between_numbers = l => {
   empty_list.push(l.length);
   return empty_list;
 };
+
 const get_unique_days = timeStamps => {
   const grouped_dict = _.groupBy(timeStamps, timeStamp => moment(timeStamp).dayOfYear());
   return Object.keys(grouped_dict);
@@ -84,4 +85,15 @@ export const daysAgoCalculate = oldestTimeStamp => {
   const hours_oldest = minutes_oldest / 60;
   const days_oldest = hours_oldest / 24;
   return days_oldest;
+};
+
+export const pushCountFromGoals = ({ goals }) => {
+  const timeStamps = _.map(goals, ({ timeStamps }) => timeStamps.length);
+  return timeStamps;
+};
+
+export const maxPushCountofGoals = ({ goals }) => {
+  const pushCountList = pushCountFromGoals({ goals });
+  const maxPushCount = _.max(pushCountList);
+  return maxPushCount;
 };

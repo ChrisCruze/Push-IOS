@@ -11,24 +11,24 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 
-const NotificationsModal = ({ modalState, setModalState }) => {
+const ModalBig = ({ modalVisible, setModalVisible, children }) => {
   return (
     <SafeAreaView>
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalState.visible}
+        visible={modalVisible}
         onRequestClose={() => {
           Alert.alert("Modal has been closed.");
         }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>{modalState.text}</Text>
+            <Text style={styles.modalText}>{children}</Text>
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
               onPress={() => {
-                setModalState({ ...modalState, visible: !modalState.visible });
+                setModalVisible(!modalVisible);
               }}
             >
               <Text style={styles.textStyle}>Hide Modal</Text>
@@ -81,4 +81,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NotificationsModal;
+export default ModalBig;
