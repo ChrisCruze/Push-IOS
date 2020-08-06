@@ -31,7 +31,7 @@ const NotificationsModal = ({ modalState, setModalState }) => {
                 setModalState({ ...modalState, visible: !modalState.visible });
               }}
             >
-              <Text style={styles.textStyle}>Hide Modal</Text>
+              <Text style={styles.textStyle}>Done</Text>
             </TouchableHighlight>
           </View>
         </View>
