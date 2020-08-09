@@ -30,7 +30,7 @@ const tenThresholdText = ({ time_stamp_count }) => {
 };
 
 const maxPushesText = ({ time_stamp_count }) => {
-  return `Avast Ye - ye just a new personal record of ${time_stamp_count} for a single goal `;
+  return `Avast Ye - ye just a new personal record of ${time_stamp_count} pushes for a single goal `;
 };
 
 const NotificationsStateCreate = ({ time_stamp_count, streakCount, cadence, maxPushCount }) => {

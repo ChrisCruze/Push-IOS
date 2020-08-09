@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 import Constants from "expo-constants";
+import { Feather as Icon } from "@expo/vector-icons";
 
 const NotificationsModal = ({ modalState, setModalState }) => {
   return (
@@ -25,6 +26,7 @@ const NotificationsModal = ({ modalState, setModalState }) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>{modalState.text}</Text>
+            <Icon name={"star"} size={80} color={"#FFD75B"} />
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
               onPress={() => {
@@ -48,8 +50,8 @@ const styles = StyleSheet.create({
     marginTop: Constants.statusBarHeight,
   },
   modalView: {
-    height: height,
-    width: width,
+    height: height * 0.4,
+    width: width * 0.8,
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
@@ -77,6 +79,9 @@ const styles = StyleSheet.create({
   },
   modalText: {
     marginBottom: 15,
+    fontSize: 20,
+    fontWeight: "bold",
+
     textAlign: "center",
   },
 });
