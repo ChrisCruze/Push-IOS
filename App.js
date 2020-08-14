@@ -98,6 +98,7 @@ const Home = createBottomTabNavigator(
     Goals: { screen: Goals },
     createGoal: { screen: createGoal },
     Dashboard: { screen: Dashboard },
+    Goal: { screen: Goal },
   },
   {
     animationEnabled: true,
@@ -114,7 +115,6 @@ const AppNavigator = createAppContainer(
       SignUp: { screen: SignUpNavigator },
       ForgotPassword: { screen: ForgotPassword },
       Home: { screen: Home },
-      Goal: { screen: Goal },
       createGoal: { screen: createGoal },
       editGoal: { screen: editGoal },
       Notifications: { screen: Notifications },
