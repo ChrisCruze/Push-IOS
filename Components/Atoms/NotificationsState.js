@@ -61,22 +61,26 @@ const NotificationsStateLogic = ({
   const streakCount = determineStreak({ timeStamps: timeStampsWithNew, cadence });
   const maxPushCount = maxPushCountofGoals({ goals });
 
+  const showModal = text => {
+    setModalState({ text, visible: true, time_stamp_count, streakCount });
+  };
+
   if (determineIfFirstPush({ time_stamp_count })) {
     const text = firstPushText();
-    setModalState({ text, visible: true });
+    showModal(text);
   } else if (determineIfStreak({ streakCount })) {
     const text = streakText({ streakCount, cadence });
-    setModalState({ text, visible: true });
+    showModal(text);
   } else if (determineIfMaxPushCount({ time_stamp_count, maxPushCount })) {
     const text = maxPushesText({ time_stamp_count });
-    setModalState({ text, visible: true });
+    showModal(text);
   } else if (determineIf10Threshold({ time_stamp_count })) {
     const text = tenThresholdText({ time_stamp_count });
-    setModalState({ text, visible: true });
+    showModal(text);
   } else {
     const text = standardText({ time_stamp_count, streakCount });
     const onPress = () => {
-      setModalState({ text, visible: true, time_stamp_count, streakCount });
+      showModal(text);
     };
     notificationPopUpUpdate({
       popup,

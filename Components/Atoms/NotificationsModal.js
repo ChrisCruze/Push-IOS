@@ -10,7 +10,40 @@ import {
   Dimensions,
 } from "react-native";
 import Constants from "expo-constants";
-import { Feather as Icon } from "@expo/vector-icons";
+import { Ionicons as Icon } from "@expo/vector-icons";
+import { CarouselMetrics } from "./CarouselMetrics";
+import MetricNeomorph from "./MetricNeomorph";
+
+const ModalIcon = () => (
+  <View style={styles.iconView}>
+    <View style={styles.iconWrapperWrapper}>
+      <View style={styles.iconWrapper}>
+        <Icon name={"ios-star"} size={80} color={"#FFD75B"} backgroundColor={"#FFD75B"} />
+      </View>
+    </View>
+  </View>
+);
+
+const PushCount = ({ time_stamp_count }) => {
+  return <MetricNeomorph number={time_stamp_count} text={"Pushes"} />;
+};
+
+const StreakCount = ({ streakCount }) => {
+  return <MetricNeomorph number={streakCount} text={"Streak"} />;
+};
+
+const ModalCarousel = ({ time_stamp_count, streakCount }) => {
+  return (
+    <CarouselMetrics
+      style="stats"
+      itemsPerInterval={2}
+      items={[
+        <PushCount time_stamp_count={time_stamp_count} />,
+        <StreakCount streakCount={streakCount} />,
+      ]}
+    />
+  );
+};
 
 const NotificationsModal = ({ modalState, setModalState }) => {
   return (
@@ -26,15 +59,18 @@ const NotificationsModal = ({ modalState, setModalState }) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>{modalState.text}</Text>
-            <Icon name={"star"} size={80} color={"#FFD75B"} />
-            <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-              onPress={() => {
-                setModalState({ ...modalState, visible: !modalState.visible });
-              }}
-            >
-              <Text style={styles.textStyle}>Done</Text>
-            </TouchableHighlight>
+            <ModalIcon />
+            <ModalCarousel {...modalState} />
+            <View style={styles.buttonWrapper}>
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
+                onPress={() => {
+                  setModalState({ ...modalState, visible: !modalState.visible });
+                }}
+              >
+                <Text style={styles.textStyle}>Done</Text>
+              </TouchableHighlight>
+            </View>
           </View>
         </View>
       </Modal>
@@ -50,9 +86,9 @@ const styles = StyleSheet.create({
     marginTop: Constants.statusBarHeight,
   },
   modalView: {
-    height: height * 0.4,
+    height: height * 0.65,
     width: width * 0.8,
-    margin: 20,
+    margin: 50,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
@@ -83,6 +119,29 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
 
     textAlign: "center",
+  },
+  iconWrapper: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: "#005AFF",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  iconWrapperWrapper: {
+    width: 120,
+    height: 120,
+    borderRadius: 120 / 2,
+    backgroundColor: "#005AFF",
+    padding: 10,
+  },
+  iconView: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  buttonWrapper: {
+    padding: 20,
   },
 });
 
