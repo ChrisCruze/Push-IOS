@@ -33,44 +33,11 @@ const maxPushesText = ({ time_stamp_count }) => {
   return `Avast Ye - ye just a new personal record of ${time_stamp_count} pushes for a single goal `;
 };
 
-const NotificationsStateCreate = ({ time_stamp_count, streakCount, cadence, maxPushCount }) => {
-  if (determineIfFirstPush({ time_stamp_count })) {
-    return { text: firstPushText() };
-  } else if (determineIfStreak({ streakCount })) {
-    return { text: streakText({ streakCount, cadence }) };
-  } else if (determineIfMaxPushCount({ time_stamp_count, maxPushCount })) {
-    return { text: maxPushesText({ time_stamp_count }) };
-  } else if (determineIf10Threshold({ time_stamp_count })) {
-    return { text: tenThresholdText({ time_stamp_count }) };
-  } else {
-    return { text: `You have ${time_stamp_count} pushes and streak of ${streakCount}` };
-  }
+const standardText = ({ time_stamp_count, streakCount }) => {
+  return `You have ${time_stamp_count} pushes and streak of ${streakCount}`;
 };
 
-const NotificationMetrics = ({ timeStampsWithNew, cadence, goals }) => {
-  const time_stamp_count = timeStampsWithNew.length;
-  const streakCount = determineStreak({ timeStamps: timeStampsWithNew, cadence });
-  const maxPushCount = maxPushCountofGoals({ goals });
-  return { time_stamp_count, streakCount, maxPushCount };
-};
-
-const notificationModalUpdate = ({
-  setModalState,
-  notificationState,
-  time_stamp_count,
-  streakCount,
-}) => {
-  setModalState({ ...notificationState, visible: true, time_stamp_count, streakCount });
-};
-
-const notificationPopUpUpdate = ({
-  popup,
-  time_stamp_count,
-  streakCount,
-  title,
-  onPress,
-  body,
-}) => {
+const notificationPopUpUpdate = ({ popup, title, onPress, body }) => {
   popup.show({
     onPress,
     appIconSource: require("../../assets/images/logo.jpg"),
@@ -82,7 +49,7 @@ const notificationPopUpUpdate = ({
   });
 };
 
-const NotificationsModalStateBase = ({
+const NotificationsStateLogic = ({
   timeStampsWithNew,
   cadence,
   goals,
@@ -90,33 +57,40 @@ const NotificationsModalStateBase = ({
   popup,
   title,
 }) => {
-  const { time_stamp_count, streakCount, maxPushCount } = NotificationMetrics({
-    timeStampsWithNew,
-    cadence,
-    goals,
-  });
-  const notificationState = NotificationsStateCreate({
-    time_stamp_count,
-    streakCount,
-    cadence,
-    maxPushCount,
-  });
-  const onPress = () => {
-    notificationModalUpdate({ setModalState, notificationState, time_stamp_count, streakCount });
-  };
-  notificationPopUpUpdate({
-    popup,
-    time_stamp_count,
-    streakCount,
-    title,
-    onPress,
-    body: notificationState.text,
-  });
-};
+  const time_stamp_count = timeStampsWithNew.length;
+  const streakCount = determineStreak({ timeStamps: timeStampsWithNew, cadence });
+  const maxPushCount = maxPushCountofGoals({ goals });
 
+  if (determineIfFirstPush({ time_stamp_count })) {
+    const text = firstPushText();
+    setModalState({ text, visible: true });
+  } else if (determineIfStreak({ streakCount })) {
+    const text = streakText({ streakCount, cadence });
+    setModalState({ text, visible: true });
+  } else if (determineIfMaxPushCount({ time_stamp_count, maxPushCount })) {
+    const text = maxPushesText({ time_stamp_count });
+    setModalState({ text, visible: true });
+  } else if (determineIf10Threshold({ time_stamp_count })) {
+    const text = tenThresholdText({ time_stamp_count });
+    setModalState({ text, visible: true });
+  } else {
+    const text = standardText({ time_stamp_count, streakCount });
+    const onPress = () => {
+      setModalState({ text, visible: true, time_stamp_count, streakCount });
+    };
+    notificationPopUpUpdate({
+      popup,
+      time_stamp_count,
+      streakCount,
+      title,
+      onPress,
+      body: text,
+    });
+  }
+};
 const NotificationsState = ({ setModalState, timeStampsWithNew, cadence, goals, popup, title }) => {
   return new Promise((resolve, reject) => {
-    NotificationsModalStateBase({
+    NotificationsStateLogic({
       setModalState,
       timeStampsWithNew,
       cadence,
