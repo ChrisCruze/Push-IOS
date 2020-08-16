@@ -85,3 +85,13 @@ export const daysAgoCalculate = oldestTimeStamp => {
   const days_oldest = hours_oldest / 24;
   return days_oldest;
 };
+export const pushCountFromGoals = ({ goals }) => {
+  const timeStamps = _.map(goals, ({ timeStamps }) => timeStamps.length);
+  return timeStamps;
+};
+
+export const maxPushCountofGoals = ({ goals }) => {
+  const pushCountList = pushCountFromGoals({ goals });
+  const maxPushCount = _.max(pushCountList);
+  return maxPushCount;
+};
