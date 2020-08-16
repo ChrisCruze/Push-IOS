@@ -1,14 +1,6 @@
-import React, { useState, useEffect, Fragment } from "react";
-import {
-  StyleSheet,
-  View,
-  SafeAreaView,
-  TouchableWithoutFeedback,
-  Modal,
-  TouchableHighlight,
-  Text,
-} from "react-native";
-import { Feather as Icon } from "@expo/vector-icons";
+import React, { useState } from "react";
+import { StyleSheet, View, SafeAreaView, TouchableWithoutFeedback } from "react-native";
+import { AntDesign as Icon } from "@expo/vector-icons";
 import Theme from "../Atoms/Theme";
 import SettingsModal from "../Atoms/SettingsModal";
 import Constants from "expo-constants";
@@ -29,14 +21,14 @@ const HeaderButtons = ({ navigation, logout }) => {
             setModalVisible(true);
           }}
         >
-          <Icon name={"list"} size={25} {...{ color: "white" }} />
+          <Icon name={"setting"} size={25} color={"white"} />
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
             navigation.navigate("Notifications");
           }}
         >
-          <Icon name={"bell"} size={25} {...{ color: "white" }} />
+          <Icon name={"bells"} size={25} color={"white"} />
         </TouchableWithoutFeedback>
       </SafeAreaView>
     </View>

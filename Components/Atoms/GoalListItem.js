@@ -10,23 +10,19 @@ import {
   Platform,
 } from "react-native";
 import { Neomorph } from "react-native-neomorph-shadows";
-import { SwipeListView, SwipeRow } from "react-native-swipe-list-view";
-import { Feather as Icon, Ionicons, FontAwesome } from "@expo/vector-icons";
-import AwesomeButton from "react-native-really-awesome-button";
-import AwesomeButtonRick from "react-native-really-awesome-button/src/themes/rick";
-import AwesomeButtonProgress from "react-native-really-awesome-button";
+import { SwipeRow } from "react-native-swipe-list-view";
+import { Feather as Icon, FontAwesome as IconTwo } from "@expo/vector-icons";
 
-const GoalButtonBackPushAction = ({ pushGoal, closeRow, pushGoalAnimate }) => {
+const GoalButtonBackPushAction = ({ navigateToGoal, closeRow }) => {
   return (
     <View style={styles.backButtonLeft}>
       <TouchableWithoutFeedback
         onPress={() => {
-          pushGoal();
+          navigateToGoal();
           closeRow();
-          pushGoalAnimate();
         }}
       >
-        <Icon name="check" size={30} color={"white"} />
+        <IconTwo name="bar-chart" size={30} color={"white"} />
       </TouchableWithoutFeedback>
     </View>
   );
@@ -72,21 +68,10 @@ const GoalButtonBackDeleteAndEdit = ({ goalName, deleteGoal, navigateToEditGoal,
   );
 };
 
-const GoalButtonBack = ({
-  closeRow,
-  goalName,
-  deleteGoal,
-  navigateToEditGoal,
-  pushGoal,
-  pushGoalAnimate,
-}) => {
+const GoalButtonBack = ({ closeRow, goalName, deleteGoal, navigateToEditGoal, navigateToGoal }) => {
   return (
     <View style={[styles.standaloneRowBack]}>
-      <GoalButtonBackPushAction
-        pushGoal={pushGoal}
-        closeRow={closeRow}
-        pushGoalAnimate={pushGoalAnimate}
-      />
+      <GoalButtonBackPushAction navigateToGoal={navigateToGoal} closeRow={closeRow} />
       <GoalButtonBackDeleteAndEdit
         closeRow={closeRow}
         goalName={goalName}
@@ -137,11 +122,10 @@ const GoalButtonFrontBase = ({
   subTitle,
   totalCount,
   cadenceCount,
-  cadence,
   lastTimeStampMessage,
   moveAnim,
   fadeAnim,
-  navigateToGoal,
+  pushGoal,
   rowOpen,
   closeRow,
   backgroundColor,
@@ -163,7 +147,7 @@ const GoalButtonFrontBase = ({
     borderWidth: Platform.OS === "android" ? 4 : 2,
   };
   return (
-    <TouchableWithoutFeedback onPress={rowOpen ? closeRow : navigateToGoal}>
+    <TouchableWithoutFeedback onPress={rowOpen ? closeRow : pushGoal}>
       <Neomorph lightShadowColor="#FFF" style={neomorph}>
         <View style={[styles.topRow, { opacity }]}>
           <GoalTitleText text={text} color={color} textDecorationLine={textDecorationLine} />
@@ -195,7 +179,7 @@ const GoalButtonFront = ({
   lastTimeStampMessage,
   moveAnim,
   fadeAnim,
-  navigateToGoal,
+  pushGoal,
   rowOpen,
   closeRow,
   is_overdue,
@@ -216,7 +200,7 @@ const GoalButtonFront = ({
         lastTimeStampMessage,
         moveAnim,
         fadeAnim,
-        navigateToGoal,
+        pushGoal,
         rowOpen,
         closeRow,
         backgroundColor,
@@ -253,22 +237,13 @@ const GoalListItem = ({
         toValue: 0,
         duration: 500,
       }),
-      // Animated.timing(moveAnim, {
-      //   toValue: 20,
-      //   duration: 100,
-      // }),
     ]).start(() => {
       pushGoal()
         .then(() => {
-          // Animated.timing(moveAnim, {
-          //   toValue: 0,
-          //   duration: 0,
-          // }).start(() => {
           Animated.timing(fadeAnim, {
             toValue: 1,
             duration: 500,
           }).start();
-          // });
         })
         .catch(e => console.error(e));
     });
@@ -281,7 +256,9 @@ const GoalListItem = ({
     }).start();
   }, []);
   return (
-    <Animated.View style={[styles.container, { opacity: Platform.OS == "android"?1: opacityAnim }]}>
+    <Animated.View
+      style={[styles.container, { opacity: Platform.OS == "android" ? 1 : opacityAnim }]}
+    >
       <View style={styles.standalone}>
         <SwipeRow
           leftActionValue={80} // the exposed length when swiped
@@ -297,11 +274,10 @@ const GoalListItem = ({
         >
           <GoalButtonBack
             deleteGoal={deleteGoal}
-            pushGoal={pushGoalAnimate}
             goalName={text}
             closeRow={() => refToSwipeRow.current.closeRow()}
-            pushGoalAnimate={() => {}}
             navigateToEditGoal={navigateToEditGoal}
+            navigateToGoal={navigateToGoal}
           />
           <GoalButtonFront
             text={text}
@@ -310,7 +286,7 @@ const GoalListItem = ({
             cadenceCount={cadenceCount}
             lastTimeStampMessage={lastTimeStampMessage}
             is_overdue={is_overdue}
-            navigateToGoal={navigateToGoal}
+            pushGoal={pushGoalAnimate}
             moveAnim={moveAnim}
             fadeAnim={fadeAnim}
             closeRow={() => refToSwipeRow.current.closeRow()}
