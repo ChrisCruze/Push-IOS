@@ -34,7 +34,7 @@ const maxPushesText = ({ time_stamp_count }) => {
 };
 
 const standardText = ({ time_stamp_count, streakCount }) => {
-  return `You have ${time_stamp_count} pushes and streak of ${streakCount}`;
+  return `Yo Ho Ho - you just reached ${time_stamp_count} pushes. You're also on a streak of ${streakCount}`;
 };
 
 const notificationPopUpUpdate = ({ popup, title, onPress, body }) => {
