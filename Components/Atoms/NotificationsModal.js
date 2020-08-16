@@ -24,22 +24,15 @@ const ModalIcon = () => (
   </View>
 );
 
-const PushCount = ({ time_stamp_count }) => {
-  return <MetricNeomorph number={time_stamp_count} text={"Pushes"} />;
-};
-
-const StreakCount = ({ streakCount }) => {
-  return <MetricNeomorph number={streakCount} text={"Streak"} />;
-};
-
-const ModalCarousel = ({ time_stamp_count, streakCount }) => {
+const ModalCarousel = ({ time_stamp_count, streakCount, longest_streak }) => {
   return (
     <CarouselMetrics
       style="stats"
-      itemsPerInterval={2}
+      itemsPerInterval={3}
       items={[
-        <PushCount time_stamp_count={time_stamp_count} />,
-        <StreakCount streakCount={streakCount} />,
+        <MetricNeomorph number={time_stamp_count} text={"Pushes"} />,
+        <MetricNeomorph number={streakCount} text={"Current Streak"} />,
+        <MetricNeomorph number={longest_streak} text={"Longest Streak"} />,
       ]}
     />
   );

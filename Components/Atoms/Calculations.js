@@ -54,6 +54,24 @@ export const determineStreak = ({ timeStamps, cadence }) => {
   return longest_streak;
 };
 
+const getStreaks = l => {
+  return l.reduce((arr, val, i, a) => {
+    if (!i || val !== a[i - 1] + 1) arr.push([]);
+    arr[arr.length - 1].push(val);
+    return arr;
+  }, []);
+};
+const getStreakLongest = l => {
+  const streaks = getStreaks(l);
+  const streakCounts = _.map(streaks, subli => subli.length);
+  return _.max(streakCounts);
+};
+export const determineStreakLongest = ({ timeStamps, cadence }) => {
+  const uniques = getUniquesBasedOnCadence({ timeStamps, cadence });
+  const longest_streak = getStreakLongest(uniques);
+  return longest_streak;
+};
+
 export const timeStampsFromGoals = ({ goals }) => {
   const timeStamps = _.map(goals, ({ timeStamps }) =>
     _.max(timeStamps, function(timeStamp) {

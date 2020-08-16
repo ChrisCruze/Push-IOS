@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { determineStreak, maxPushCountofGoals } from "./Calculations";
+import { determineStreak, maxPushCountofGoals, determineStreakLongest } from "./Calculations";
 
 const determineIfFirstPush = ({ time_stamp_count }) => {
   return time_stamp_count == 1;
@@ -60,9 +60,9 @@ const NotificationsStateLogic = ({
   const time_stamp_count = timeStampsWithNew.length;
   const streakCount = determineStreak({ timeStamps: timeStampsWithNew, cadence });
   const maxPushCount = maxPushCountofGoals({ goals });
-
+  const longest_streak = determineStreakLongest({ timeStamps: timeStampsWithNew, cadence });
   const showModal = text => {
-    setModalState({ text, visible: true, time_stamp_count, streakCount });
+    setModalState({ text, visible: true, time_stamp_count, streakCount, longest_streak });
   };
 
   if (determineIfFirstPush({ time_stamp_count })) {
