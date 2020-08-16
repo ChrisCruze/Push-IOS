@@ -13,6 +13,8 @@ import Theme from "../Atoms/Theme";
 import DashboardTimeStamps from "../Molecules/DashboardTimeStamps";
 import { DataFlattenConvertGoals } from "../Atoms/BarChart.functions";
 import moment from "moment";
+import NotificationsModal from "../Atoms/NotificationsModal";
+import NotificationPopup from "react-native-push-notification-popup";
 
 const GoalBarChart = ({ goals_filtered }) => {
   const goals_count_by_day_array = goals_data_last_n_days_from_transformed_goals_array({
@@ -57,7 +59,8 @@ const Goal = ({ navigation }) => {
   const goals_filtered = goals.filter(function(D) {
     return D["_id"] == _id;
   });
-
+  const [modalState, setModalState] = useState({ visible: false });
+  const [popup, setPopUp] = useState(null);
   return (
     <View style={styles.container}>
       <Animated.ScrollView
@@ -78,6 +81,9 @@ const Goal = ({ navigation }) => {
           _id={_id}
           navigation={navigation}
           refetch={refetch}
+          setModalState={setModalState}
+          goals={goals}
+          popup={popup}
         />
         <GoalBarChart goals_filtered={goals_filtered} />
         <GoalTableGrid goals_filtered={goals_filtered} />
@@ -87,6 +93,11 @@ const Goal = ({ navigation }) => {
           hideTitle={true}
         />
       </Animated.ScrollView>
+      <NotificationsModal
+        modalState={modalState}
+        setModalState={setModalState}
+      ></NotificationsModal>
+      <NotificationPopup ref={ref => setPopUp(ref)}></NotificationPopup>
     </View>
   );
 };

@@ -3,6 +3,7 @@ import { StyleSheet, View, Vibration, Alert } from "react-native";
 import moment from "moment";
 import ButtonNeomorph from "../Atoms/ButtonNeomorph";
 import { useGoalUpdate, useGoalDelete } from "../../API";
+import NotificationsState from "../Atoms/NotificationsState";
 
 const GoalPageButtons = ({
   _id,
@@ -12,6 +13,9 @@ const GoalPageButtons = ({
   cadenceCount,
   timeStamps,
   refetch,
+  setModalState,
+  goals,
+  popup,
 }) => {
   const { removeGoal } = useGoalDelete();
   const { updateGoal } = useGoalUpdate();
@@ -44,15 +48,26 @@ const GoalPageButtons = ({
   const pushGoalPress = () => {
     Vibration.vibrate();
     const timeStampsWithNew = timeStamps.concat(moment().format());
-    updateGoal({
-      variables: {
-        _id,
-        title,
-        cadence,
-        cadenceCount,
-        timeStamps: timeStampsWithNew,
-      },
+
+    NotificationsState({
+      setModalState,
+      timeStampsWithNew,
+      cadence,
+      goals,
+      popup,
+      title,
     })
+      .then(
+        updateGoal({
+          variables: {
+            _id,
+            title,
+            cadence,
+            cadenceCount,
+            timeStamps: timeStampsWithNew,
+          },
+        }),
+      )
       .then(() => refetch())
       .catch(e => console.error(e));
   };
