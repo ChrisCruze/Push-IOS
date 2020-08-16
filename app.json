@@ -4,7 +4,11 @@
     "slug": "push-pirates",
     "privacy": "public",
     "sdkVersion": "36.0.0",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "version": "1.0.15",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,7 +20,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.push.xyz"
@@ -28,6 +34,7 @@
     "description": "Push your way to success",
     "notification": {
       "icon": "./assets/icon.png"
-    }
+    },
+    "githubUrl": "https://github.com/ChrisCruze/Push-IOS"
   }
 }

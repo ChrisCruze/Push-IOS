@@ -18,7 +18,7 @@ const ModalIcon = () => (
   <View style={styles.iconView}>
     <View style={styles.iconWrapperWrapper}>
       <View style={styles.iconWrapper}>
-        <Icon name={"ios-star"} size={80} color={"#FFD75B"} backgroundColor={"#FFD75B"} />
+        <Icon name={"ios-star"} size={90} color={"#FFD75B"} backgroundColor={"#FFD75B"} />
       </View>
     </View>
   </View>
@@ -26,15 +26,18 @@ const ModalIcon = () => (
 
 const ModalCarousel = ({ time_stamp_count, streakCount, longest_streak }) => {
   return (
-    <CarouselMetrics
-      style="stats"
-      itemsPerInterval={3}
-      items={[
-        <MetricNeomorph number={time_stamp_count} text={"Pushes"} />,
-        <MetricNeomorph number={streakCount} text={"Current Streak"} />,
-        <MetricNeomorph number={longest_streak} text={"Longest Streak"} />,
-      ]}
-    />
+    <View style={styles.metricsContainer}>
+      <CarouselMetrics
+        style="stats"
+        itemsPerInterval={3}
+        items={[
+          <MetricNeomorph number={time_stamp_count} text={"Pushes"} />,
+          <MetricNeomorph number={streakCount} text={"Current Streak"} />,
+          <MetricNeomorph number={longest_streak} text={"Longest Streak"} />,
+          <MetricNeomorph number={time_stamp_count} text={"Pushes"} />,
+        ]}
+      />
+    </View>
   );
 };
 
@@ -79,7 +82,7 @@ const styles = StyleSheet.create({
     marginTop: Constants.statusBarHeight,
   },
   modalView: {
-    height: height * 0.65,
+    height: height * 0.8,
     width: width * 0.8,
     margin: 50,
     backgroundColor: "white",
@@ -135,6 +138,13 @@ const styles = StyleSheet.create({
   },
   buttonWrapper: {
     padding: 20,
+  },
+  metricsContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 30,
+    textAlign: "center",
   },
 });
 
