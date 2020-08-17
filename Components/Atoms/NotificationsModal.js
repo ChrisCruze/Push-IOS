@@ -56,7 +56,7 @@ const NotificationsModal = ({ modalState, setModalState }) => {
           <View style={styles.modalView}>
             <Text style={styles.modalText}>{modalState.text}</Text>
             <ModalIcon />
-            <ModalCarousel {...modalState} />
+            {/* <ModalCarousel {...modalState} /> */}
             <View style={styles.buttonWrapper}>
               <TouchableHighlight
                 style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     marginTop: Constants.statusBarHeight,
   },
   modalView: {
-    height: height * 0.8,
+    height: height * 0.55,
     width: width * 0.8,
     margin: 50,
     backgroundColor: "white",
