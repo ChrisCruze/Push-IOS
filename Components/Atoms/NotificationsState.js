@@ -4,8 +4,14 @@ import { determineStreak, maxPushCountofGoals, determineStreakLongest } from "./
 const determineIfFirstPush = ({ time_stamp_count }) => {
   return time_stamp_count == 1;
 };
+
+const roundNumber = (x, divisor) => {
+  return Math.ceil(x / divisor) * divisor;
+};
+
 const determineIfStreak = ({ streakCount }) => {
-  return streakCount > 1;
+  const is_divisible_by_5 = roundNumber(streakCount, 5) == streakCount;
+  return streakCount == 2 || is_divisible_by_5;
 };
 const determineIf10Threshold = ({ time_stamp_count }) => {
   const is_divisible_by_10 =
