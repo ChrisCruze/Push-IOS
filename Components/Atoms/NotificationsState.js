@@ -11,8 +11,9 @@ const roundNumber = (x, divisor) => {
 
 const determineIfStreak = ({ streakCount }) => {
   const is_divisible_by_5 = roundNumber(streakCount, 5) == streakCount;
-  return streakCount == 2 || is_divisible_by_5;
+  return streakCount == 2 || is_divisible_by_5 & (streakCount > 2);
 };
+
 const determineIf10Threshold = ({ time_stamp_count }) => {
   const is_divisible_by_10 =
     parseFloat(parseInt(time_stamp_count / 10)) == parseFloat(time_stamp_count / 10);
@@ -68,7 +69,7 @@ const NotificationsStateLogic = ({
   const maxPushCount = maxPushCountofGoals({ goals });
   const longest_streak = determineStreakLongest({ timeStamps: timeStampsWithNew, cadence });
   const showModal = text => {
-    setModalState({ text, visible: true, time_stamp_count, streakCount, longest_streak });
+    setModalState({ text, visible: true, time_stamp_count, streakCount, longest_streak, title });
   };
 
   if (determineIfFirstPush({ time_stamp_count })) {
