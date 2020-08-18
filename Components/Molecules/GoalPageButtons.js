@@ -56,6 +56,8 @@ const GoalPageButtons = ({
       goals,
       popup,
       title,
+      navigation,
+      _id,
     })
       .then(
         updateGoal({

@@ -94,6 +94,8 @@ const GoalItem = ({
       goals,
       popup,
       title,
+      navigation,
+      _id,
     })
       .then(() => {
         if (totalCount + 1 == cadenceCount) {

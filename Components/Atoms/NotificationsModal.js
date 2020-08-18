@@ -67,7 +67,16 @@ const NotificationsModal = ({ modalState, setModalState }) => {
                   setModalState({ ...modalState, visible: !modalState.visible });
                 }}
               >
-                <Text style={styles.textStyle}>Done</Text>
+                <Text style={styles.textStyle}>Close</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
+                onPress={() => {
+                  modalState.navigateToGoal();
+                  setModalState({ ...modalState, visible: !modalState.visible });
+                }}
+              >
+                <Text style={styles.textStyle}>Dashboard</Text>
               </TouchableHighlight>
             </View>
           </View>
@@ -149,6 +158,10 @@ const styles = StyleSheet.create({
   },
   buttonWrapper: {
     padding: 20,
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
+    alignSelf: "stretch",
   },
   metricsContainer: {
     flex: 1,

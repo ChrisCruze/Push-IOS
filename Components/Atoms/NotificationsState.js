@@ -63,13 +63,29 @@ const NotificationsStateLogic = ({
   setModalState,
   popup,
   title,
+  navigation,
+  _id,
 }) => {
   const time_stamp_count = timeStampsWithNew.length;
   const streakCount = determineStreak({ timeStamps: timeStampsWithNew, cadence });
   const maxPushCount = maxPushCountofGoals({ goals });
   const longest_streak = determineStreakLongest({ timeStamps: timeStampsWithNew, cadence });
+
+  const navigateToGoal = () => {
+    const pass_dict = { id: _id };
+    navigation.navigate("Goal", pass_dict);
+  };
+
   const showModal = text => {
-    setModalState({ text, visible: true, time_stamp_count, streakCount, longest_streak, title });
+    setModalState({
+      text,
+      visible: true,
+      time_stamp_count,
+      streakCount,
+      longest_streak,
+      title,
+      navigateToGoal,
+    });
   };
 
   if (determineIfFirstPush({ time_stamp_count })) {
@@ -99,7 +115,16 @@ const NotificationsStateLogic = ({
     });
   }
 };
-const NotificationsState = ({ setModalState, timeStampsWithNew, cadence, goals, popup, title }) => {
+const NotificationsState = ({
+  setModalState,
+  timeStampsWithNew,
+  cadence,
+  goals,
+  popup,
+  title,
+  navigation,
+  _id,
+}) => {
   return new Promise((resolve, reject) => {
     NotificationsStateLogic({
       setModalState,
@@ -108,6 +133,8 @@ const NotificationsState = ({ setModalState, timeStampsWithNew, cadence, goals, 
       goals,
       popup,
       title,
+      navigation,
+      _id,
     });
     resolve();
   });
