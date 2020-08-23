@@ -113,3 +113,8 @@ export const maxPushCountofGoals = ({ goals }) => {
   const maxPushCount = _.max(pushCountList);
   return maxPushCount;
 };
+
+export const cadenceTextConvert = cadence => {
+  const cadenceText = cadence == "Daily" ? "Day" : cadence == "Weekly" ? "Wk" : "Mo";
+  return cadenceText;
+};

@@ -1,4 +1,9 @@
-import { determineStreak, maxPushCountofGoals, determineStreakLongest } from "./Calculations";
+import {
+  determineStreak,
+  maxPushCountofGoals,
+  determineStreakLongest,
+  cadenceTextConvert,
+} from "./Calculations";
 
 const determineIfFirstPush = ({ time_stamp_count }) => {
   return time_stamp_count == 1;
@@ -28,7 +33,8 @@ const firstPushText = () => {
 };
 
 const streakText = ({ streakCount, cadence }) => {
-  return `Yo Ho Ho - you're on ${streakCount} ${cadence} streak`;
+  const cadenceText = cadenceTextConvert(cadence);
+  return `Yo Ho Ho - you're on ${streakCount} ${cadenceText} streak`;
 };
 
 const tenThresholdText = ({ time_stamp_count }) => {
@@ -40,7 +46,7 @@ const maxPushesText = ({ time_stamp_count }) => {
 };
 
 const standardText = ({ time_stamp_count, streakCount }) => {
-  return `Yo Ho Ho - you just reached ${time_stamp_count} pushes. You're also on a streak of ${streakCount}`;
+  return `Yo Ho Ho - you just reached ${time_stamp_count} pushes.`;
 };
 
 const notificationPopUpUpdate = ({ popup, title, onPress, body }) => {
