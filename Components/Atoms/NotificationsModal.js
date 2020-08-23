@@ -52,7 +52,7 @@ const NotificationsModal = ({ modalState, setModalState }) => {
           Alert.alert("Modal has been closed.");
         }}
       >
-        <View style={styles.centeredView}>
+        <View style={styles.centeredViewFlex}>
           <View style={styles.modalView}>
             <Text style={styles.modalTitle}>{modalState.title}</Text>
 
@@ -89,8 +89,12 @@ const { height, width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   centeredView: {
-    flex: 1,
     justifyContent: "center",
+    alignItems: "center",
+  },
+  centeredViewFlex: {
+    justifyContent: "center",
+    flex: 1,
     alignItems: "center",
   },
   modalView: {
