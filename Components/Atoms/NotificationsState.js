@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { determineStreak, maxPushCountofGoals, determineStreakLongest } from "./Calculations";
 
 const determineIfFirstPush = ({ time_stamp_count }) => {
@@ -37,7 +36,7 @@ const tenThresholdText = ({ time_stamp_count }) => {
 };
 
 const maxPushesText = ({ time_stamp_count }) => {
-  return `Avast Ye - ye just a new personal record of ${time_stamp_count} pushes for a single goal `;
+  return `Avast Ye - ye just achieved a new personal record of ${time_stamp_count} pushes for a single goal `;
 };
 
 const standardText = ({ time_stamp_count, streakCount }) => {
