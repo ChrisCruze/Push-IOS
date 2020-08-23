@@ -110,7 +110,12 @@ const Goals = ({ navigation }) => {
   const [popup, setPopUp] = useState(null);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: modalState.visible ? "rgba(0, 0, 0, 0.5)" : "transparent" },
+      ]}
+    >
       <NavigationEvents
         onWillFocus={() => {
           refetch();

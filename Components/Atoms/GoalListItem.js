@@ -302,7 +302,7 @@ const GoalListItem = ({
 export default GoalListItem;
 
 const { width } = Dimensions.get("window");
-const main_background = "#FFF9FD";
+const main_background = "transparent"; //"#FFF9FD";
 const styles = StyleSheet.create({
   container: {
     backgroundColor: main_background,

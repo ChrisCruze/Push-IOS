@@ -62,7 +62,12 @@ const Goal = ({ navigation }) => {
   const [modalState, setModalState] = useState({ visible: false });
   const [popup, setPopUp] = useState(null);
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: modalState.visible ? "rgba(0, 0, 0, 0.5)" : "transparent" },
+      ]}
+    >
       <Animated.ScrollView
         onScroll={Animated.event(
           [
@@ -105,7 +110,7 @@ const Goal = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Theme.palette.background,
+    // backgroundColor: Theme.palette.background,
   },
   barchartContainer: {
     alignItems: "center",
