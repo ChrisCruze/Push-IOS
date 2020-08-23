@@ -43,7 +43,7 @@ const ModalCarousel = ({ time_stamp_count, streakCount, longest_streak }) => {
 
 const NotificationsModal = ({ modalState, setModalState }) => {
   return (
-    <SafeAreaView>
+    <View style={styles.centeredView}>
       <Modal
         animationType="slide"
         transparent={true}
@@ -64,39 +64,38 @@ const NotificationsModal = ({ modalState, setModalState }) => {
               <TouchableHighlight
                 style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
                 onPress={() => {
-                  setModalState({ ...modalState, visible: !modalState.visible });
-                }}
-              >
-                <Text style={styles.textStyle}>Close</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
-                onPress={() => {
                   modalState.navigateToGoal();
                   setModalState({ ...modalState, visible: !modalState.visible });
                 }}
               >
                 <Text style={styles.textStyle}>Dashboard</Text>
               </TouchableHighlight>
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
+                onPress={() => {
+                  setModalState({ ...modalState, visible: !modalState.visible });
+                }}
+              >
+                <Text style={styles.textStyle}>Close</Text>
+              </TouchableHighlight>
             </View>
           </View>
         </View>
       </Modal>
-    </SafeAreaView>
+    </View>
   );
 };
 const { height, width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   centeredView: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: Constants.statusBarHeight,
   },
   modalView: {
     height: height * 0.55,
     width: width * 0.8,
-    margin: 50,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
@@ -109,12 +108,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    justifyContent: "center",
+    alignItems: "center",
   },
   openButton: {
     backgroundColor: "#F194FF",
     borderRadius: 20,
     padding: 10,
     elevation: 2,
+    width: 100,
   },
   textStyle: {
     color: "white",
@@ -157,7 +159,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   buttonWrapper: {
-    padding: 20,
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
