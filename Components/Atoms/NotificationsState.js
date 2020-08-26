@@ -172,6 +172,18 @@ const NotificationsStateLogicModal = ({
     title,
     navigateToGoal,
   });
+
+  setTimeout(() => {
+    setModalState({
+      text,
+      visible: false,
+      time_stamp_count,
+      streakCount,
+      longest_streak,
+      title,
+      navigateToGoal,
+    });
+  }, 4000);
 };
 
 const NotificationsStateLogic = ({
