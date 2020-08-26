@@ -14,8 +14,7 @@ const roundNumber = (x, divisor) => {
 };
 
 const determineIfStreak = ({ streakCount }) => {
-  const is_divisible_by_5 = roundNumber(streakCount, 5) == streakCount;
-  return streakCount == 2 || is_divisible_by_5 & (streakCount > 2);
+  return streakCount > 2;
 };
 
 const determineIf10Threshold = ({ time_stamp_count }) => {
@@ -61,6 +60,25 @@ const notificationPopUpUpdate = ({ popup, title, onPress, body }) => {
   });
 };
 
+const NotificationTextDetermine = ({ time_stamp_count, streakCount, cadence, maxPushCount }) => {
+  if (determineIfFirstPush({ time_stamp_count })) {
+    const text = firstPushText();
+    return text;
+  } else if (determineIfStreak({ streakCount })) {
+    const text = streakText({ streakCount, cadence });
+    return text;
+  } else if (determineIfMaxPushCount({ time_stamp_count, maxPushCount })) {
+    const text = maxPushesText({ time_stamp_count });
+    return text;
+  } else if (determineIf10Threshold({ time_stamp_count })) {
+    const text = tenThresholdText({ time_stamp_count });
+    return text;
+  } else {
+    const text = standardText({ time_stamp_count, streakCount });
+    return text;
+  }
+};
+
 const NotificationsStateLogic = ({
   timeStampsWithNew,
   cadence,
@@ -93,32 +111,18 @@ const NotificationsStateLogic = ({
     });
   };
 
-  if (determineIfFirstPush({ time_stamp_count })) {
-    const text = firstPushText();
+  const text = NotificationTextDetermine({ time_stamp_count, streakCount, cadence, maxPushCount });
+  const onPress = () => {
     showModal(text);
-  } else if (determineIfStreak({ streakCount })) {
-    const text = streakText({ streakCount, cadence });
-    showModal(text);
-  } else if (determineIfMaxPushCount({ time_stamp_count, maxPushCount })) {
-    const text = maxPushesText({ time_stamp_count });
-    showModal(text);
-  } else if (determineIf10Threshold({ time_stamp_count })) {
-    const text = tenThresholdText({ time_stamp_count });
-    showModal(text);
-  } else {
-    const text = standardText({ time_stamp_count, streakCount });
-    const onPress = () => {
-      showModal(text);
-    };
-    notificationPopUpUpdate({
-      popup,
-      time_stamp_count,
-      streakCount,
-      title,
-      onPress,
-      body: text,
-    });
-  }
+  };
+  notificationPopUpUpdate({
+    popup,
+    time_stamp_count,
+    streakCount,
+    title,
+    onPress,
+    body: text,
+  });
 };
 const NotificationsState = ({
   setModalState,
