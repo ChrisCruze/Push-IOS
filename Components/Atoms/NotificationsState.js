@@ -80,28 +80,28 @@ const NotificationTextDetermine = ({ time_stamp_count, streakCount, cadence, max
   }
 };
 
-const NotificationDetermineCadenceComplete = ({ goals }) => {
+const NotificationDetermineCadenceComplete = ({ goals, cadence }) => {
   const day_goals = GoalsFilterCadence({ goals, cadence: "daily" });
   const week_goals = GoalsFilterCadence({ goals, cadence: "weekly" });
   const month_goals = GoalsFilterCadence({ goals, cadence: "monthly" });
-  const is_day_completed = determinePercentageDone(day_goals) == 100;
-  const is_week_completed = determinePercentageDone(week_goals) == 100;
-  const is_month_completed = determinePercentageDone(month_goals) == 100;
+  const is_day_completed = determinePercentageDone(day_goals) == 100 && cadence == "Daily";
+  const is_week_completed = determinePercentageDone(week_goals) == 100 && cadence == "Weekly";
+  const is_month_completed = determinePercentageDone(month_goals) == 100 && cadence == "Monthly";
   const is_all_completed = determinePercentageDone(goals) == 100;
   if (is_all_completed) {
-    return "You Completed all of your goals!";
+    return "Avast Ye - you completed all of your goals!";
   } else if (is_day_completed) {
-    return "You Completed all of your Daily goals!";
+    return "Avast Ye - you Completed all of your daily goals!";
   } else if (is_week_completed) {
-    return "You Completed all of your Weekly goals!";
+    return "Avast Ye - you Completed all of your weekly goals!";
   } else if (is_month_completed) {
-    return "You Completed all of your Monthly goals!";
+    return "Avast Ye -you Completed all of your monthly goals!";
   } else {
     return false;
   }
 };
 
-const NotificationsStateLogic = ({
+const NotificationsStateLogicInApp = ({
   timeStampsWithNew,
   cadence,
   goals,
@@ -131,8 +131,7 @@ const NotificationsStateLogic = ({
       navigateToGoal,
     });
   };
-  //const text = NotificationTextDetermine({ time_stamp_count, streakCount, cadence, maxPushCount });
-  const text = NotificationDetermineCadenceComplete({ goals });
+  const text = NotificationTextDetermine({ time_stamp_count, streakCount, cadence, maxPushCount });
   const onPress = () => {
     showModal(text);
   };
@@ -144,6 +143,72 @@ const NotificationsStateLogic = ({
     onPress,
     body: text,
   });
+};
+const NotificationsStateLogicModal = ({
+  timeStampsWithNew,
+  cadence,
+  goals,
+  setModalState,
+  popup,
+  title,
+  navigation,
+  _id,
+  text,
+}) => {
+  const time_stamp_count = timeStampsWithNew.length;
+  const streakCount = determineStreak({ timeStamps: timeStampsWithNew, cadence });
+  const maxPushCount = maxPushCountofGoals({ goals });
+  const longest_streak = determineStreakLongest({ timeStamps: timeStampsWithNew, cadence });
+  const navigateToGoal = () => {
+    const pass_dict = { id: _id };
+    navigation.navigate("Goal", pass_dict);
+  };
+  setModalState({
+    text,
+    visible: true,
+    time_stamp_count,
+    streakCount,
+    longest_streak,
+    title,
+    navigateToGoal,
+  });
+};
+
+const NotificationsStateLogic = ({
+  timeStampsWithNew,
+  cadence,
+  goals,
+  setModalState,
+  popup,
+  title,
+  navigation,
+  _id,
+}) => {
+  const modal_text = NotificationDetermineCadenceComplete({ goals, cadence });
+  if (modal_text != false) {
+    NotificationsStateLogicModal({
+      setModalState,
+      timeStampsWithNew,
+      cadence,
+      goals,
+      popup,
+      title,
+      navigation,
+      _id,
+      text: modal_text,
+    });
+  } else {
+    NotificationsStateLogicInApp({
+      setModalState,
+      timeStampsWithNew,
+      cadence,
+      goals,
+      popup,
+      title,
+      navigation,
+      _id,
+    });
+  }
 };
 
 const NotificationsState = ({
