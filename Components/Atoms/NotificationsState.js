@@ -80,14 +80,23 @@ const NotificationTextDetermine = ({ time_stamp_count, streakCount, cadence, max
   }
 };
 
-const NotificationDetermineCadenceComplete = ({ goals, cadence }) => {
-  const day_goals = GoalsFilterCadence({ goals, cadence: "daily" });
-  const week_goals = GoalsFilterCadence({ goals, cadence: "weekly" });
-  const month_goals = GoalsFilterCadence({ goals, cadence: "monthly" });
+const appendNewGoalsTimeStamps = ({ goals, _id, timeStampsWithNew }) => {
+  const goals_filtered = goals.filter(goal => goal._id != _id);
+  const goal_updated_dict = goals.find(goal => goal._id == _id);
+  const goal_updated_dict_with_timestamps = { ...goal_updated_dict, timeStamps: timeStampsWithNew };
+  const combined_goals = [...goals_filtered, goal_updated_dict_with_timestamps];
+  return combined_goals;
+};
+
+const NotificationDetermineCadenceComplete = ({ goals, cadence, timeStampsWithNew, _id }) => {
+  const updated_goals = appendNewGoalsTimeStamps({ goals, _id, timeStampsWithNew });
+  const day_goals = GoalsFilterCadence({ goals: updated_goals, cadence: "daily" });
+  const week_goals = GoalsFilterCadence({ goals: updated_goals, cadence: "weekly" });
+  const month_goals = GoalsFilterCadence({ goals: updated_goals, cadence: "monthly" });
   const is_day_completed = determinePercentageDone(day_goals) == 100 && cadence == "Daily";
   const is_week_completed = determinePercentageDone(week_goals) == 100 && cadence == "Weekly";
   const is_month_completed = determinePercentageDone(month_goals) == 100 && cadence == "Monthly";
-  const is_all_completed = determinePercentageDone(goals) == 100;
+  const is_all_completed = determinePercentageDone(updated_goals) == 100;
   if (is_all_completed) {
     return "Avast Ye - you completed all of your goals!";
   } else if (is_day_completed) {
@@ -196,7 +205,12 @@ const NotificationsStateLogic = ({
   navigation,
   _id,
 }) => {
-  const modal_text = NotificationDetermineCadenceComplete({ goals, cadence });
+  const modal_text = NotificationDetermineCadenceComplete({
+    goals,
+    cadence,
+    timeStampsWithNew,
+    _id,
+  });
   if (modal_text != false) {
     NotificationsStateLogicModal({
       setModalState,
