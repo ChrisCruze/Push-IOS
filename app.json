@@ -4,7 +4,11 @@
     "slug": "push-pirates",
     "privacy": "public",
     "sdkVersion": "36.0.0",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "version": "1.0.15",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,7 +20,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.push.xyz"
@@ -25,9 +31,10 @@
       "package": "com.push.xyz",
       "versionCode": 7
     },
-    "description": "Push your way to success",
+    "description": "Push Pirates is a free and easy-to-use habit forming app that helps you to build and maintain habits/routines so that you can take better control of your life. By setting goals, tracking your habits, and holding yourself accountable through this tool, you can start to build a healthier lifestyle focused on behaviors you are trying to improve.",
     "notification": {
       "icon": "./assets/icon.png"
-    }
+    },
+    "githubUrl": "https://github.com/ChrisCruze/Push-IOS"
   }
 }

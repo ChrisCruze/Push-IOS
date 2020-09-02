@@ -5,6 +5,7 @@ import _ from "lodash";
 import GoalListItem from "../Atoms/GoalListItem";
 import { determineOverDue, filterTimeStampsForCadence } from "../Atoms/BarChart.functions.js";
 import { determineStreak } from "../Atoms/Calculations";
+import NotificationsState from "../Atoms/NotificationsState";
 
 const GoalOptionsPress = ({ id, navigation, goals }) => {
   const pass_dict = { id: id, goals: goals };
@@ -67,6 +68,8 @@ const GoalItem = ({
   removeGoal,
   refetch,
   goalsListConfetti,
+  setModalState,
+  popup,
 }) => {
   const totalCount = GoalCountGet({ goals, id, cadence });
   const lastTimeStamp = GoalLastTimeStamp({ goals, id });
@@ -84,23 +87,36 @@ const GoalItem = ({
     Vibration.vibrate();
     const timeStampsWithNew = timeStamps.concat(moment().format());
 
-    return updateGoal({
-      variables: {
-        _id,
-        title,
-        cadence,
-        cadenceCount,
-        timeStamps: timeStampsWithNew,
-      },
+    return NotificationsState({
+      setModalState,
+      timeStampsWithNew,
+      cadence,
+      goals,
+      popup,
+      title,
+      navigation,
+      _id,
     })
-      .then(() => refetch())
       .then(() => {
         if (totalCount + 1 == cadenceCount) {
           goalsListConfetti();
         }
       })
+      .then(
+        updateGoal({
+          variables: {
+            _id,
+            title,
+            cadence,
+            cadenceCount,
+            timeStamps: timeStampsWithNew,
+          },
+        }),
+      )
+      .then(() => refetch())
       .catch(e => console.error(e));
   };
+
   const deleteGoalPress = () => {
     removeGoal({ variables: { _id } });
     refetch();

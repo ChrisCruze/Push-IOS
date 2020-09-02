@@ -21,6 +21,8 @@ import { GoalsSort, GoalsFilterState, GoalsFilterCadence } from "../Atoms/BarCha
 import AnimatedLoading from "../Molecules/AnimatedLoading";
 import NetworkCheckNav from "../Molecules/NetworkCheckNav";
 import { NOTIFICATION_URI } from "react-native-dotenv";
+import NotificationsModal from "../Atoms/NotificationsModal";
+import NotificationPopup from "react-native-push-notification-popup";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
@@ -104,8 +106,16 @@ const Goals = ({ navigation }) => {
 
   const refToConfetti = useRef(null);
 
+  const [modalState, setModalState] = useState({ visible: false });
+  const [popup, setPopUp] = useState(null);
+
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: modalState.visible ? "rgba(0, 0, 0, 0.5)" : "transparent" },
+      ]}
+    >
       <NavigationEvents
         onWillFocus={() => {
           refetch();
@@ -153,11 +163,18 @@ const Goals = ({ navigation }) => {
                 removeGoal,
                 refetch,
                 goalsListConfetti: () => refToConfetti.current.start(),
+                setModalState,
+                popup,
               });
             }}
           />
         </Fragment>
       </AnimatedHeader>
+      <NotificationsModal
+        modalState={modalState}
+        setModalState={setModalState}
+      ></NotificationsModal>
+      <NotificationPopup ref={ref => setPopUp(ref)}></NotificationPopup>
       <Confetti ref={refToConfetti} />
     </View>
   );
