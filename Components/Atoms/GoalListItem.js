@@ -223,8 +223,12 @@ const pushGoalAnimation = ({ fadeAnim, updateIsLoading, pushGoal }) => {
     duration: 500,
   }).start(() => {
     new Promise((resolve, reject) => {
-      updateIsLoading(true);
-      resolve();
+      if (true) {
+        updateIsLoading(true);
+        resolve();
+      } else {
+        reject();
+      }
     })
       .then(() => {
         Animated.timing(fadeAnim, {
@@ -235,17 +239,13 @@ const pushGoalAnimation = ({ fadeAnim, updateIsLoading, pushGoal }) => {
             Animated.timing(fadeAnim, {
               toValue: 0,
               duration: 500,
-            })
-              .start(() => {
-                updateIsLoading(false);
-              })
-              .then(() => {
-                Animated.timing(fadeAnim, {
-                  toValue: 1,
-                  duration: 500,
-                }).start();
-              })
-              .catch(e => console.error(e));
+            }).start(() => {
+              updateIsLoading(false);
+              Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 500,
+              }).start();
+            });
           });
         });
       })
