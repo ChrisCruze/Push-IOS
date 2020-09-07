@@ -57,7 +57,6 @@ const NotificationsModal = ({ modalState, setModalState }) => {
             <Text style={styles.modalTitle}>{modalState.title}</Text>
 
             <Text style={styles.modalText}>{modalState.text}</Text>
-
             <ModalIcon />
             {/* <ModalCarousel {...modalState} /> */}
             <View style={styles.buttonWrapper}>
@@ -136,7 +135,7 @@ const styles = StyleSheet.create({
   },
 
   modalText: {
-    marginBottom: 15,
+    marginBottom: 30,
     fontSize: 15,
     fontWeight: "bold",
 
