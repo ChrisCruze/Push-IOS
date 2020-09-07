@@ -45,6 +45,10 @@ const SettingsModal = ({ modalVisible, setModalVisible, logout }) => {
                 <Text style={styles.textStyle}>Logout</Text>
               </TouchableHighlight>
             </View>
+
+            <View style={styles.versionTitle}>
+              <Text style={styles.versionText}>Version 358</Text>
+            </View>
           </View>
         </View>
       </Modal>
@@ -99,6 +103,18 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
     fontWeight: "bold",
+  },
+  versionText: {
+    fontSize: 14,
+    marginLeft: 10,
+    marginBottom: 15,
+    textAlign: "center",
+    color: "gray",
+  },
+  versionTitle: {
+    flexDirection: "column",
+    // alignSelf: "flex-end",
+    justifyContent: "space-between",
   },
 });
 
