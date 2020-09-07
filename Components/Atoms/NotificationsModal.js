@@ -55,7 +55,6 @@ const NotificationsModal = ({ modalState, setModalState }) => {
         <View style={styles.centeredViewFlex}>
           <View style={styles.modalView}>
             <Text style={styles.modalTitle}>{modalState.title}</Text>
-
             <Text style={styles.modalText}>{modalState.text}</Text>
             <ModalIcon />
             {/* <ModalCarousel {...modalState} /> */}
@@ -97,12 +96,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
-    height: height * 0.55,
+    height: 350,
     width: width * 0.8,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
