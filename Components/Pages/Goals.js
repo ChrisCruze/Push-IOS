@@ -113,7 +113,7 @@ const Goals = ({ navigation }) => {
     <View
       style={[
         styles.container,
-        { backgroundColor: modalState.visible ? "rgba(0, 0, 0, 0.5)" : "transparent" },
+        { backgroundColor: modalState.visible ? "rgba(0, 0, 0, 0.7)" : "transparent" },
       ]}
     >
       <NavigationEvents
