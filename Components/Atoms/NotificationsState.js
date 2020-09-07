@@ -29,24 +29,24 @@ const determineIfMaxPushCount = ({ time_stamp_count, maxPushCount }) => {
 };
 
 const firstPushText = () => {
-  return `Aye, Aye - you got your first push matey!`;
+  return `You got your first push!`;
 };
 
 const streakText = ({ streakCount, cadence }) => {
   const cadenceText = cadenceTextConvert(cadence);
-  return `Yo Ho Ho - you're on ${streakCount} ${cadenceText} streak`;
+  return `You're on ${streakCount} ${cadenceText} streak`;
 };
 
 const tenThresholdText = ({ time_stamp_count }) => {
-  return `Ahoy - ye just reached ${time_stamp_count} pushes`;
+  return `You just reached ${time_stamp_count} pushes`;
 };
 
 const maxPushesText = ({ time_stamp_count }) => {
-  return `Avast Ye - ye just achieved a new personal record of ${time_stamp_count} pushes for a single goal `;
+  return `You just achieved a new personal record of ${time_stamp_count} pushes for a single goal `;
 };
 
 const standardText = ({ time_stamp_count, streakCount }) => {
-  return `Yo Ho Ho - you just reached ${time_stamp_count} pushes.`;
+  return `You just reached ${time_stamp_count} pushes.`;
 };
 
 const notificationPopUpUpdate = ({ popup, title, onPress, body }) => {
@@ -61,7 +61,13 @@ const notificationPopUpUpdate = ({ popup, title, onPress, body }) => {
   });
 };
 
-const NotificationTextDetermine = ({ time_stamp_count, streakCount, cadence, maxPushCount }) => {
+const NotificationTextDetermineBase = ({
+  time_stamp_count,
+  streakCount,
+  cadence,
+  maxPushCount,
+  goals,
+}) => {
   if (determineIfFirstPush({ time_stamp_count })) {
     const text = firstPushText();
     return text;
@@ -80,6 +86,26 @@ const NotificationTextDetermine = ({ time_stamp_count, streakCount, cadence, max
   }
 };
 
+const NotificationTextDetermine = ({
+  time_stamp_count,
+  streakCount,
+  cadence,
+  maxPushCount,
+  goals,
+  _id,
+  timeStampsWithNew,
+}) => {
+  const text = NotificationTextDetermineBase({
+    time_stamp_count,
+    streakCount,
+    cadence,
+    maxPushCount,
+    goals,
+  });
+  const updated_goals = appendNewGoalsTimeStamps({ goals, _id, timeStampsWithNew });
+  const percenage_done = determinePercentageDone(updated_goals);
+  return text + " " + percenage_done + "% completed!";
+};
 const appendNewGoalsTimeStamps = ({ goals, _id, timeStampsWithNew }) => {
   const goals_filtered = goals.filter(goal => goal._id != _id);
   const goal_updated_dict = goals.find(goal => goal._id == _id);
@@ -140,7 +166,15 @@ const NotificationsStateLogicInApp = ({
       navigateToGoal,
     });
   };
-  const text = NotificationTextDetermine({ time_stamp_count, streakCount, cadence, maxPushCount });
+  const text = NotificationTextDetermine({
+    time_stamp_count,
+    streakCount,
+    cadence,
+    maxPushCount,
+    goals,
+    _id,
+    timeStampsWithNew,
+  });
   const onPress = () => {
     showModal(text);
   };
