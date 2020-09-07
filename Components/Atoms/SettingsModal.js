@@ -47,7 +47,7 @@ const SettingsModal = ({ modalVisible, setModalVisible, logout }) => {
             </View>
 
             <View style={styles.versionTitle}>
-              <Text style={styles.versionText}>Version 358</Text>
+              <Text style={styles.versionText}>Version 364</Text>
             </View>
           </View>
         </View>
