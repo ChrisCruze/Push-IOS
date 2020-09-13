@@ -8,6 +8,7 @@ import {
   View,
   SafeAreaView,
   Dimensions,
+  Share,
 } from "react-native";
 import Constants from "expo-constants";
 import { Ionicons as Icon } from "@expo/vector-icons";
@@ -41,27 +42,55 @@ const ModalCarousel = ({ time_stamp_count, streakCount, longest_streak }) => {
   );
 };
 
-const ModalButtons = ({ modalState, setModalState }) => (
-  <View style={styles.buttonWrapper}>
-    <TouchableHighlight
-      style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
-      onPress={() => {
-        modalState.navigateToGoal();
-        setModalState({ ...modalState, visible: !modalState.visible });
-      }}
-    >
-      <Text style={styles.textStyle}>Dashboard</Text>
-    </TouchableHighlight>
-    <TouchableHighlight
-      style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
-      onPress={() => {
-        setModalState({ ...modalState, visible: !modalState.visible });
-      }}
-    >
-      <Text style={styles.textStyle}>Close</Text>
-    </TouchableHighlight>
-  </View>
-);
+const ModalButtons = ({ modalState, setModalState }) => {
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: "Just hit a new milestone on Push. Check it out here: PushPirates.com",
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+  return (
+    <View style={styles.buttonWrapper}>
+      <TouchableHighlight
+        style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
+        onPress={() => {
+          modalState.navigateToGoal();
+          setModalState({ ...modalState, visible: !modalState.visible });
+        }}
+      >
+        <Text style={styles.textStyle}>Dashboard</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
+        onPress={() => {
+          onShare();
+        }}
+      >
+        <Text style={styles.textStyle}>Share</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
+        onPress={() => {
+          setModalState({ ...modalState, visible: !modalState.visible });
+        }}
+      >
+        <Text style={styles.textStyle}>Close</Text>
+      </TouchableHighlight>
+    </View>
+  );
+};
 const ModalText = ({ modalState }) => (
   <Fragment>
     <Text style={styles.modalTitle}>{modalState.title}</Text>
@@ -131,14 +160,14 @@ const styles = StyleSheet.create({
   },
 
   modalTitle: {
-    marginBottom: 5,
-    fontSize: 20,
+    marginBottom: 20,
+    fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
   },
 
   modalText: {
-    marginBottom: 30,
+    marginBottom: 0,
     fontSize: 15,
     fontWeight: "bold",
 
@@ -163,7 +192,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     flexDirection: "row",
     justifyContent: "center",
-    padding: 30,
+    padding: 40,
   },
   buttonWrapper: {
     justifyContent: "space-between",
