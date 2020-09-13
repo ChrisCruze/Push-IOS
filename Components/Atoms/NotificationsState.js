@@ -124,13 +124,13 @@ const NotificationDetermineCadenceComplete = ({ goals, cadence, timeStampsWithNe
   const is_month_completed = determinePercentageDone(month_goals) == 100 && cadence == "Monthly";
   const is_all_completed = determinePercentageDone(updated_goals) == 100;
   if (is_all_completed) {
-    return "Avast Ye - you completed all of your goals!";
+    return "You completed all of your goals!";
   } else if (is_day_completed) {
-    return "Avast Ye - you Completed all of your daily goals!";
+    return "You Completed all of your daily goals!";
   } else if (is_week_completed) {
-    return "Avast Ye - you Completed all of your weekly goals!";
+    return "You Completed all of your weekly goals!";
   } else if (is_month_completed) {
-    return "Avast Ye -you Completed all of your monthly goals!";
+    return "You Completed all of your monthly goals!";
   } else {
     return false;
   }

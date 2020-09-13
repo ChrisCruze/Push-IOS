@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
   Alert,
   Modal,
@@ -41,6 +41,34 @@ const ModalCarousel = ({ time_stamp_count, streakCount, longest_streak }) => {
   );
 };
 
+const ModalButtons = ({ modalState, setModalState }) => (
+  <View style={styles.buttonWrapper}>
+    <TouchableHighlight
+      style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
+      onPress={() => {
+        modalState.navigateToGoal();
+        setModalState({ ...modalState, visible: !modalState.visible });
+      }}
+    >
+      <Text style={styles.textStyle}>Dashboard</Text>
+    </TouchableHighlight>
+    <TouchableHighlight
+      style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
+      onPress={() => {
+        setModalState({ ...modalState, visible: !modalState.visible });
+      }}
+    >
+      <Text style={styles.textStyle}>Close</Text>
+    </TouchableHighlight>
+  </View>
+);
+const ModalText = ({ modalState }) => (
+  <Fragment>
+    <Text style={styles.modalTitle}>{modalState.title}</Text>
+    <Text style={styles.modalText}>{modalState.text}</Text>
+  </Fragment>
+);
+
 const NotificationsModal = ({ modalState, setModalState }) => {
   return (
     <View style={styles.centeredView}>
@@ -54,29 +82,10 @@ const NotificationsModal = ({ modalState, setModalState }) => {
       >
         <View style={styles.centeredViewFlex}>
           <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>{modalState.title}</Text>
-            <Text style={styles.modalText}>{modalState.text}</Text>
+            <ModalText modalState={modalState} />
             <ModalIcon />
+            <ModalButtons modalState={modalState} setModalState={setModalState} />
             {/* <ModalCarousel {...modalState} /> */}
-            <View style={styles.buttonWrapper}>
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
-                onPress={() => {
-                  modalState.navigateToGoal();
-                  setModalState({ ...modalState, visible: !modalState.visible });
-                }}
-              >
-                <Text style={styles.textStyle}>Dashboard</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
-                onPress={() => {
-                  setModalState({ ...modalState, visible: !modalState.visible });
-                }}
-              >
-                <Text style={styles.textStyle}>Close</Text>
-              </TouchableHighlight>
-            </View>
           </View>
         </View>
       </Modal>
@@ -97,6 +106,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     height: 350,
+
     width: width * 0.8,
     backgroundColor: "white",
     borderRadius: 20,

@@ -11,8 +11,7 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import Constants from "expo-constants";
-import { VERSION } from "react-native-dotenv";
-
+import Version from "../../Version";
 const SettingsModal = ({ modalVisible, setModalVisible, logout }) => {
   return (
     <SafeAreaView>
@@ -48,7 +47,7 @@ const SettingsModal = ({ modalVisible, setModalVisible, logout }) => {
             </View>
 
             <View style={styles.versionTitle}>
-              <Text style={styles.versionText}>{VERSION}</Text>
+              <Text style={styles.versionText}>{Version}</Text>
             </View>
           </View>
         </View>
