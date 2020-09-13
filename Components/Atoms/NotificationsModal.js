@@ -80,14 +80,14 @@ const NotificationsModal = ({ modalState, setModalState }) => {
           Alert.alert("Modal has been closed.");
         }}
       >
-        <View style={styles.centeredViewFlex}>
-          <View style={styles.modalView}>
-            <ModalText modalState={modalState} />
-            <ModalIcon />
-            <ModalButtons modalState={modalState} setModalState={setModalState} />
-            {/* <ModalCarousel {...modalState} /> */}
-          </View>
+        {/* <View style={styles.centeredView}> */}
+        <View style={styles.modalView}>
+          <ModalText modalState={modalState} />
+          <ModalIcon />
+          <ModalButtons modalState={modalState} setModalState={setModalState} />
+          {/* <ModalCarousel {...modalState} /> */}
         </View>
+        {/* </View> */}
       </Modal>
     </View>
   );
@@ -98,19 +98,16 @@ const styles = StyleSheet.create({
   centeredView: {
     justifyContent: "center",
     alignItems: "center",
-  },
-  centeredViewFlex: {
-    justifyContent: "center",
     flex: 1,
-    alignItems: "center",
   },
   modalView: {
-    height: 350,
-
-    width: width * 0.8,
+    flex: 1,
+    alignItems: "center",
+    flexDirection: "column",
     backgroundColor: "white",
-    borderRadius: 20,
+    justifyContent: "center",
     padding: 35,
+    borderRadius: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -119,8 +116,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    justifyContent: "center",
-    alignItems: "center",
   },
   openButton: {
     backgroundColor: "#F194FF",
@@ -165,9 +160,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   iconView: {
-    flex: 1,
+    // flex: 1,
     flexDirection: "row",
     justifyContent: "center",
+    padding: 30,
   },
   buttonWrapper: {
     justifyContent: "space-between",

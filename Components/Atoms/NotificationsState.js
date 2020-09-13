@@ -216,17 +216,17 @@ const NotificationsStateLogicModal = ({
     navigateToGoal,
   });
 
-  // setTimeout(() => {
-  //   setModalState({
-  //     text,
-  //     visible: false,
-  //     time_stamp_count,
-  //     streakCount,
-  //     longest_streak,
-  //     title,
-  //     navigateToGoal,
-  //   });
-  // }, 4000);
+  setTimeout(() => {
+    setModalState({
+      text,
+      visible: false,
+      time_stamp_count,
+      streakCount,
+      longest_streak,
+      title,
+      navigateToGoal,
+    });
+  }, 5000);
 };
 
 const NotificationsStateLogic = ({
