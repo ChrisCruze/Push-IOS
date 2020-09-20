@@ -109,14 +109,14 @@ const NotificationsModal = ({ modalState, setModalState }) => {
           Alert.alert("Modal has been closed.");
         }}
       >
-        {/* <View style={styles.centeredView}> */}
-        <View style={styles.modalView}>
-          <ModalText modalState={modalState} />
-          <ModalIcon />
-          <ModalButtons modalState={modalState} setModalState={setModalState} />
-          {/* <ModalCarousel {...modalState} /> */}
+        <View style={styles.centeredViewFlex}>
+          <View style={styles.modalView}>
+            <ModalText modalState={modalState} />
+            <ModalIcon />
+            <ModalButtons modalState={modalState} setModalState={setModalState} />
+            {/* <ModalCarousel {...modalState} /> */}
+          </View>
         </View>
-        {/* </View> */}
       </Modal>
     </View>
   );
@@ -127,7 +127,11 @@ const styles = StyleSheet.create({
   centeredView: {
     justifyContent: "center",
     alignItems: "center",
+  },
+  centeredViewFlex: {
+    justifyContent: "center",
     flex: 1,
+    alignItems: "center",
   },
   modalView: {
     flex: 1,
