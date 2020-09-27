@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
   Alert,
   Modal,
@@ -8,6 +8,7 @@ import {
   View,
   SafeAreaView,
   Dimensions,
+  Share,
 } from "react-native";
 import Constants from "expo-constants";
 import { Ionicons as Icon } from "@expo/vector-icons";
@@ -41,6 +42,62 @@ const ModalCarousel = ({ time_stamp_count, streakCount, longest_streak }) => {
   );
 };
 
+const ModalButtons = ({ modalState, setModalState }) => {
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: "Just hit a new milestone on Push. Check it out here: PushPirates.com",
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+  return (
+    <View style={styles.buttonWrapper}>
+      <TouchableHighlight
+        style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
+        onPress={() => {
+          modalState.navigateToGoal();
+          setModalState({ ...modalState, visible: !modalState.visible });
+        }}
+      >
+        <Text style={styles.textStyle}>Dashboard</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
+        onPress={() => {
+          onShare();
+        }}
+      >
+        <Text style={styles.textStyle}>Share</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
+        onPress={() => {
+          setModalState({ ...modalState, visible: !modalState.visible });
+        }}
+      >
+        <Text style={styles.textStyle}>Close</Text>
+      </TouchableHighlight>
+    </View>
+  );
+};
+const ModalText = ({ modalState }) => (
+  <Fragment>
+    <Text style={styles.modalTitle}>{modalState.title}</Text>
+    <Text style={styles.modalText}>{modalState.text}</Text>
+  </Fragment>
+);
+
 const NotificationsModal = ({ modalState, setModalState }) => {
   return (
     <View style={styles.centeredView}>
@@ -54,31 +111,10 @@ const NotificationsModal = ({ modalState, setModalState }) => {
       >
         <View style={styles.centeredViewFlex}>
           <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>{modalState.title}</Text>
-
-            <Text style={styles.modalText}>{modalState.text}</Text>
-
+            <ModalText modalState={modalState} />
             <ModalIcon />
+            <ModalButtons modalState={modalState} setModalState={setModalState} />
             {/* <ModalCarousel {...modalState} /> */}
-            <View style={styles.buttonWrapper}>
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
-                onPress={() => {
-                  modalState.navigateToGoal();
-                  setModalState({ ...modalState, visible: !modalState.visible });
-                }}
-              >
-                <Text style={styles.textStyle}>Dashboard</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#005AFF" }}
-                onPress={() => {
-                  setModalState({ ...modalState, visible: !modalState.visible });
-                }}
-              >
-                <Text style={styles.textStyle}>Close</Text>
-              </TouchableHighlight>
-            </View>
           </View>
         </View>
       </Modal>
@@ -98,12 +134,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
-    height: height * 0.55,
-    width: width * 0.8,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
+    flex: 1,
     alignItems: "center",
+    flexDirection: "column",
+    backgroundColor: "white",
+    justifyContent: "center",
+    padding: 35,
+    borderRadius: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -112,8 +149,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    justifyContent: "center",
-    alignItems: "center",
   },
   openButton: {
     backgroundColor: "#F194FF",
@@ -129,14 +164,14 @@ const styles = StyleSheet.create({
   },
 
   modalTitle: {
-    marginBottom: 5,
-    fontSize: 20,
+    marginBottom: 20,
+    fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
   },
 
   modalText: {
-    marginBottom: 15,
+    marginBottom: 0,
     fontSize: 15,
     fontWeight: "bold",
 
@@ -158,9 +193,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   iconView: {
-    flex: 1,
+    // flex: 1,
     flexDirection: "row",
     justifyContent: "center",
+    padding: 40,
   },
   buttonWrapper: {
     justifyContent: "space-between",

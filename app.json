@@ -31,7 +31,7 @@
       "package": "com.push.xyz",
       "versionCode": 7
     },
-    "description": "Push Pirates is a free and easy-to-use habit forming app that helps you to build and maintain habits/routines so that you can take better control of your life. By setting goals, tracking your habits, and holding yourself accountable through this tool, you can start to build a healthier lifestyle focused on behaviors you are trying to improve.",
+    "description": "Push Pirates is a free and easy-to-use habit forming app that helps you to build and maintain habits/routines so that you can take better control of your life. By setting goals, tracking your habits, and holding yourself accountable through this tool, you can start to build a healthier lifestyle focused on behaviors you are trying to improve.\n\nThis is V365",
     "notification": {
       "icon": "./assets/icon.png"
     },

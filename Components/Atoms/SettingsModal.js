@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import Constants from "expo-constants";
-
+import Version from "../../Version";
 const SettingsModal = ({ modalVisible, setModalVisible, logout }) => {
   return (
     <SafeAreaView>
@@ -44,6 +44,10 @@ const SettingsModal = ({ modalVisible, setModalVisible, logout }) => {
               >
                 <Text style={styles.textStyle}>Logout</Text>
               </TouchableHighlight>
+            </View>
+
+            <View style={styles.versionTitle}>
+              <Text style={styles.versionText}>{Version}</Text>
             </View>
           </View>
         </View>
@@ -99,6 +103,18 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
     fontWeight: "bold",
+  },
+  versionText: {
+    fontSize: 14,
+    marginLeft: 10,
+    marginBottom: 15,
+    textAlign: "center",
+    color: "gray",
+  },
+  versionTitle: {
+    flexDirection: "column",
+    // alignSelf: "flex-end",
+    justifyContent: "space-between",
   },
 });
 
