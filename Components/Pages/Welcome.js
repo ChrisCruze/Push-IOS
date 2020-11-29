@@ -1,13 +1,18 @@
-import * as React from "react";
-import { StyleSheet, Dimensions, TouchableOpacity } from "react-native";
+import React from "react";
+import { StyleSheet, Dimensions, TouchableOpacity, AsyncStorage, Platform } from "react-native";
+import moment from "moment";
+import * as Google from "expo-google-app-auth";
+import {
+  GOOGLE_SIGN_IN_CLIENT_ID_IOS,
+  GOOGLE_SIGN_IN_CLIENT_ID_ANDROID,
+} from "react-native-dotenv";
+
 import Theme from "../Atoms/Theme";
 import Text from "../Atoms/Text";
 import Button from "../Atoms/Button";
 import Container from "../Atoms/Container";
 import { AnimatedView } from "../Atoms/Animations";
 import Logo from "../Molecules/Logo";
-import { AsyncStorage } from "react-native";
-import moment from "moment";
 
 function determine_number_of_hours_since_created(token_created_date) {
   const token_created_date_moment = moment(token_created_date);
@@ -15,7 +20,6 @@ function determine_number_of_hours_since_created(token_created_date) {
   const diff = now.diff(token_created_date_moment);
   const diffDuration = moment.duration(diff);
   const difference_hours = diffDuration.hours();
-  const difference_minutes = diffDuration.minutes();
   return difference_hours;
 }
 
@@ -35,10 +39,26 @@ const AuthCheckNavigate = ({ navigation }) => {
   });
 };
 
+const signInWithGoogle = async () => {
+  try {
+    const { type, idToken } = await Google.logInAsync({
+      scopes: ["email", "openid"],
+      clientId:
+        Platform.OS === "android" ? GOOGLE_SIGN_IN_CLIENT_ID_ANDROID : GOOGLE_SIGN_IN_CLIENT_ID_IOS,
+    });
+    if (type === "success") {
+      console.log("Send id_token to PUSH API for signup/signin", idToken);
+    }
+  } catch ({ message }) {
+    console.error("login: Error:" + message);
+  }
+};
+
 const Welcome = ({ navigation }) => {
   const login = () => navigation.navigate("Login");
   const signUp = () => navigation.navigate("SignUp");
   AuthCheckNavigate({ navigation });
+
   return (
     <Container gutter={2} style={styles.root}>
       <Logo />
@@ -48,8 +68,15 @@ const Welcome = ({ navigation }) => {
         </Text>
       </AnimatedView>
       <AnimatedView style={styles.container} delay={600} duration={300}>
-        <Button label="Login" onPress={login} full white style={{backgroundColor:Theme.palette.buttonTheme,borderRadius:32}} />
+        <Button
+          label="Login"
+          onPress={login}
+          full
+          white
+          style={{ backgroundColor: Theme.palette.buttonTheme, borderRadius: 32 }}
+        />
         <Button label="Sign Up" onPress={signUp} full />
+        <Button label="Sign in with Google" onPress={signInWithGoogle} full />
       </AnimatedView>
       <TouchableOpacity style={styles.framer} onPress={Welcome.framer}>
         <Text type={"regular"} style={styles.framerText}></Text>
