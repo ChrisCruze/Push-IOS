@@ -5,7 +5,9 @@ import * as Google from "expo-google-app-auth";
 import {
   GOOGLE_SIGN_IN_CLIENT_ID_IOS,
   GOOGLE_SIGN_IN_CLIENT_ID_ANDROID,
+  SIGN_IN_OATH_URI,
 } from "react-native-dotenv";
+import axios from "axios";
 
 import Theme from "../Atoms/Theme";
 import Text from "../Atoms/Text";
@@ -39,25 +41,42 @@ const AuthCheckNavigate = ({ navigation }) => {
   });
 };
 
-const signInWithGoogle = async () => {
-  try {
-    const { type, idToken } = await Google.logInAsync({
-      scopes: ["email", "openid"],
-      clientId:
-        Platform.OS === "android" ? GOOGLE_SIGN_IN_CLIENT_ID_ANDROID : GOOGLE_SIGN_IN_CLIENT_ID_IOS,
-    });
-    if (type === "success") {
-      console.log("Send id_token to PUSH API for signup/signin", idToken);
-    }
-  } catch ({ message }) {
-    console.error("login: Error:" + message);
-  }
-};
-
 const Welcome = ({ navigation }) => {
   const login = () => navigation.navigate("Login");
   const signUp = () => navigation.navigate("SignUp");
   AuthCheckNavigate({ navigation });
+
+  const signInWithGoogle = async () => {
+    try {
+      const { type, idToken } = await Google.logInAsync({
+        scopes: ["email", "openid"],
+        clientId:
+          Platform.OS === "android"
+            ? GOOGLE_SIGN_IN_CLIENT_ID_ANDROID
+            : GOOGLE_SIGN_IN_CLIENT_ID_IOS,
+      });
+      if (type === "success") {
+        console.log("Send id_token to PUSH API for signup/signin", idToken);
+        axios
+          .post(SIGN_IN_OATH_URI, {
+            idToken,
+            oAuthType: "google",
+          })
+          .then(response => {
+            AsyncStorage.setItem("token_created_date", moment().format());
+            AsyncStorage.setItem("token", response["data"]["token"]);
+          })
+          .then(() => {
+            navigation.navigate("Goals");
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
+    } catch ({ message }) {
+      console.error("login: Error:" + message);
+    }
+  };
 
   return (
     <Container gutter={2} style={styles.root}>
