@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Dimensions, TouchableOpacity, AsyncStorage, Platform } from "react-native";
 import moment from "moment";
 import * as Google from "expo-google-app-auth";
@@ -32,7 +32,7 @@ function determine_is_not_expired(token_created_date) {
   return has_token && within_expiration;
 }
 
-const AuthCheckNavigate = ({ navigation }) => {
+const authCheckAndNavigate = async ({ navigation }) => {
   AsyncStorage.getItem("token_created_date").then(token_created_date => {
     const already_logged_in = determine_is_not_expired(token_created_date);
     if (already_logged_in) {
@@ -42,9 +42,12 @@ const AuthCheckNavigate = ({ navigation }) => {
 };
 
 const Welcome = ({ navigation }) => {
+  useEffect(() => {
+    authCheckAndNavigate({ navigation });
+  }, []);
+
   const login = () => navigation.navigate("Login");
   const signUp = () => navigation.navigate("SignUp");
-  AuthCheckNavigate({ navigation });
 
   const signInWithGoogle = async () => {
     try {
@@ -56,18 +59,20 @@ const Welcome = ({ navigation }) => {
             : GOOGLE_SIGN_IN_CLIENT_ID_IOS,
       });
       if (type === "success") {
-        console.log("Send id_token to PUSH API for signup/signin", idToken);
         axios
           .post(SIGN_IN_OATH_URI, {
-            idToken,
+            token: idToken,
             oAuthType: "google",
           })
           .then(response => {
-            AsyncStorage.setItem("token_created_date", moment().format());
-            AsyncStorage.setItem("token", response["data"]["token"]);
+            const jwt = response["data"]["token"];
+            if (jwt) {
+              AsyncStorage.setItem("token_created_date", moment().format());
+              AsyncStorage.setItem("token", jwt);
+            }
           })
           .then(() => {
-            navigation.navigate("Goals");
+            authCheckAndNavigate({ navigation });
           })
           .catch(error => {
             console.error(error);
