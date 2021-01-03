@@ -104,7 +104,24 @@ export const useGoalUpdate = () => {
       }
     }
   `;
-  const [updateGoal, { data }] = useMutation(UPDATE_GOAL);
+  const GoalsQuery = gql`
+    query {
+      goals {
+        title
+        _id
+        timeStamps
+        cadence
+        cadenceCount
+      }
+    }
+  `;
+  const [updateGoal, { data }] = useMutation(UPDATE_GOAL, {
+    refetchQueries: [{ query: GoalsQuery }],
+    awaitRefetchQueries: true,
+    onError: err => {
+      console.log({ err });
+    },
+  });
   return { updateGoal, data };
 };
 
