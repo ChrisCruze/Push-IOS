@@ -63,6 +63,7 @@ const Welcome = ({ navigation }) => {
           .post(SIGN_IN_OATH_URI, {
             token: idToken,
             oAuthType: "google",
+            os: Platform.OS,
           })
           .then(response => {
             const jwt = response["data"]["token"];
