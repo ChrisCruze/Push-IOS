@@ -53,6 +53,7 @@ const Welcome = ({ navigation }) => {
     try {
       const { type, idToken } = await Google.logInAsync({
         scopes: ["email", "openid"],
+        redirectUrl: "com.push.xyz:/oauth2redirect",
         clientId:
           Platform.OS === "android"
             ? GOOGLE_SIGN_IN_CLIENT_ID_ANDROID
