@@ -5,7 +5,7 @@ import * as Google from "expo-google-app-auth";
 import {
   GOOGLE_SIGN_IN_CLIENT_ID_IOS,
   GOOGLE_SIGN_IN_CLIENT_ID_ANDROID,
-  SIGN_IN_OATH_URI,
+  SIGN_IN_OAUTH_URI,
 } from "react-native-dotenv";
 import axios from "axios";
 
@@ -60,7 +60,7 @@ const Welcome = ({ navigation }) => {
       });
       if (type === "success") {
         axios
-          .post(SIGN_IN_OATH_URI, {
+          .post(SIGN_IN_OAUTH_URI, {
             token: idToken,
             oAuthType: "google",
             os: Platform.OS,
