@@ -35,11 +35,7 @@ const ForgotPassword = ({ navigation }) => {
           }
         })
         .catch(error => {
-          if (error.message === "Request failed with status code 404") {
-            setSnackMessage("Email address not found");
-          } else if (error.message === "Request failed with status code 422") {
-            setSnackMessage("Email address format not valid");
-          }
+          setSnackMessage(`${error.response.status}: ${error.response.data}`);
           setLoading(false);
           setSnackVisibility(true);
         });
