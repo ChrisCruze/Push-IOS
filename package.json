@@ -25,7 +25,7 @@
     "expo-permissions": "^8.1.0",
     "graphql": "^15.0.0",
     "install": "^0.13.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "native-base": "^2.13.8",
     "react": "~16.9.0",
